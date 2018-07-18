@@ -1,0 +1,37 @@
+html, body{
+  font-size: 14px;
+  color: $main-font;
+  // 字体抗锯齿，看起来更平滑
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+// 统一和模型为border-box
+html, body, main, section, article, header, footer,
+aside, div, p, h1, h2, h3, h4, h5, h6,
+table, tr, td, ul, ol, li,
+a, span, i, em, img, button, input{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+h1, h2, h3, h4, h5, h6{
+  font-weight: 600;
+}
+
+// 更改a标签初始样式
+a{
+  text-decoration: none;
+  color: $main-font;
+  &:hover{
+    color: #57a3f3;
+  }
+}
+
+// 重置elementui部分样式
+.el-button--mini{
+  padding: 7px;
+}

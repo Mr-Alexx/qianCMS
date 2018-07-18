@@ -1,0 +1,73 @@
+@mixin clearfix () {
+  &:after{
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+@mixin transition ($artribute: all, $time: .5s, $timefun: ease) {
+  -webkit-transition: $artribute $time $timefun;
+  -moz-transition: $artribute $time $timefun;
+  -o-transition: $artribute $time $timefun;
+  -ms-transition: $artribute $time $timefun;
+  transition: $artribute $time $timefun;
+}
+
+@mixin transform ($arg) {
+  -webkit-transform: $arg;
+  -moz-transform: $arg;
+  -o-transform: $arg;
+  -ms-transform: $arg;
+  transform: $arg;
+}
+
+@mixin transform-origin ($arg) {
+  -webkit-transform-origin: $arg;
+  -moz-transform-origin: $arg;
+  -o-transform-origin: $arg;
+  -ms-transform-origin: $arg;
+  transform-origin: $arg;
+}
+
+// 文本溢出
+@mixin text-ellipsis () {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 相同宽高圆形的图标
+// null值的意思是，当不传该参数时，对应调用的属性被排除
+@mixin radius ($wh, $bg: null) {
+  width: $wh;
+  height: $wh;
+  border-radius: 50%;
+  @if $bg {
+    background-color: $bg;
+  }
+}
+
+// 阴影
+@mixin box-shadow ($arg: 0 2px 1px 1px rgba(100, 100, 100, 0.1)) {
+  -webkit-box-shadow: $arg;
+  -moz-box-shadow: $arg;
+  box-shadow: $arg;
+}
+
+// 绝对定位， $dir 方向
+// center => 水平和垂直剧中；top => 垂直剧中；left => 水平剧中
+@mixin psc ($dir: center) {
+  position: absolute;
+  @if $dir == center {
+    top: 50%;
+    left: 50%;
+    @include transform(translateX(-50%) translateY(-50%));
+  } @else if $dir == top {
+    top: 50%;
+    @include transform(translateY(-50%));
+  } @else {
+    left: 50%;
+    @include transform(translateX(-50%));
+  }
+}

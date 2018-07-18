@@ -1,0 +1,44 @@
+@import '@/backend/styles/colors.scss';
+@import '@/backend/styles/variable.scss';
+@import '@/backend/styles/mixins.scss';
+
+/********** 用户信息卡片 ********/
+$infoH: info-card-header;
+$infoC: info-card-content;
+.info-card{
+  .el-card__header, .el-card__body{
+    padding: 10px 20px;
+  }
+  .el-card__header{
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+// 头部
+.#{$infoH}{
+  padding-bottom: 10px;
+  border-bottom: 1px solid $tl-border;
+  // 头部头像
+  .#{$infoH}-avator{
+    @include radius(60px);
+  }
+  // 头部文字信息
+  .#{$infoH}-content{
+    padding-top: 5px;
+    h2, p{
+      margin: 0;
+      line-height: 20px;
+      @include text-ellipsis();
+    }
+    h2{
+      // padding-bottom: 5px;
+      color: $primary;
+      line-height: 30px;
+    }
+  }
+}
+// card body区域内容
+.#{$infoC}{
+  font-size: $small-font;
+  line-height: 25px;
+}

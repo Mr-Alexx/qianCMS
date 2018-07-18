@@ -1,0 +1,127 @@
+@import '../styles/colors.scss';
+@import '../styles/mixins.scss';
+@import '../../../static/fonts/iconfont.css';
+
+.main{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  // background-color: rgb(240, 240, 240);
+}
+/******** 左侧菜单 ********/
+.el-menu-vertical-demo:not(.el-menu--collapse){
+  width: 210px;
+  height: 100%;
+}
+.collapse-aside{
+  width: 66px !important;
+}
+.expand-aside{
+  width: 210px !important;
+}
+.aside-menu{
+  height: 100%;
+  .el-menu{
+    height: 100% !important;
+  }
+}
+
+/******* main-header *******/
+.main-header{
+  padding: 14px 15px 14px 0;
+  background-color: #fff;
+  @include box-shadow();
+  position: relative;
+  z-index: 2;
+  >div{
+    float: left;
+    &:last-child{
+      float: right;
+    }
+  }
+  [class*='on']{
+    font-size: 23px;
+    cursor: pointer;
+    &.el-icon-caret-bottom{
+      font-size: 12px;
+    }
+  }
+  
+}
+// navicon
+.navicon-con{
+  .icon-ios-menu{
+    font-size: 32px;
+    font-weight: 400;
+    padding: 6px 15px;
+    margin-top: -6px;
+    @include transition();
+    @include transform-origin(0 0);
+    &.clollapse-navicon{
+      @include transform(rotateZ(90deg));
+    }
+    &:hover{
+      color: $primary;
+    }
+  }
+}
+// header middle part
+.header-middle-con{
+  height: 100%;
+  padding-left: 15px;
+  padding-top: 9px;
+}
+// header right part
+.header-right-con{
+  >div{
+    float: left;
+  }
+  // 功能按键（全屏之类的）
+  .header-right-icons-con{
+    padding-right: 20px;
+    .iconfont{
+      padding: 0 5px;
+    }
+    // unread message
+    .msg-tip{
+      position: relative;
+      >span{
+        position: absolute;
+        right: 0;
+        top: -4px;
+        // 圆点
+        @include radius(8px, #ed3f14);
+      }
+    }
+  }
+  // avator
+  .header-avator-con{
+    height: 32px;
+    .el-dropdown-link{
+      font-size: 12px;
+      color: $primary;
+      float: left;
+      padding-right: 10px;
+    }
+    .el-icon-caret-bottom{
+      color: $dark-primary;
+    }
+    img{
+      float: right;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+  }
+}
+
+/****** 单页主内容区域 *******/
+.single-page-con{
+  height: calc(100% - 100px);
+  padding: 10px;
+  position: relative;
+  z-index: 1;
+  background-color: #fff; // $body-gray;
+}
