@@ -134,6 +134,23 @@ Vue.prototype.$http = axios
 const lodash = require('lodash/core')
 Vue.prototype._ = lodash
 
+// echarts
+const echarts = require('echarts/lib/echarts')
+// map
+require('echarts/lib/chart/map')
+// bar
+require('echarts/lib/chart/bar')
+// tips
+require('echarts/lib/component/tooltip')
+
+Vue.prototype.$echarts = (id, option) => {
+  const dom = document.getElementById(id)
+  const chart = echarts.init(dom)
+  chart.setOption(option, true)
+  window.addEventListener('resize', chart.resize)
+  return chart
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

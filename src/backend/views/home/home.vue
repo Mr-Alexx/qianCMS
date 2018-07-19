@@ -83,11 +83,20 @@
         这是权限dialog
       </el-dialog>
     </el-row>
+
+    <!-- 访问量和错误监测图表 -->
+    <el-row :gutter="15" class="separate-box">
+      <el-col :md="12" :xs="24">
+        <view-chart :renderData="[10, 20, 30, 40, 30, 20, 10]"></view-chart>
+      </el-col>
+      <el-col :md="12" :xs="24"></el-col>
+    </el-row>
   </section>
 </template>
 
 <script>
 import infoCard from './components/infoCard.vue'
+import viewChart from './components/charts/viewChart.vue'
 
 export default {
   name: 'home',
@@ -124,7 +133,8 @@ export default {
     }
   },
   components: {
-    infoCard
+    infoCard,
+    viewChart
   }
 }
 </script>

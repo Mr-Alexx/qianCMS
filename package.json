@@ -17,6 +17,7 @@
     "babel-polyfill": "^6.26.0",
     "concurrently": "^3.6.0",
     "countup": "^1.8.2",
+    "echarts": "^4.1.0",
     "element-ui": "^2.4.4",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
