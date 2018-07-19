@@ -7,7 +7,7 @@ $infoH: info-card-header;
 $infoC: info-card-content;
 .info-card{
   .el-card__header, .el-card__body{
-    padding: 10px 20px;
+    padding: 12px 20px 14px 20px;
   }
   .el-card__header{
     padding-bottom: 0;
@@ -41,4 +41,18 @@ $infoC: info-card-content;
 .#{$infoC}{
   font-size: $small-font;
   line-height: 25px;
+}
+
+/******* 快捷操作 *********/
+.quick-operation{
+  margin-top: 7.5px;
+  .el-card__header{
+    padding: 10px;
+  }
+  .el-card__body{
+    padding: 15px 10px;
+  }
+  .iconfont{
+    vertical-align: text-bottom;
+  }
 }

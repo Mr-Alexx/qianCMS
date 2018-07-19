@@ -59,7 +59,8 @@ import {
   Footer,
   Loading,
   MessageBox,
-  Message
+  Message,
+  Scrollbar
 } from 'element-ui'
 
 Vue.use(Pagination)
@@ -117,6 +118,7 @@ Vue.use(Main)
 Vue.use(Footer)
 Vue.use(Card)
 Vue.use(Loading.directive)
+Vue.use(Scrollbar)
 
 Vue.prototype.$loading = Loading.service
 Vue.prototype.$msgbox = MessageBox
