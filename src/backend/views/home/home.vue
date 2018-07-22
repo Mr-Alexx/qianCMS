@@ -31,6 +31,13 @@
                 type="text" size="mini"
                 @click="mypurview = true">查看</el-button>
             </el-col>
+            <!-- 权限的dialog -->
+            <el-dialog
+              title="我的权限"
+              :visible.sync="mypurview"
+              center>
+              这是权限dialog
+            </el-dialog>
           </el-row>
         </el-card>
       </el-col>
@@ -53,7 +60,9 @@
         </el-row>
         <!-- 快捷操作 -->
         <el-card class="quick-operation">
-          <header slot="header" class="quick-operation-header">快捷操作</header>
+          <header slot="header" class="quick-operation-header">
+            <q-icon icon="ios-send"></q-icon> 快捷操作
+          </header>
           <div class="quick-operation-body">
             <el-button plain round type="primary" size="mini">
               <i class="iconfont icon-new"></i>
@@ -74,29 +83,61 @@
           </div>
         </el-card>
       </el-col>
-
-      <!-- 权限的dialog -->
-      <el-dialog
-        title="我的权限"
-        :visible.sync="mypurview"
-        center>
-        这是权限dialog
-      </el-dialog>
     </el-row>
 
     <!-- 访问量和错误监测图表 -->
     <el-row :gutter="15" class="separate-box">
       <el-col :md="12" :xs="24">
-        <view-chart :renderData="[10, 20, 30, 40, 30, 20, 10]"></view-chart>
+        <chart
+          title="近七天网站访问量"
+          :bar-data="[10, 20, 30, 40, 30, 20, 10]"
+          bar-color="rgb(109, 176, 234)"
+          id-name="views-chart" bar-name="访问量">
+          <q-icon
+            icon="ios-happy" slot="icon"
+            color="#409EFF" :size="18"></q-icon>
+        </chart>
       </el-col>
-      <el-col :md="12" :xs="24"></el-col>
+      <el-col :md="12" :xs="24">
+        <chart
+          title="近七天网站出错数与错误率"
+          id-name="error-chart" :bar-data="[10, 20, 30, 40, 30, 20, 10]"
+          line-color="#F56C6C" bar-color="rgb(96, 196, 199)"
+          show-line bar-name="错误数" line-name="错误率"
+          :line-data="[10, 15, 12, 13, 18, 20, 30]">
+          <q-icon
+            icon="ios-sad" slot="icon"
+            color="#F56C6C" :size="18"></q-icon>
+        </chart>
+      </el-col>
+    </el-row>
+
+    <!-- 访客地域分布图 -->
+    <el-row class="separate-box">
+      <el-col :span="24">
+        <el-card>
+          <header slot="header">
+            <q-icon icon="location" :size="18"></q-icon>
+            访客地域分布图
+          </header>
+          <bmap></bmap>
+          <!-- <el-row>
+            <el-col :md="16" :xs="24">
+              <bmap></bmap>
+            </el-col>
+            <el-col :md="8" :xs="0"></el-col>
+          </el-row> -->
+        </el-card>
+      </el-col>
     </el-row>
   </section>
 </template>
 
 <script>
 import infoCard from './components/infoCard.vue'
-import viewChart from './components/charts/viewChart.vue'
+import chart from './components/charts/barAndLine.vue'
+import qIcon from '@/backend/components/qIcon.vue'
+import bmap from './components/charts/bmap.vue'
 
 export default {
   name: 'home',
@@ -134,7 +175,9 @@ export default {
   },
   components: {
     infoCard,
-    viewChart
+    chart,
+    qIcon,
+    bmap
   }
 }
 </script>

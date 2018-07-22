@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import {router} from './router/index.js'
 import axios from 'axios'
+import '../../static/fonts/iconfont.css' // 全局使用iconfont
 import {
   Pagination,
   Dialog,
@@ -138,8 +139,12 @@ Vue.prototype._ = lodash
 const echarts = require('echarts/lib/echarts')
 // map
 require('echarts/lib/chart/map')
+// 中国地图JS文件
+require('echarts/map/js/china')
 // bar
 require('echarts/lib/chart/bar')
+// line
+require('echarts/lib/chart/line')
 // tips
 require('echarts/lib/component/tooltip')
 

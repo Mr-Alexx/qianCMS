@@ -1,3 +1,12 @@
+// 兼容性 $attr 兼容属性，$arg 属性值
+@mixin compatible ($attr, $arg) {
+  -webkit-#{$attr}: $arg;
+  -moz-#{$attr}: $arg;
+  -o-#{$attr}: $arg;
+  -ms-#{$attr}: $arg;
+  #{$attr}: $arg;
+}
+
 @mixin clearfix () {
   &:after{
     content: '';
@@ -70,4 +79,9 @@
     left: 50%;
     @include transform(translateX(-50%));
   }
+}
+
+// 动画
+@mixin animation ($arg) {
+  @include compatible(animation, $arg);
 }

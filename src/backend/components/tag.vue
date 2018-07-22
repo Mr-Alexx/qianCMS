@@ -2,6 +2,7 @@
   <transition name="fade">
     <span
       :class="['qian-tag', {'active-tag': active}]">
+      <i class="qian-tag-circle"></i>
       {{title}}
       <slot></slot>
       <i
@@ -43,6 +44,7 @@ export default {
 
 <style lang="scss">
 @import "../styles/colors.scss";
+@import "../styles/mixins.scss";
 .qian-tag {
   background-color: #fff;
   color: $main-font;
@@ -55,6 +57,24 @@ export default {
   border-radius: 3px;
   border: 1px solid $tl-border;
   white-space: nowrap;
+  position: relative;
+  padding-left: 10px; // 25px;
+  @include transition(padding-left .3s ease);
+  &.active-tag{
+    padding-left: 25px;
+    .qian-tag-circle{
+      display: block;
+    }
+  }
+  .qian-tag-circle{
+    @include psc(top);
+    display: none;
+    left: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+  }
   .el-icon-close {
     color: $main-font;
     margin-left: 5px;
