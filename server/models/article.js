@@ -46,6 +46,15 @@ class Article {
       offset: perpage * (page - 1)
     })  
   }
+  
+  // 添加/更新文章
+  /**
+   * @description 添加文章
+   * @param {Object} form 表单内容
+  */
+  async addArticle (form) {
+    
+  }
 }
 
 module.exports = new Article()

@@ -72,6 +72,11 @@ class ArticleCtrl {
       console.log(err)
     }
   }
+  
+  // 添加文章
+  async addArticle (ctx) {
+    const form = ctx.params
+  }
 }
 // 不推荐使用new来导出，new会消耗内存
 // 推荐使用es6的static方法来导出静态方法（因为api构建并不需要实现继承之类的复杂操作），减少内存消耗，但静态方法常驻内存，此处还是使用new方式，具体还待研究（是我太菜）

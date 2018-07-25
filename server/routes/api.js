@@ -17,5 +17,6 @@ router
   .get('/api/v1/article/:id', articleCtrl.getArticleById)
   .get('/api/v1/article/:tid/articles', articleCtrl.getArticleByTid)
   .get('/api/v1/article/:page/:perpage', articleCtrl.getArticle)
+  .post('api/v1/article/add', articleCtrl.addArticle)
 
 module.exports = router

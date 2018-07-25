@@ -1,0 +1,176 @@
+/*! Color theme design by Qian */
+pre.prettyprint, code.prettyprint {
+  position: relative;
+  border-radius: 5px !important;
+  padding-top: 43px !important;
+  background: rgb(30, 30, 30);
+  font-family: consolas, Menlo, "PingFang SC", "Microsoft YaHei", monospace;
+  border: 0 !important;
+  -webkit-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
+  -moz-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
+  -o-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
+  -ms-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
+  font-size: 16px;
+}
+/* 预留顶部仿mac的容器 */
+pre.prettyprint:before, code.prettyprint:before{
+  content: attr(data-rel);
+  height: 38px;
+  line-height: 38px;
+  background: #000;
+  color: #fff;
+  font-size: 16px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: bold;
+  padding: 0px 80px;
+  text-indent: 15px;
+  float: left;
+}
+/* 仿mac的三个圆点 */
+pre.prettyprint:after, code.prettyprint:after{
+  content: " ";
+  position: absolute;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: #fc625d;
+  width: 12px;
+  height: 12px;
+  top: 0;
+  left: 15px;
+  margin-top: 13px;
+  -webkit-box-shadow: 20px 0px #fdbc40, 40px 0px #35cd4b;
+  -moz-box-shadow: 20px 0px #fdbc40, 40px 0px #35cd4b;
+  -o-box-shadow: 20px 0px #fdbc40, 40px 0px #35cd4b;
+  -ms-box-shadow: 20px 0px #fdbc40, 40px 0px #35cd4b;
+  box-shadow: 20px 0px #fdbc40, 40px 0px #35cd4b;
+  z-index: 3;
+}
+
+.pln {
+  color: rgb(156, 220, 254);
+}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+  color: #fff;
+  padding-left: 0;
+  position: relative;
+}
+ol.linenums:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1.44em;
+  background-color: rgb(30,30, 30);
+  width: 3px;
+}
+
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L4,
+li.L5,
+li.L6,
+li.L7,
+li.L8,
+li.L9 {
+  padding-left: 1em;
+  background-color: transparent;
+  list-style-type: decimal;
+}
+
+@media screen {
+
+  /* string content */
+
+  .str {
+    color: #9c9;
+  }
+
+  /* keyword */
+
+  .kwd {
+    color: rgb(190, 122, 172);
+  }
+
+  /* comment */
+
+  .com {
+    color: rgb(96, 136, 66);
+  }
+
+  /* type name */
+
+  .typ {
+    color: rgb(78, 201, 176);
+  }
+
+  /* literal value 数字*/
+
+  .lit {
+    color: rgb(179, 204, 167);
+  }
+
+  /* punctuation */
+
+  .pun {
+    color: rgb(212, 212, 212);
+  }
+
+  /* lisp open bracket */
+
+  .opn {
+    color: #c5c8c6;
+  }
+
+  /* lisp close bracket */
+
+  .clo {
+    color: #9c9;
+  }
+
+  /* markup tag name */
+
+  .tag {
+    color: rgb(86, 156, 214);
+  }
+
+  /* markup attribute name */
+
+  .atn {
+    color: rgb(156, 220, 254);
+  }
+
+  /* markup attribute value */
+
+  .atv {
+    color: rgb(156, 220, 254);
+  }
+
+  /* declaration */
+
+  .dec {
+    color: #de935f;
+  }
+
+  /* variable name */
+
+  .var {
+    color: rgb(190, 122, 172);
+  }
+
+  /* function name */
+
+  .fun {
+    color: #81a2be;
+  }
+}
