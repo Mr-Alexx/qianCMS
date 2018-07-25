@@ -155,9 +155,7 @@ export default {
     /**
      * @description 添加/更新文章
     */
-    onSubmit () {
-      
-    }
+    onSubmit () {}
   }
 }
 </script>

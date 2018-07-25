@@ -7,7 +7,9 @@
       @close="handleClose"
       background-color="#545c64"
       text-color="#fff"
-      active-text-color="#ffd04b">
+      active-text-color="#ffd04b"
+      router
+      default-active="/home">
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-location"></i>
@@ -15,19 +17,19 @@
         </template>
         <el-menu-item-group>
           <template slot="title">分组一</template>
-          <el-menu-item index="1-1">
-            <router-link to="/home">home</router-link>
+          <el-menu-item index="/home">
+            home
           </el-menu-item>
-          <el-menu-item index="1-2">
-            <router-link to="docCtrl">docCtrol</router-link>
+          <el-menu-item index="docCtrl">
+            docCtrl
           </el-menu-item>
-          <el-menu-item index="1-3">
-            <router-link to="docEdit">docEdit</router-link>
+          <el-menu-item index="docEdit">
+            docEdit
           </el-menu-item>
         </el-menu-item-group>
         <el-menu-item-group title="分组2">
-          <el-menu-item index="1-3">
-            <router-link to="dew">404</router-link>
+          <el-menu-item index="dew">
+            404
           </el-menu-item>
         </el-menu-item-group>
         <el-submenu index="1-4">
@@ -70,7 +72,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  @import './flexible-menu.scss';
-</style>

@@ -13,9 +13,6 @@
       <el-header class="main-header">
         <!-- 控制左侧导航伸缩 -->
         <div class="navicon-con">
-          <!-- <i
-            :class="['iconfont', 'icon-ios-menu', {'clollapse-navicon': isCollapse}]"
-            @click="isCollapse = !isCollapse"></i> -->
             <q-icon
               icon="ios-menu" :class="{'clollapse-navicon': isCollapse}"
               @click.native="isCollapse = !isCollapse"></q-icon>
