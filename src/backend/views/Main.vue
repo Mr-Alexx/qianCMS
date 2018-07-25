@@ -13,9 +13,12 @@
       <el-header class="main-header">
         <!-- 控制左侧导航伸缩 -->
         <div class="navicon-con">
-          <i
+          <!-- <i
             :class="['iconfont', 'icon-ios-menu', {'clollapse-navicon': isCollapse}]"
-            @click="isCollapse = !isCollapse"></i>
+            @click="isCollapse = !isCollapse"></i> -->
+            <q-icon
+              icon="ios-menu" :class="{'clollapse-navicon': isCollapse}"
+              @click.native="isCollapse = !isCollapse"></q-icon>
         </div>
 
         <!-- 中间文字显示内容 -->
@@ -76,6 +79,7 @@
 </template>
 
 <script>
+import qIcon from '@/backend/components/qIcon.vue'
 import breadcrumb from './main-components/breadcrumb-nav.vue'
 import themeSwitch from './main-components/theme-switch.vue'
 import tagsPageOpened from './main-components/tagsPageOpened.vue'
@@ -107,7 +111,11 @@ export default {
     breadcrumb,
     themeSwitch,
     tagsPageOpened,
+    qIcon,
     flexibleMenu // 左侧菜单栏
+  },
+  mounted () {
+    // this.$loadingbar.start()
   },
   methods: {
     handleOpen (key, keyPath) {

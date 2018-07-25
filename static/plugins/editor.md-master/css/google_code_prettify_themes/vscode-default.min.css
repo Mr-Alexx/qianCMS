@@ -4,7 +4,7 @@ pre.prettyprint, code.prettyprint {
   border-radius: 5px !important;
   padding-top: 43px !important;
   background: rgb(30, 30, 30);
-  font-family: consolas, Menlo, "PingFang SC", "Microsoft YaHei", monospace;
+  font-family: Menlo,Monaco,Consolas,Courier,monospace;
   border: 0 !important;
   -webkit-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
   -moz-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
@@ -12,6 +12,9 @@ pre.prettyprint, code.prettyprint {
   -ms-box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
   box-shadow: 0 10px 15px 0px rgba(0,0,0,0.4);
   font-size: 16px;
+  margin: 30px 0 !important;
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 /* 预留顶部仿mac的容器 */
 pre.prettyprint:before, code.prettyprint:before{
@@ -83,7 +86,8 @@ li.L6,
 li.L7,
 li.L8,
 li.L9 {
-  padding-left: 1em;
+  /* padding-left: 1em; */
+  padding-left: 0;
   background-color: transparent;
   list-style-type: decimal;
 }

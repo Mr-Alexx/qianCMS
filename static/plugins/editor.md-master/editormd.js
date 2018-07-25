@@ -1473,14 +1473,29 @@
             
             if (settings.previewCodeHighlight) 
             {
-                previewContainer.find("pre").addClass("prettyprint linenums");
+                var pres = previewContainer.find("pre")
+                pres.addClass("prettyprint linenums")
+                // 暂时找不到如何获取当前lang类型
+                // 这里采用比较笨的方法，直接获取子孙元素code的类名，过滤写入
+                var _class = [], _dom = []
+                if (previewContainer[0].children.length > 0) {
+                    _dom = $(previewContainer[0]).find('code')
+                    $.each(_dom, function (i, v) {
+                        var _c = $(v).attr('class')
+                        // 将lang-xxx转化为xxx并转大写
+                        if (_c) {
+                            _c = _c.replace(/lang-/, '').toUpperCase()
+                        }
+                        // 对应的pre容器设置为对应的lang类型
+                        $(pres[i]).attr('data-rel', _c)
+                    })  
+                }
                 
                 if (typeof prettyPrint !== "undefined")
                 {                    
                     prettyPrint();
                 }
             }
-
             return this;
         },
         

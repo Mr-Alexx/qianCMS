@@ -58,7 +58,7 @@ export default {
     initEditor: function () {
       (async () => {
         await this.fetchScript('/static/plugins/editor.md-master/jquery.min.js')
-        await this.fetchScript('/static/plugins/editor.md-master/editormd.min.js')
+        await this.fetchScript('/static/plugins/editor.md-master/editormd.js')
         // await this.fetchScript('/static/editor.md/editormd.js')
         this.$nextTick(() => {
           let editor = window.editormd(this.editorId, this.getConfig())

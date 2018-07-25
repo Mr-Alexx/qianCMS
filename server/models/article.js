@@ -7,8 +7,19 @@
 
 const db = require('../config/db')
 const articleSchema = db.import('../schemas/article.js')
+const _ = require('lodash/core')
+const vd = require('../utils/validate.js')
 
 class Article {
+  /**
+   * @description 验证表单编辑内容
+   * @param {Object} form
+  */
+  static validateForm (form) {
+    if (vd.isNullStr(form.title)) {
+      return '标题不能为空'
+    }
+  }
   // 查找指定id的文章
   async getArticleById (id) {
     return await articleSchema.findById(id)

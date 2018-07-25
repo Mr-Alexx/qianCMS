@@ -74,7 +74,7 @@
             {
                 dialog = editor.find("." + dialogName);
                 dialog.find("option:first").attr("selected", "selected");
-                dialog.find("textarea").val(selection);
+				dialog.find("textarea").val(selection);
 
                 this.dialogShowMask(dialog);
                 this.dialogLockScreen();
