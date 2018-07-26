@@ -67,7 +67,7 @@ export default {
     padding: 4px 10px;
     background-color: #f0f0f0;
     padding-right: 120px;
-    @include box-shadow();
+    // @include box-shadow();
   }
   .tags-inner-scroll-body{
     overflow: visible;
