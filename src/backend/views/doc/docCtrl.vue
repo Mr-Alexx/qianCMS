@@ -1,23 +1,89 @@
 <template>
   <section>
-    <bmap id-name="sdfd" class="test"></bmap>
+    <el-upload
+      class="avatar-uploader"
+      action="http://localhost:3000/api/v1/upload/image"
+      :show-file-list="false"
+      :on-success="handleAvatarSuccess"
+      :before-upload="beforeAvatarUpload">
+      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+
+    <img :src="uploadImg" v-if="uploadImg">
+
+    <el-button @click="test">test</el-button>
+    <el-button @click="test2">test2</el-button>
   </section>
 </template>
 
 <script>
-import bmap from '../home/components/charts/bmap.vue'
+import axios from 'axios'
 
 export default {
   name: 'docCtrl',
-  components: {
-    bmap
+  data () {
+    return {
+      imageUrl: '',
+      uploadImg: ''
+    }
+  },
+  methods: {
+    handleAvatarSuccess (res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+      console.log(res, file)
+      if (res.data) {
+        this.uploadImg = res.data.url
+      }
+    },
+    beforeAvatarUpload (file) {
+      const allowPicType = file.type.match(/^(image\/)(png|jpeg|gif)$/i)
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!allowPicType) {
+        this.$message.error('上传头像图片只能是png/jpeg/gif!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return allowPicType && isLt2M
+    },
+    test () {
+      axios.post('http://localhost:3000/api/v1/upload/image', {})
+        .then(data => {
+          console.log(data)
+        })
+    },
+    test2 () {
+      axios.get('http://localhost:3000/api/v1/article/1')
+        .then(data => console.log(data))
+    }
   }
 }
 </script>
 
 <style lang="scss">
-  .test{
-    width: 600px;
-    height: 500px;
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
   }
 </style>

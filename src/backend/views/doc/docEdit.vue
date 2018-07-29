@@ -3,8 +3,8 @@
     <el-form ref="form" :model="form" :rules="rules" label-position="right" label-width="80px" size="small">
       <el-form-item label="文档类别">
         <el-radio-group v-model="form.docType">
-          <el-radio label="文章" value="1"></el-radio>
-          <el-radio label="图片" value="2"></el-radio>
+          <el-radio label="1">文章</el-radio>
+          <el-radio label="2" disabled="">图片</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文档类别">
@@ -22,8 +22,8 @@
       </el-form-item>
       <el-form-item label="来源">
         <el-radio-group v-model="form.source">
-          <el-radio label="原创" value="1"></el-radio>
-          <el-radio label="转载" value="2"></el-radio>
+          <el-radio label="1">原创</el-radio>
+          <el-radio label="2">转载</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="显示">

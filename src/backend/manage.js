@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 import {router} from './router/index.js'
+import store from './store/index.js'
 import axios from 'axios'
 import '../../static/fonts/iconfont.css' // 全局使用iconfont
 import loadingBar from './components/loading-bar' // 使用loadingbar
@@ -162,6 +163,7 @@ Vue.prototype.$echarts = (id, option) => {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

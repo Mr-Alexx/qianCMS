@@ -15,14 +15,17 @@ export default {
     }
   },
   mounted () {
-    this.$http.get('/api/v1/article/1').then(data => {
+    const ENV = process.env.NODE_ENV
+    const baseUrl = ENV === 'development' ? 'http://localhost:3000/api/' : 'http://imqian.com/api/'
+    console.log(baseUrl)
+    this.$http.get(baseUrl + 'v1/article/1').then(data => {
       console.log('获取指定id文章：', data)
     })
-    this.$http.get('/api/v1/article/0/articles').then(data => {
+    this.$http.get(baseUrl + 'v1/article/0/articles').then(data => {
       console.log('获取指定标签的所有文章：', data)
       this.test = data.data
     })
-    this.$http.get('/api/v1/article/1/2').then(data => {
+    this.$http.get(baseUrl + 'v1/article/1/2').then(data => {
       console.log('获取分页数据：', data)
     })
   }

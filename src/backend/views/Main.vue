@@ -65,7 +65,7 @@
       <!-- 标签栏 -->
       <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
 
-      <!-- 主试图内容 -->
+      <!-- 主视图内容 -->
       <el-main class="single-page-con">
         <keep-alive>
           <router-view></router-view>

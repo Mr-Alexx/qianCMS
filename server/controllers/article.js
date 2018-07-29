@@ -60,7 +60,7 @@ class ArticleCtrl {
       
     try {
       const result = await articleModel.getArticle(page, perpage)
-      console.log(result)
+      // console.log(result)
       ctx.response.status = 200
       ctx.response.message = 'success'
       ctx.body = {

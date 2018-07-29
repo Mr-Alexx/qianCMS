@@ -6,11 +6,13 @@
 */
 
 const router = require("koa-router")()
+
 const 
   articleCtrl = require('../controllers/article'),
   categoryCtrl = require('../controllers/category'),
   tagsCtrl = require('../controllers/tags'),
-  userCtrl = require('../controllers/user')
+  userCtrl = require('../controllers/user'),
+  uploadCtrl = require('../controllers/upload')
 
 // article
 router
@@ -18,5 +20,9 @@ router
   .get('/api/v1/article/:tid/articles', articleCtrl.getArticleByTid)
   .get('/api/v1/article/:page/:perpage', articleCtrl.getArticle)
   .post('api/v1/article/add', articleCtrl.addArticle)
+
+// 文件上传
+router
+  .post('/api/v1/upload/image', uploadCtrl.uploadImg)
 
 module.exports = router
