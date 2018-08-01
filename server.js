@@ -21,24 +21,14 @@ const
 
 const  app = new Koa()
 
-// 热更新
-// app.use(hotMiddleware(compiler, {
-//   log () {
-//     cleanCache(require.resolve('./server'))
-//     try {
-//       server = require('./server')
-//     } catch (err) {
-//       console.error('module update failed')
-//     }
-//   }
-// }))
-
 // 允许跨域--上传测试用，生产环境需关闭
 app.use(async (ctx, next) => {
-  // console.log(ctx.request.method)
-  ctx.response.set('Access-Control-Allow-Origin', '*')
-  ctx.response.set('Access-Control-Allow-Methods', '*')
-  ctx.response.set('Access-Control-Allow-Headers','Content-Type,Access-Token')
+  ctx.set({
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,Access-Token',
+    'Allow': 'HEAD,GET,POST,PUT,PATCH,DELETE'
+  })
   await next()
 })
 
@@ -50,9 +40,14 @@ app.use(koabody({
   multipart: true, // 开启文件上传
   formidable: {
     keepExtensions: true,
-    uploadDir: __dirname + '/static/upload/images/', // config.uploadImagePath, // ,
+    uploadDir: config.uploadImagePath,
     maxFileSize: 1024 * 1024 * 2, // 最大允许2m
-    onFileBegin: require('./server/utils/koaBodyUpload')
+    onFileBegin: require('./server/utils/koaBodyUpload').bind(app),
+    onError: err => {
+      const getRes = require('./server/utils/customStatus.js')
+      // 文件上传失败 2002
+      ctx.body = getRes(2002, err, null)
+    }
   }
 }))
 
@@ -60,20 +55,16 @@ app.on('error', (err, ctx) => {
   console.log('server error:', err)
 })
 
-// static代理访问dist目录下的静态文件(webpack打包后的)
-// app.use(koaStatic(path.join(__dirname, 'dist')))
-// app.use(koaStatic(path.join(__dirname, 'public')))
-app.use(koaStatic(path.resolve('dist/')))
-app.use(koaStatic(path.resolve('public')))
-
-// static 代理访问static目录下的静态文件（upload）等
-// app.use(koaStatic(__dirname + '/static/'))
-
 // 挂在各种的路由规则
 app.use(articleRoute.routes())
 // 将路由规则挂在倒实例上
 app.use(router.routes())
 app.use(router.allowedMethods())
+
+// static代理访问dist目录下的静态文件(webpack打包后的)
+// 访问的时候不需要加前缀dist/public，加了会404
+app.use(koaStatic(path.join(__dirname, 'dist')))
+app.use(koaStatic(path.join(__dirname, 'public')))
 
 app.listen(config.port, () => {
   console.log('Koa is listening port on 3000.')

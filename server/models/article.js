@@ -64,7 +64,19 @@ class Article {
    * @param {Object} form 表单内容
   */
   async addArticle (form) {
-    
+    return await articleSchema.create({
+      id: 0,
+      category_id: form.category_id,
+      title: form.title,
+      smtitle: form.smtitle,
+      source: form.source,
+      display: form.display,
+      tags: form.tags,
+      thumbnail: form.thumbnail,
+      summary: form.summary,
+      html: form.html,
+      markdown: form.markdown
+    })
   }
 }
 

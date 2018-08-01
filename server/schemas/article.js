@@ -23,9 +23,9 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '0'
     },
     source: {
-      type: DataTypes.INTEGER(3).UNSIGNED,
+      type: DataTypes.STRING(10),
       allowNull: false,
-      defaultValue: '0'
+      defaultValue: ''
     },
     display: {
       type: DataTypes.INTEGER(3).UNSIGNED,
@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: ''
     },
     thumbnail: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
       allowNull: false,
       defaultValue: ''
     },
@@ -52,31 +52,43 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: ''
     },
-    view: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      defaultValue: '0'
-    },
     create_time: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     },
     update_time: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     },
     is_delete: {
       type: DataTypes.INTEGER(3).UNSIGNED,
       allowNull: false,
       defaultValue: '1'
     },
-    content: {
-      type: "BLOB",
-      allowNull: false
+    view: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
     },
     comments: {
       type: DataTypes.INTEGER(5).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    html: {
+      type: DataTypes.TEXT,
       allowNull: false
+    },
+    markdown: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    smtitle: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: ''
     }
   }, {
     tableName: 'article'

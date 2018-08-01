@@ -1,7 +1,8 @@
 <template>
   <section>
     <a href="manage.html" class="qian-button">后台管理页面入口</a>
-    <p>{{test}}</p>
+    <!-- <p>{{test}}</p> -->
+    <div v-html="test"></div>
   </section>
 </template>
 
@@ -16,16 +17,17 @@ export default {
   },
   mounted () {
     const ENV = process.env.NODE_ENV
-    const baseUrl = ENV === 'development' ? 'http://localhost:3000/api/' : 'http://imqian.com/api/'
+    const baseUrl = ENV === 'development' ? 'http://localhost:3000/api/v1/' : 'http://localhost:3000/api/v1/' // 'http://imqian.com/api/'
     console.log(baseUrl)
-    this.$http.get(baseUrl + 'v1/article/1').then(data => {
-      console.log('获取指定id文章：', data)
+    this.$http.get(baseUrl + 'article/getArtilceById/1').then(res => {
+      console.log('获取指定id文章：', res)
+      this.test = res.data.data.html
     })
-    this.$http.get(baseUrl + 'v1/article/0/articles').then(data => {
+    this.$http.get(baseUrl + 'article/getArticlesByTid/0').then(data => {
       console.log('获取指定标签的所有文章：', data)
-      this.test = data.data
+      // this.test = data.data
     })
-    this.$http.get(baseUrl + 'v1/article/1/2').then(data => {
+    this.$http.get(baseUrl + 'article/getArticlesByPage/1/5').then(data => {
       console.log('获取分页数据：', data)
     })
   }

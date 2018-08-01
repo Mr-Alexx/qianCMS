@@ -14,15 +14,25 @@ const
   userCtrl = require('../controllers/user'),
   uploadCtrl = require('../controllers/upload')
 
-// article
-router
-  .get('/api/v1/article/:id', articleCtrl.getArticleById)
-  .get('/api/v1/article/:tid/articles', articleCtrl.getArticleByTid)
-  .get('/api/v1/article/:page/:perpage', articleCtrl.getArticle)
-  .post('api/v1/article/add', articleCtrl.addArticle)
+/* artilce */
 
-// 文件上传
-router
-  .post('/api/v1/upload/image', uploadCtrl.uploadImg)
+// 通过id获取文章内容
+router.get('/api/v1/article/getArtilceById/:id', articleCtrl.getArticleById)
+
+// 通过tid查询文章列表
+router.get('/api/v1/article/getArticlesByTid/:tid', articleCtrl.getArticleByTid)
+
+// 通过分页和每页数量查询文章列表
+router.get('/api/v1/article/getArticlesByPage/:page/:perpage', articleCtrl.getArticle)
+
+// 添加文章
+router.post('/api/v1/article/addArticle', articleCtrl.addArticle)
+
+// 更新文章
+// router.put('api/v1/article/update/:id', articleCtrl.updateArticle)
+
+/* 文件上传 */
+router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
+console.log(router)
 
 module.exports = router

@@ -19,6 +19,8 @@
 
 <script>
 import axios from 'axios'
+import {host} from '@/backend/config/index.js'
+console.log(host)
 
 export default {
   name: 'docCtrl',
@@ -30,10 +32,14 @@ export default {
   },
   methods: {
     handleAvatarSuccess (res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
-      console.log(res, file)
+      // this.imageUrl = URL.createObjectURL(file.raw)
       if (res.data) {
-        this.uploadImg = res.data.url
+        this.imageUrl = `${host}${res.data.path}`
+      } else {
+        this.$message({
+          message: res.message,
+          type: 'error'
+        })
       }
     },
     beforeAvatarUpload (file) {

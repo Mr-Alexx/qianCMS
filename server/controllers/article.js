@@ -5,6 +5,8 @@
 */
 
 const articleModel = require('../models/article')
+const getRes = require('../utils/customStatus.js')
+const validateForm = require('../utils/validate.js').validateForm
 
 class ArticleCtrl {
   // 根据id获取article
@@ -75,7 +77,21 @@ class ArticleCtrl {
   
   // 添加文章
   async addArticle (ctx) {
-    const form = ctx.params
+    const form = ctx.request.body
+    // 普通验证
+    const vali = validateForm(form)
+    // 防注入验证
+    // 验证不通过则返回错误码
+    if (vali) {
+      return  ctx.body = getRes(1002, vali)
+    }
+    try {
+      const result = await articleModel.addArticle(form)
+      console.log(result)
+      ctx.body = getRes()
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 // 不推荐使用new来导出，new会消耗内存
