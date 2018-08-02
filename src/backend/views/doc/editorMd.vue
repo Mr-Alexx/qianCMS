@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import scriptjs from 'scriptjs'
+import {fetchScript} from '@/backend/utils'
 import { defaultConfig, codeThemes } from '@/backend/config/editorMd.js'
 
 export default {
@@ -45,20 +45,13 @@ export default {
     }
   },
   methods: {
-    fetchScript: function (url) {
-      return new Promise(resolve => {
-        scriptjs(url, () => {
-          resolve()
-        })
-      })
-    },
     getConfig: function () {
       return { ...defaultConfig, ...this.config }
     },
     initEditor: function () {
       (async () => {
-        await this.fetchScript('/static/plugins/editor.md-master/jquery.min.js')
-        await this.fetchScript('/static/plugins/editor.md-master/editormd.js')
+        await fetchScript('/static/plugins/editor.md-master/jquery.min.js')
+        await fetchScript('/static/plugins/editor.md-master/editormd.js')
         // await this.fetchScript('/static/editor.md/editormd.js')
         this.$nextTick(() => {
           let editor = window.editormd(this.editorId, this.getConfig())

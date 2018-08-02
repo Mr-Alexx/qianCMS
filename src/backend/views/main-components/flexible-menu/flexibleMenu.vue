@@ -20,8 +20,8 @@
           <el-menu-item index="/home">
             home
           </el-menu-item>
-          <el-menu-item index="docCtrl">
-            docCtrl
+          <el-menu-item index="login">
+            login
           </el-menu-item>
           <el-menu-item index="docEdit">
             docEdit

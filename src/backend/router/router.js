@@ -1,7 +1,7 @@
 import Main from '../views/Main'
 
 // 不作为Main组件的子组件展示的页面单独写
-// 如下
+// 错误页
 export const page404 = {
   path: '/*',
   name: 'page404',
@@ -29,6 +29,16 @@ export const page500 = {
   component: () => import('@/backend/views/error-page/500.vue')
 }
 
+// 登陆
+export const login = {
+  path: '/login',
+  name: 'login',
+  meta: {
+    title: '登陆'
+  },
+  component: () => import('@/backend/views/login/login.vue')
+}
+
 // 作为Main组件的子组件页面展示但是不在左侧菜单显示的路由
 // 写在otherRouter里
 export const otherRouter = {
@@ -46,6 +56,7 @@ export const otherRouter = {
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
   otherRouter,
+  login,
   page403,
   page404,
   page500
