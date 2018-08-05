@@ -43,13 +43,22 @@ const user = {
   },
   actions: {
     // 用户名登陆
-    async LoginByUsername ({commit}, userInfo) {
+    async LoginByUsername ({commit}, {userInfo, vue}) {
       const uname = userInfo.uname.trim()
       try {
-        let data = await loginByUsername(uname, userInfo.pwd)
-        data = data.data
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        const res = await loginByUsername(uname, userInfo.pwd)
+        const data = res.data
+        if (!data.data) {
+          return vue.$message({
+            message: data.message,
+            type: 'error'
+          })
+        }
+        commit('SET_TOKEN', data.data.token)
+        setToken(data.data.token)
+        vue.$router.push({
+          path: '/home'
+        })
       } catch (err) {
         console.log(err)
       }

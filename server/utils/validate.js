@@ -43,6 +43,11 @@ const validate = {
       return 'markdown内容不能为空且不能超过30000个字符'
     }
     return false
+  },
+  // 防止sql注入验证
+  valiSql (str) {
+    const re = /select|update|delete|truncate|join|union|exec|insert|drop|count|'|"|;|>|<|%/ig
+    return str.match(re)
   }
 }
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import {routers} from './router'
+import {getToken} from '../utils/auth.js'
 
 Vue.use(VueRouter)
 
@@ -17,8 +18,15 @@ router.beforeEach((to, from, next) => {
   // 加载loadingBar，后面自己做一个吧（仿ivews的loadingBar
   Vue.$loadingbar.start() // 开始进度条
   window.document.title = to.meta.title || 'QianCMS' // title设置
+  // 判断是否已登陆
+  const token = getToken()
+  if (!token) {
+    next()
+  } else {
+    next()
+  }
   // 调用下一步操作方法
-  next()
+  // next()
 })
 
 // // 路由加载后处理

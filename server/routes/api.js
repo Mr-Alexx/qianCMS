@@ -33,6 +33,9 @@ router.post('/api/v1/article/addArticle', articleCtrl.addArticle)
 
 /* 文件上传 */
 router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
-console.log(router)
+
+/* 用户 */
+// 登陆
+router.post('/api/v1/login/login', userCtrl.login)
 
 module.exports = router
