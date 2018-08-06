@@ -117,6 +117,11 @@ export default {
     top: 40%;
     width: 360px;
     height: 300px;
+    .el-card__header{
+      h5{
+        font-size: 16px;
+      }
+    }
     .el-card__body{
       padding-top: 0;
       .el-form-item{

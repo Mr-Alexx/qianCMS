@@ -4,7 +4,7 @@ const Sequelize = require('sequelize')
 const config = {
   host: 'localhost',
   user: 'root',
-  pwd: 'Qian3160366',
+  pwd: 'imgroot',
   database: 'blog',
   port: 3306
 }

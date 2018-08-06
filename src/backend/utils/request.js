@@ -3,9 +3,11 @@ import axios from 'axios'
 import store from '@/backend/store'
 import {getToken} from '@/backend/utils/auth'
 
+const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000'
+
 // 创建axios实例
 const http = axios.create({
-  baseURL: '/api/v1/',
+  baseURL: host + '/api/v1/',
   timeout: 8000 // 超时时间
 })
 
