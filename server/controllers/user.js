@@ -7,6 +7,8 @@
 const userModel = require('../models/user')
 const getRes = require('../utils/customStatus.js')
 const valiSql = require('../utils/validate.js').valiSql
+const jwt = require('jsonwebtoken')
+const secret = require('../config').secret
 
 class UserCtrl {
   // 登陆
@@ -28,8 +30,13 @@ class UserCtrl {
       if (!res) {
         return ctx.body = getRes(1002, '登陆失败，账号或密码不正确')
       }
+      // 登录成功
+      const userToken = {
+        name: uname
+      }
+      const token = jwt.sign(userToken, secret, {expiresIn: '1h'}) // token签名 有效期为1小时
       ctx.body = getRes(1001, '登陆成功！', {
-        token: 'xxxxxx'
+        token
       })
     } catch (err) {
       ctx.body = getRes(1002)

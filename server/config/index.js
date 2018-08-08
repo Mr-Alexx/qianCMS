@@ -11,5 +11,6 @@ module.exports = {
   // 上传图片最大值
   uploadImageMaxSize: 1024 * 1024 * 2, // 2M
   // 服务端运行端口
-  port: 3000
+  port: 3000,
+  secret: 'Admin-Token'
 }

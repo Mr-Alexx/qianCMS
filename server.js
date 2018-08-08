@@ -17,7 +17,8 @@ const
   articleRoute = require('./server/routes/api'),
   cleanCache = require('./server/middlewares/cleanCache'),
   hotMiddleware = require('koa-webpack-middleware'),
-  config = require('./server/config')
+  config = require('./server/config'),
+  koaJwt = require('koa-jwt')
 
 const  app = new Koa()
 
@@ -34,6 +35,12 @@ app.use(async (ctx, next) => {
 
 //logger
 app.use(logger())
+
+// jwt验证
+app.use(koaJwt({secret: config.secret}).unless({
+  path: [/^\/api\/v1\/login/] // 数组中的路径不需要通过jwt验证
+}))
+
 // bodyparser
 // app.use(bodyparser())
 app.use(koabody({
