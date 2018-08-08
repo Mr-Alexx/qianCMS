@@ -1,4 +1,6 @@
 const _ = require('lodash/core')
+const secret = require('../config').secret
+const jwt = require('jsonwebtoken')
 
 const validate = {
   /**
@@ -48,6 +50,14 @@ const validate = {
   valiSql (str) {
     const re = /select|update|delete|truncate|join|union|exec|insert|drop|count|'|"|;|>|<|%/ig
     return str.match(re)
+  },
+  async checkToken (token) {
+    if (!token) {
+      return false
+    }
+    // 解密，获取payload
+    let payload = await jwt.verify(token.split(' ')[1], secret)
+    return payload
   }
 }
 

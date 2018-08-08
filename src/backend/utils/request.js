@@ -15,7 +15,7 @@ const http = axios.create({
 http.interceptors.request.use(config => {
   // 存在token时，发送token
   if (store.getters.totken) {
-    config.headers['Auth-Token'] = getToken()
+    config.headers['authorization'] = getToken()
   }
   return config
 }, err => {
