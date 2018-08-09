@@ -37,8 +37,10 @@ app.use(async (ctx, next) => {
 app.use(logger())
 
 // jwt验证
+// 登陆和get请求不需要通过jwt验证
 app.use(koaJwt({secret: config.secret}).unless({
-  path: [/^\/api\/v1\/login/] // 数组中的路径不需要通过jwt验证
+  path: [/^\/api\/v1\/login/],
+  method: 'GET'
 }))
 
 // bodyparser

@@ -11,7 +11,8 @@ const validateForm = require('../utils/validate.js').validateForm
 class ArticleCtrl {
   // 根据id获取article
   async getArticleById (ctx) {
-    console.log(ctx.header.authorization)
+    // console.log(ctx.header.authorization)
+    console.log(ctx.header)
     // ctx可以指代ctx
     const id = ctx.params.id
     const result = await articleModel.getArticleById(id)
