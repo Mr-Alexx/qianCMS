@@ -2,7 +2,7 @@ import axios from 'axios'
 // import {Message} from 'element-ui
 import store from '@/backend/store'
 import {getToken, removeToken} from '@/backend/utils/auth'
-import router from '../router'
+import {router} from '../router/index.js'
 
 const host = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'http://localhost:3000'
 

@@ -49,7 +49,8 @@ export const otherRouter = {
   children: [
     {path: 'home', title: '首页', name: 'home_index', component: () => import('../views/home/home.vue')},
     {path: 'docCtrl', title: '文档管理', name: 'doc_ctrol', component: () => import('../views/doc/docCtrl.vue')},
-    {path: 'docEdit', title: '文档管理', name: 'doc_edit', component: () => import('../views/doc/docEdit.vue')}
+    {path: 'docEdit', title: '文档管理', name: 'doc_edit', component: () => import('../views/doc/docEdit.vue')},
+    {path: 'docManage', title: '文档管理', name: 'doc_manage', component: () => import('../views/doc/docManage.vue')}
   ]
 }
 

@@ -54,7 +54,7 @@ import {
   Progress,
   Badge,
   Card,
-  Rate,
+  Cascader,
   Container,
   Header,
   Aside,
@@ -65,6 +65,9 @@ import {
   Message,
   Scrollbar
 } from 'element-ui'
+
+// 设置默认尺寸
+Vue.prototype.$ELEMENT = {size: 'mini'}
 
 Vue.use(Pagination)
 Vue.use(Dialog)
@@ -113,13 +116,13 @@ Vue.use(Col)
 Vue.use(Upload)
 Vue.use(Progress)
 Vue.use(Badge)
-Vue.use(Rate)
 Vue.use(Container)
 Vue.use(Header)
 Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Footer)
 Vue.use(Card)
+Vue.use(Cascader)
 Vue.use(Loading.directive)
 Vue.use(Scrollbar)
 
