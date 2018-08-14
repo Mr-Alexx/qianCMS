@@ -5,7 +5,9 @@
     <el-row>
       <el-col :md="12" :sm="24">
         <el-button-group>
-          <el-button type="primary" size="mini">添加</el-button>
+          <el-button type="primary" size="mini">
+            <router-link to="/docEdit">添加</router-link>
+          </el-button>
           <el-button type="primary" size="mini">删除</el-button>
         </el-button-group>
 
@@ -29,6 +31,12 @@
           </el-input>
           </el-col>
         </el-row>
+      </el-col>
+    </el-row>
+    <!-- 文章列表 -->
+    <el-row>
+      <el-col :span="24">
+        <el-table></el-table>
       </el-col>
     </el-row>
   </section>

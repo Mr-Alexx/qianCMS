@@ -79,6 +79,8 @@ class ArticleCtrl {
   
   // 添加文章
   async addArticle (ctx) {
+    const header = ctx.headers
+    console.log(header['Authentication'])
     const form = ctx.request.body
     // 普通验证
     const vali = validateForm(form)

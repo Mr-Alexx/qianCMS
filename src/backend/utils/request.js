@@ -15,8 +15,8 @@ const http = axios.create({
 // 请求前的拦截
 http.interceptors.request.use(config => {
   // 存在token时，发送token
-  if (store.getters.token) {
-    config.headers['authorization'] = getToken()
+  if (store.state.user.token) {
+    config.headers['Authentication'] = getToken()
   }
   return config
 }, err => {
@@ -77,4 +77,20 @@ http.interceptors.response.use(res => {
   }
 })
 
-export default http
+// 封装get请求
+export function fetch (url, params) {
+  return http({
+    method: 'GET',
+    url,
+    params
+  })
+}
+
+// 封装post请求
+export function postReq (url, data) {
+  return http({
+    method: 'POST',
+    url,
+    data
+  })
+}

@@ -27,7 +27,7 @@ app.use(async (ctx, next) => {
   ctx.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': '*',
-    'Access-Control-Allow-Headers': 'Content-Type,Access-Token',
+    'Access-Control-Allow-Headers': 'Content-Type,Access-Token,Authentication',
     'Allow': 'HEAD,GET,POST,PUT,PATCH,DELETE'
   })
   await next()
@@ -38,10 +38,10 @@ app.use(logger())
 
 // jwt验证
 // 登陆和get请求不需要通过jwt验证
-app.use(koaJwt({secret: config.secret}).unless({
-  path: [/^\/api\/v1\/login/],
-  method: 'GET'
-}))
+// app.use(koaJwt({secret: config.secret}).unless({
+//   path: [/^\/api\/v1\/(login|upload)/], // 暂时上传不需要认证，后面改造
+//   method: 'GET'
+// }))
 
 // bodyparser
 // app.use(bodyparser())

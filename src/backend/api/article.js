@@ -1,21 +1,17 @@
-import axios from 'axios'
-import {baseUrl} from '../config'
+import {fetch, postReq} from '../utils/request.js'
+// import {baseUrl} from '../config'
 
-const getArticle = async (page, perpage) => {
-  return axios.get(`${baseUrl}/article/getArticlesByPage/:${page}/:${perpage}`)
+// 获取分页文章
+export async function getArticle (page, perpage) {
+  return fetch(`/article/getArticlesByPage/:${page}/:${perpage}`)
 }
 
-const addArticle = async (form) => {
-  console.log(`${baseUrl}/article/addArticle`)
-  return axios.post(`${baseUrl}/article/addArticle`, form)
+// 添加文章
+export async function addArticle (form) {
+  return postReq('/article/addArticle', form)
 }
 
-const editArticle = async (form) => {
-  return axios.post(`${baseUrl}/article/updateArticle`, form)
-}
-
-export {
-  getArticle,
-  addArticle,
-  editArticle
+// 编辑文章
+export async function editArticle (form) {
+  return postReq('//article/updateArticle', form)
 }
