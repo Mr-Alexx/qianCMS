@@ -67,8 +67,10 @@
       </el-form-item>
       <!-- 确定/取消 -->
       <el-form-item>
-        <el-button type="primary" @click="onSubmit('form')">
-          {{isExist ? '添加' : '发布'}}
+        <el-button
+          type="primary" @click="onSubmit('form')"
+          :loading="requesting">
+          {{isExist ? '更新' : '添加'}}
         </el-button>
         <el-button>取消</el-button>
       </el-form-item>
@@ -99,6 +101,7 @@ export default {
   },
   data () {
     return {
+      requesting: false,
       form: {
         docType: 1,
         category_id: '',
@@ -198,15 +201,36 @@ export default {
           })
           return false
         }
-        // console.log(this.form)
+        // 通过校验才加载loading，防止多次提交
+        this.requesting = true
         console.log(this.form)
         let res = null
-        if (!this.isExist) {
-          res = await addArticle(this.form)
-        } else {
-          res = await editArticle(this.form)
+        try {
+          if (!this.isExist) {
+            res = await addArticle(this.form)
+          } else {
+            res = await editArticle(this.form)
+          }
+          // 添加/更新成功
+          if (res.data.code === 1001) {
+            this.$message({
+              message: res.data.message || '添加/更新成功',
+              type: 'success'
+            })
+            this.$router.push('/docManage')
+          } else {
+            // 添加/更新失败
+            this.$message({
+              message: res.data.message || '添加/更新失败',
+              type: 'error'
+            })
+            // 停止loading
+            this.requesting = false
+          }
+        } catch (err) {
+          this.requesting = false
+          console.log(err)
         }
-        console.log(res)
       })
     }
   },

@@ -3,12 +3,12 @@ import {fetch, postReq} from '../utils/request.js'
 
 // 用户名密码登陆
 export async function loginByUsername (uname, pwd) {
-  return postReq('/login/login', {uname, pwd})
+  return postReq('/user/admin/login', {uname, pwd})
 }
 
 // 退出登陆
 export async function logout () {
-  return postReq('/login/logout')
+  return postReq('/user/admin/logout')
 }
 
 // 通过token获取用户信息

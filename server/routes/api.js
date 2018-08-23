@@ -17,25 +17,28 @@ const
 /* artilce */
 
 // 通过id获取文章内容
-router.get('/api/v1/article/getArtilceById/:id', articleCtrl.getArticleById)
+router.get('/api/v1/article/id/:id', articleCtrl.getArticleById)
 
 // 通过tid查询文章列表
-router.get('/api/v1/article/getArticlesByTid/:tid', articleCtrl.getArticleByTid)
+router.get('/api/v1/article/tid/:tid', articleCtrl.getArticleByTid)
+// 通过分类(cid)查询文章列表
+router.get('/api/v1/article/cid/:cid', articleCtrl.getArticleByCid)
 
-// 通过分页和每页数量查询文章列表
-router.get('/api/v1/article/getArticlesByPage/:page/:perpage', articleCtrl.getArticle)
+// 通过分页和每页数量查询文章列表--page采用query形式获取参数 ?limit=x&offset=x
+router.get('/api/v1/article/pagination', articleCtrl.getArticle)
 
 // 添加文章
-router.post('/api/v1/article/addArticle', articleCtrl.addArticle)
+router.post('/api/v1/article/add', articleCtrl.addArticle)
 
 // 更新文章
-// router.put('api/v1/article/update/:id', articleCtrl.updateArticle)
+router.put('/api/v1/article/update', articleCtrl.updateArticle)
 
 /* 文件上传 */
 router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
 
 /* 用户 */
 // 登陆
-router.post('/api/v1/login/login', userCtrl.login)
+router.post('/api/v1/user/admin/login', userCtrl.login)
+router.post('/api/v1/user/admin/logout', userCtrl.logout)
 
 module.exports = router

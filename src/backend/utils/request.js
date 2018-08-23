@@ -14,10 +14,21 @@ const http = axios.create({
 
 // 请求前的拦截
 http.interceptors.request.use(config => {
+  console.log(config)
   // 存在token时，发送token
   if (store.state.user.token) {
     config.headers['Authentication'] = getToken()
   }
+  // 防止post请求发送options请求而导致自定义头部无法发送给后端
+  // 导致没有携带token，一直返回401的问题
+  // 方法一就是前端设置content-type
+  // 方法二就是后端遇到options请求时方行，此处使用方法一
+  // if (config.method.match(/post/i)) {
+  //   config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+  //   console.log(config.headers)
+  // }
+  // console.log(config.headers)
+  // console.log(config.method, config.method.match(/post/i))
   return config
 }, err => {
   // 请求出错时
@@ -34,6 +45,7 @@ http.interceptors.response.use(res => {
     return Promise.reject(res)
   }
 }, err => {
+  console.log(err)
   // 服务器状态码不是2开头的情况
   // 401 =》 未登陆，402 =》token过期，403 =》权限不足，404 =》访问不存在
   // 500 =》服务器错误
@@ -90,6 +102,15 @@ export function fetch (url, params) {
 export function postReq (url, data) {
   return http({
     method: 'POST',
+    url,
+    data
+  })
+}
+
+// 封装put请求
+export function putReq (url, data) {
+  return http({
+    method: 'PUT',
     url,
     data
   })

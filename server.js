@@ -15,7 +15,7 @@ const
   koaStatic = require('koa-static')
   router = require('koa-router')(),
   articleRoute = require('./server/routes/api'),
-  cleanCache = require('./server/middlewares/cleanCache'),
+  errHandler = require('./server/middlewares/errHandler'),
   hotMiddleware = require('koa-webpack-middleware'),
   config = require('./server/config'),
   koaJwt = require('koa-jwt')
@@ -27,21 +27,28 @@ app.use(async (ctx, next) => {
   ctx.set({
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': '*',
-    'Access-Control-Allow-Headers': 'Content-Type,Access-Token,Authentication',
-    'Allow': 'HEAD,GET,POST,PUT,PATCH,DELETE'
+    'Access-Control-Allow-Headers': 'Content-Type, Authentication, Accept'
   })
   await next()
 })
+
+app.use(async (ctx, next) => {
+  await next()
+  console.log(ctx.headers)
+})
+
+// 401捕获
+app.use(errHandler)
 
 //logger
 app.use(logger())
 
 // jwt验证
 // 登陆和get请求不需要通过jwt验证
-// app.use(koaJwt({secret: config.secret}).unless({
-//   path: [/^\/api\/v1\/(login|upload)/], // 暂时上传不需要认证，后面改造
-//   method: 'GET'
-// }))
+app.use(koaJwt({secret: config.secret}).unless({
+  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
+  method: 'GET'
+}))
 
 // bodyparser
 // app.use(bodyparser())
@@ -60,10 +67,6 @@ app.use(koabody({
   }
 }))
 
-app.on('error', (err, ctx) => {
-  console.log('server error:', err)
-})
-
 // 挂在各种的路由规则
 app.use(articleRoute.routes())
 // 将路由规则挂在倒实例上
@@ -74,6 +77,19 @@ app.use(router.allowedMethods())
 // 访问的时候不需要加前缀dist/public，加了会404
 app.use(koaStatic(path.join(__dirname, 'dist')))
 app.use(koaStatic(path.join(__dirname, 'public')))
+
+app.on('error', (err, ctx) => {
+  console.log('server error:', err)
+  // 401捕获
+  // console.log(err.status)
+  // if (err.status === 401) {
+  //   ctx.status = 401
+  //   ctx.body = {
+  //     code: 401,
+  //     message: err.originalError ? err.originalError.message : err.message
+  //   }
+  // }
+})
 
 app.listen(config.port, () => {
   console.log('Koa is listening port on 3000.')

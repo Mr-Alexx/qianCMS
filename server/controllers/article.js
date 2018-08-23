@@ -29,14 +29,19 @@ class ArticleCtrl {
   // 根据tid获取文章
   async getArticleByTid (ctx) {
     const tid = ctx.params.tid
-    const result = await articleModel.getArticleByTid(tid)
-    ctx.response.status = 200
-    ctx.response.message = 'true'
-    // ctx.body = 'I want to love somebody.'
-    ctx.body = {
-      code: 1,
-      message: 'success',
-      data: result
+    try {
+      const result = await articleModel.getArticleByTid(tid)
+      ctx.body = {
+        code: 1001,
+        message: 'Success!',
+        data: result
+      }
+    } catch (err) {
+      ctx.body = {
+        code: 1002,
+        message: 'Failed!'
+      }
+      console.log('getArticleByTig error: ' + err)
     }
   }
   // 根据分类获取文章
@@ -44,10 +49,8 @@ class ArticleCtrl {
     const cid = ctx.params.cid
     try {
       const result = await articleModel.getArticleByCid(cid)
-      ctx.response.status = 200
-      ctx.response.message = 'true'
       ctx.body = {
-        code: 1,
+        code: 1001,
         message: 'success',
         data: result
       }
@@ -59,27 +62,29 @@ class ArticleCtrl {
   // 获取文章--分页
   async getArticle (ctx) {
     const 
-      page = ctx.params.page,
-      perpage = ctx.params.perpage
+      page = ctx.request.query.page,
+      perpage = ctx.request.query.perpage
       
     try {
       const result = await articleModel.getArticle(page, perpage)
-      // console.log(result)
-      ctx.response.status = 200
-      ctx.response.message = 'success'
       ctx.body = {
-        code: 1,
+        code: 1001,
         message: 'success',
         data: result
       }
     } catch (err) {
+      ctx.body = {
+        code: 1002,
+        message: 'failed'
+      }
       console.log(err)
     }
   }
   
-  // 添加文章
+  // add article
   async addArticle (ctx) {
     const header = ctx.headers
+    console.log('=========')
     console.log(header['Authentication'])
     const form = ctx.request.body
     // 普通验证
@@ -96,6 +101,11 @@ class ArticleCtrl {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  // update article
+  async updateArticle (ctx) {
+    console.log(ctx)
   }
 }
 // 不推荐使用new来导出，new会消耗内存

@@ -34,7 +34,7 @@ class UserCtrl {
       const userToken = {
         name: uname
       }
-      const token = jwt.sign(userToken, secret, {expiresIn: '1h'}) // token签名 有效期为1小时
+      const token = jwt.sign(userToken, secret, {expiresIn: '100h'}) // token签名 有效期为1小时
       ctx.body = getRes(1001, '登陆成功！', {
         token
       })
@@ -42,6 +42,11 @@ class UserCtrl {
       ctx.body = getRes(1002)
       console.log(err)
     }
+  }
+
+  // 退出登陆
+  async logout (ctx) {
+    console.log(ctx.header)
   }
 }
 // 不推荐使用new来导出，new会消耗内存

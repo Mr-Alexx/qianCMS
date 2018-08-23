@@ -3,15 +3,16 @@ import {fetch, postReq} from '../utils/request.js'
 
 // 获取分页文章
 export async function getArticle (page, perpage) {
-  return fetch(`/article/getArticlesByPage/:${page}/:${perpage}`)
+  return fetch(`/article/pagination`)
 }
 
 // 添加文章
 export async function addArticle (form) {
-  return postReq('/article/addArticle', form)
+  return postReq('/article/add', form)
 }
 
 // 编辑文章
+// form {id...}
 export async function editArticle (form) {
-  return postReq('//article/updateArticle', form)
+  return postReq('/article/update', form)
 }
