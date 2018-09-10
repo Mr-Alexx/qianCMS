@@ -203,7 +203,7 @@ export default {
         }
         // 通过校验才加载loading，防止多次提交
         this.requesting = true
-        console.log(this.form)
+        // console.log(this.form)
         let res = null
         try {
           if (!this.isExist) {

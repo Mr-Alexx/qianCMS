@@ -12,5 +12,5 @@ module.exports = {
   uploadImageMaxSize: 1024 * 1024 * 2, // 2M
   // 服务端运行端口
   port: 3000,
-  secret: 'auth;token!'
+  secret: 'Authentication' // 'auth;token!'
 }

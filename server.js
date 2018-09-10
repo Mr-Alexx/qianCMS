@@ -43,17 +43,11 @@ app.use(errHandler)
 //logger
 app.use(logger())
 
-// jwt验证
-// 登陆和get请求不需要通过jwt验证
-app.use(koaJwt({secret: config.secret}).unless({
-  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
-  method: 'GET'
-}))
-
 // bodyparser
 // app.use(bodyparser())
 app.use(koabody({
   multipart: true, // 开启文件上传
+  // encoding: 'gzip', // 开启gzip
   formidable: {
     keepExtensions: true,
     uploadDir: config.uploadImagePath,
@@ -67,16 +61,23 @@ app.use(koabody({
   }
 }))
 
+// static代理访问dist目录下的静态文件(webpack打包后的)
+// 访问的时候不需要加前缀dist/public，加了会404
+app.use(koaStatic(path.join(__dirname, 'dist')))
+app.use(koaStatic(path.join(__dirname, 'public')))
+
+// jwt验证
+// 登陆和get请求不需要通过jwt验证
+app.use(koaJwt({secret: config.secret}).unless({
+  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
+  method: 'GET'
+}))
+
 // 挂在各种的路由规则
 app.use(articleRoute.routes())
 // 将路由规则挂在倒实例上
 app.use(router.routes())
 app.use(router.allowedMethods())
-
-// static代理访问dist目录下的静态文件(webpack打包后的)
-// 访问的时候不需要加前缀dist/public，加了会404
-app.use(koaStatic(path.join(__dirname, 'dist')))
-app.use(koaStatic(path.join(__dirname, 'public')))
 
 app.on('error', (err, ctx) => {
   console.log('server error:', err)

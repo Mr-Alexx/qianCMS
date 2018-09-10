@@ -34,7 +34,8 @@ class UserCtrl {
       const userToken = {
         name: uname
       }
-      const token = jwt.sign(userToken, secret, {expiresIn: '100h'}) // token签名 有效期为1小时
+      // , {expiresIn: '100h'}
+      const token = jwt.sign(userToken, secret) // token签名 有效期为1小时
       ctx.body = getRes(1001, '登陆成功！', {
         token
       })

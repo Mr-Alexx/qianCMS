@@ -17,6 +17,9 @@ http.interceptors.request.use(config => {
   console.log(config)
   // 存在token时，发送token
   if (store.state.user.token) {
+    console.log(getToken())
+    // 不能设置该header属性值,这是上传文件用的,设置的话会将post的data转成from-data,传递值不对
+    // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     config.headers['Authentication'] = getToken()
   }
   // 防止post请求发送options请求而导致自定义头部无法发送给后端
