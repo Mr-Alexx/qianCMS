@@ -14,24 +14,12 @@ const http = axios.create({
 
 // 请求前的拦截
 http.interceptors.request.use(config => {
-  console.log(config)
   // 存在token时，发送token
   if (store.state.user.token) {
-    console.log(getToken())
     // 不能设置该header属性值,这是上传文件用的,设置的话会将post的data转成from-data,传递值不对
     // config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    config.headers['Authentication'] = getToken()
+    config.headers['Authorization'] = `Bearer ${getToken()}`
   }
-  // 防止post请求发送options请求而导致自定义头部无法发送给后端
-  // 导致没有携带token，一直返回401的问题
-  // 方法一就是前端设置content-type
-  // 方法二就是后端遇到options请求时方行，此处使用方法一
-  // if (config.method.match(/post/i)) {
-  //   config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-  //   console.log(config.headers)
-  // }
-  // console.log(config.headers)
-  // console.log(config.method, config.method.match(/post/i))
   return config
 }, err => {
   // 请求出错时

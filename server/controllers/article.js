@@ -11,20 +11,10 @@ const validateForm = require('../utils/validate.js').validateForm
 class ArticleCtrl {
   // 根据id获取article
   async getArticleById (ctx) {
-    // console.log(ctx.header.authorization)
-    console.log(ctx.header)
     // ctx可以指代ctx
     const id = ctx.params.id
     const result = await articleModel.getArticleById(id)
-    // 采用json形式返回
-    // const newResult = JSON.stringify(result)
-    ctx.response.status = 200
-    ctx.response.message = 'true'
-    ctx.body = {
-      code: 1,
-      message: 'success',
-      data: result
-    }
+    ctx.body = getRes(1001, '', result)
   }
   // 根据tid获取文章
   async getArticleByTid (ctx) {
@@ -80,13 +70,20 @@ class ArticleCtrl {
       console.log(err)
     }
   }
+  // 获取所有文章
+  async getAllArticle (ctx) {
+    try {
+      const res = await articleModel.getAllArticle()
+      ctx.body = getRes(1001, '', res)
+    } catch (err) {
+      ctx.body = getRes(1002)
+      console.log(err)
+    }
+  }
   
   // add article
   async addArticle (ctx) {
-    const header = ctx.headers
-    console.log('=========')
     const form = ctx.request.body
-    console.log(form)
     // 普通验证
     const vali = validateForm(form)
     // 防注入验证
@@ -96,7 +93,6 @@ class ArticleCtrl {
     }
     try {
       const result = await articleModel.addArticle(form)
-      console.log(result)
       ctx.body = getRes()
     } catch (err) {
       console.log(err)

@@ -2,9 +2,9 @@
   <section>
     <h5>文档管理</h5>
     <!-- 功能组 -->
-    <el-row>
+    <el-row class="qian-manage-menu">
       <el-col :md="12" :sm="24">
-        <el-button-group>
+        <el-button-group class="qian-manage-menu__group">
           <el-button type="primary" size="mini">
             <router-link to="/docEdit">添加</router-link>
           </el-button>
@@ -36,7 +36,75 @@
     <!-- 文章列表 -->
     <el-row>
       <el-col :span="24">
-        <el-table></el-table>
+        <el-table
+          :data="articles"
+          size="primary"
+          @selection-change="handleSelect">
+          <el-table-column
+            type="selection"
+            width="50"></el-table-column>
+          <el-table-column
+            prop="id"
+            label="编号"
+            width="80"></el-table-column>
+          <el-table-column
+            prop="title"
+            label="标题"
+            width="260"></el-table-column>
+          <el-table-column
+            prop="update_time"
+            label="更新时间">
+            <template slot-scope="scope">
+              <span>
+                {{scope.row.update_time | timeFilter}}
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="category_name"
+            label="文档类别"
+            width="100"></el-table-column>
+          <el-table-column
+            prop="source"
+            label="来源"
+            width="80"></el-table-column>
+          <el-table-column
+            prop="view"
+            label="点击数"
+            width="100"></el-table-column>
+          <el-table-column
+            prop="comments"
+            label="评论数"
+            width="100"></el-table-column>
+          <el-table-column
+            prop="display"
+            label="显示状态"></el-table-column>
+          <el-table-column
+            prop="action"
+            label="操作"
+            fixed="right"
+            width="140">
+            <template slot-scope="scope">
+              <el-button @click="edit(scope.$index, scope.row)">修改</el-button>
+              <el-button
+                type="danger">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+    <!-- 分页 -->
+    <el-row>
+      <el-col :span="24">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[8, 16, 24, 32]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="articleList.length">
+        </el-pagination>
       </el-col>
     </el-row>
   </section>
@@ -65,12 +133,61 @@ export default {
   data () {
     return {
       searchVal: '',
-      selectCategory: []
+      selectCategory: [],
+      articleList: [],
+      pageSize: 8, // 每页数量
+      currentPage: 1 // 当前页数
+    }
+  },
+  computed: {
+    articles () {
+      if (this.$store.state.doc.articleList.length > 0) {
+        const start = (this.currentPage - 1) * this.pageSize
+        const end = this.currentPage * this.pageSize
+        return this.$store.state.doc.articleList.slice(start, end)
+      }
+    }
+  },
+  filters: {
+    timeFilter (time) {
+      return time.substring(0, 10)
+    }
+  },
+  created () {
+    this.$store.dispatch('getArticleList')
+  },
+  methods: {
+    // 处理文章列表checkbox选择
+    handleSelect () {},
+
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      this.pageSize = val
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.currentPage = val
+    },
+
+    /**
+     * @description 编辑文章
+     */
+    edit (index, row) {
+      this.$router.push({
+        path: '/docEdit',
+        query: {
+          id: row.id
+        }
+      })
     }
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+  .qian-manage-menu__group {
+    a {
+      color: #fff;
+    }
+  }
 </style>

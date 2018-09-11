@@ -26,6 +26,8 @@ router.get('/api/v1/article/cid/:cid', articleCtrl.getArticleByCid)
 
 // 通过分页和每页数量查询文章列表--page采用query形式获取参数 ?limit=x&offset=x
 router.get('/api/v1/article/pagination', articleCtrl.getArticle)
+// 获取所有文章
+router.get('/api/v1/article', articleCtrl.getAllArticle)
 
 // 添加文章
 router.post('/api/v1/article/add', articleCtrl.addArticle)

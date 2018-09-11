@@ -13,6 +13,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@koa/cors": "^2.2.2",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "concurrently": "^3.6.0",

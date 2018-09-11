@@ -8,6 +8,7 @@
 const 
   Koa = require('koa'),
   path = require('path'),
+  cors = require('@koa/cors'),
   fs = require('fs'),
   logger = require('koa-logger'),
   koabody = require('koa-body'),
@@ -22,26 +23,24 @@ const
 
 const  app = new Koa()
 
-// 允许跨域--上传测试用，生产环境需关闭
-app.use(async (ctx, next) => {
-  ctx.set({
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': '*',
-    'Access-Control-Allow-Headers': 'Content-Type, Authentication, Accept'
-  })
-  await next()
-})
-
-app.use(async (ctx, next) => {
-  await next()
-  console.log(ctx.headers)
-})
+// 允许跨域,cors中间件 https://github.com/koajs/cors
+app.use(cors({
+  origin: '*',
+  allowHeaders: ['Content-Type', 'Authorization'] // 不是Authentication 请记住,我个大傻逼
+}))
 
 // 401捕获
-app.use(errHandler)
+// app.use(errHandler())
 
 //logger
 app.use(logger())
+
+// jwt验证 保护下面的中间件
+// 登陆和get请求不需要通过jwt验证
+app.use(koaJwt({secret: config.secret}).unless({
+  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
+  method: 'GET'
+}))
 
 // bodyparser
 // app.use(bodyparser())
@@ -66,13 +65,6 @@ app.use(koabody({
 app.use(koaStatic(path.join(__dirname, 'dist')))
 app.use(koaStatic(path.join(__dirname, 'public')))
 
-// jwt验证
-// 登陆和get请求不需要通过jwt验证
-app.use(koaJwt({secret: config.secret}).unless({
-  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
-  method: 'GET'
-}))
-
 // 挂在各种的路由规则
 app.use(articleRoute.routes())
 // 将路由规则挂在倒实例上
@@ -82,14 +74,14 @@ app.use(router.allowedMethods())
 app.on('error', (err, ctx) => {
   console.log('server error:', err)
   // 401捕获
-  // console.log(err.status)
-  // if (err.status === 401) {
-  //   ctx.status = 401
-  //   ctx.body = {
-  //     code: 401,
-  //     message: err.originalError ? err.originalError.message : err.message
-  //   }
-  // }
+  console.log(err.status)
+  if (err.status === 401) {
+    ctx.status = 401
+    ctx.body = {
+      code: 401,
+      message: err.originalError ? err.originalError.message : err.message
+    }
+  }
 })
 
 app.listen(config.port, () => {

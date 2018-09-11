@@ -10,10 +10,10 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文章类别" prop="category_id">
-        <el-select v-model="form.category_id" placeholder="请选择文章类别">
-          <el-option label="js" :value="1"></el-option>
-          <el-option label="vue" :value="2"></el-option>
-          <el-option label="node" :value="3"></el-option>
+        <el-select v-model="form.category" placeholder="请选择文章类别">
+          <el-option label="js" :value="{id: 1, name: 'js'}"></el-option>
+          <el-option label="vue" :value="{id: 2, name: 'vue'}"></el-option>
+          <el-option label="node" :value="{id: 3, name: 'node'}"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="标题" prop="title">
@@ -92,19 +92,13 @@ export default {
   components: {
     editorMd
   },
-  props: {
-    // 文章是否存在，控制按钮文字用（发布/保存）
-    isExist: {
-      type: Boolean,
-      default: false
-    }
-  },
   data () {
     return {
       requesting: false,
+      isExist: false,
       form: {
         docType: 1,
-        category_id: '',
+        category: {id: 1, name: 'js'},
         title: '',
         smtitle: '',
         source: '原创',
@@ -118,7 +112,7 @@ export default {
         html: ''
       },
       rules: {
-        category_id: [
+        category: [
           {required: true, message: '请选择文章类别', trigger: 'change'}
         ],
         title: [
@@ -142,17 +136,32 @@ export default {
       initEditorContent: '' // 编辑文章时的初始内容
     }
   },
-  created () {
-    if (this.isExist) {
-      this.initDoc()
-    }
+  mounted () {
+    this.initDoc()
   },
   methods: {
     /**
      * @description 编辑状态时初始数据
      */
     async initDoc () {
-      this.form = await getArticle()
+      const id = this.$route.query.id
+      if (id) {
+        this.isExist = true
+        try {
+          const res = (await this.$store.dispatch('getArticleById', id)).data.data
+          this.form = res
+          this.form.category = {id: res.category_id, name: res.category_name}
+          console.log(this.form)
+        } catch (err) {
+          console.log(err)
+          this.$message({
+            message: '获取文章失败',
+            type: 'error'
+          })
+        }
+      } else {
+        this.isExist = false
+      }
     },
     thumbnailUploadSuccess (res, file) {
       // this.form.thumbnail = URL.createObjectURL(file.raw)
@@ -205,27 +214,30 @@ export default {
         this.requesting = true
         // console.log(this.form)
         let res = null
+        this.form.category_id = this.form.category.id
+        this.form.category_name = this.form.category.name
         try {
           if (!this.isExist) {
             res = await addArticle(this.form)
           } else {
             res = await editArticle(this.form)
           }
+          const msg = this.isExist ? '更新' : '添加'
           // 添加/更新成功
           if (res.data.code === 1001) {
             this.$message({
-              message: res.data.message || '添加/更新成功',
+              message: `${msg}成功`,
               type: 'success'
             })
+            this.loading = false
             this.$router.push('/docManage')
           } else {
             // 添加/更新失败
             this.$message({
-              message: res.data.message || '添加/更新失败',
+              message: `${msg}失败: ${res.data.message}`,
               type: 'error'
             })
-            // 停止loading
-            this.requesting = false
+            this.loading = false
           }
         } catch (err) {
           this.requesting = false

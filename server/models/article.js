@@ -58,6 +58,13 @@ class Article {
     })  
   }
   
+  /**
+   * @description 获取所有文章
+   */
+  async getAllArticle () {
+    return await articleSchema.findAll()
+  }
+
   // 添加/更新文章
   /**
    * @description 添加文章
@@ -67,6 +74,7 @@ class Article {
     return await articleSchema.create({
       id: 0,
       category_id: form.category_id,
+      category_name: form.category_name,
       title: form.title,
       smtitle: form.smtitle,
       source: form.source,

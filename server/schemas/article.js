@@ -89,6 +89,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(30),
       allowNull: false,
       defaultValue: ''
+    },
+    category_name: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      defaultValue: ''
     }
   }, {
     tableName: 'article'

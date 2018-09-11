@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: ''
     },
     pwd: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING(20),
       allowNull: false
     },
     role: {
@@ -23,7 +23,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     create_time: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
     }
   }, {
     tableName: 'user'

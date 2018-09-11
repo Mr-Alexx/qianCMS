@@ -12,7 +12,10 @@ const validate = {
   validateForm (form) {
     console.log(form)
     if (!_.isNumber(form.category_id)) {
-      return '分类名称id必须是整型'
+      return '分类id必须是整型'
+    }
+    if (validate.isNullStr(form.category_name)) {
+      return '分类名称必须是字符型'
     }
     if (!_.isBoolean(form.display)) {
       return '显示类型必须是布尔型'

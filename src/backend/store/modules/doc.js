@@ -1,15 +1,19 @@
+import Vue from 'vue'
 import {host} from '@/backend/config/index.js'
 import {
   getArticle,
   addArticle,
-  editArticle
+  editArticle,
+  getAllArticle,
+  getArticleById
 } from '@/backend/api/article.js'
 
 const doc = {
   state: {
+    articleList: [], // 文章列表
     form: {
       docType: '1',
-      category_id: '1',
+      category: {id: 1, name: 'js'},
       title: '',
       smTitle: '',
       source: '1',
@@ -21,21 +25,14 @@ const doc = {
       markdown: '',
       html: ''
     },
-    rules: {
-      title: [
-        {required: true, trigger: 'blur'},
-        {min: 1, max: 20, message: '长度在1～20个字符', trigger: 'blur'}
-      ],
-      smTitle: [
-        {required: true, trigger: 'blur'},
-        {min: 1, max: 20, message: '长度在1～20个字符', trigger: 'blur'}
-      ]
-    },
     maxSize: 2, // 单位M
     dialogVisible: false,
     initEditorContent: '' // 编辑文章时的初始内容
   },
   mutations: {
+    SET_ARTICLELIST (state, list) {
+      state.articleList = list
+    },
     SET_THUMBNAIL (state, thumbnail) {
       state.form.thumbnail = thumbnail
     },
@@ -50,6 +47,27 @@ const doc = {
     }
   },
   actions: {
+    /**
+     * @description 获取文章列表
+     */
+    async getArticleList ({commit}) {
+      const res = await getAllArticle()
+      if (res.data.code === 1001) {
+        commit('SET_ARTICLELIST', res.data.data)
+      } else {
+        Vue.$message({
+          message: res.data.message,
+          type: 'error'
+        })
+      }
+    },
+
+    async getArticleById ({commit}, id) {
+      const res = await getArticleById(id)
+      console.log(res)
+      return res
+    },
+
     /**
      * @description 文章内容输入变化时的回调
      */
