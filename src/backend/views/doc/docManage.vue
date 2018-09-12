@@ -1,10 +1,12 @@
 <template>
   <section>
-    <h5>文档管理</h5>
     <!-- 功能组 -->
     <el-row class="qian-manage-menu">
-      <el-col :md="12" :sm="24">
-        <el-button-group class="qian-manage-menu__group">
+      <el-col :span="24">
+        <h5 class="qian-manage-menu__title">文档管理</h5>
+      </el-col>
+      <el-col :md="12" :sm="24" class="qian-manage-menu__group">
+        <el-button-group>
           <el-button type="primary" size="mini">
             <router-link to="/docEdit">添加</router-link>
           </el-button>
@@ -87,7 +89,8 @@
             <template slot-scope="scope">
               <el-button @click="edit(scope.$index, scope.row)">修改</el-button>
               <el-button
-                type="danger">删除</el-button>
+                type="danger"
+                @click="deleteArticle(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -97,6 +100,7 @@
     <el-row>
       <el-col :span="24">
         <el-pagination
+          class="qian-manage-pagination"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
@@ -179,15 +183,50 @@ export default {
           id: row.id
         }
       })
+    },
+
+    /**
+     * @description 删除文章
+     */
+    deleteArticle (index, row) {
+      this.$confirm('是否将该文章移入回收站?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        await this.$store.dispatch('deleteArticle', [row], this)
+        // 更新文章列表
+        this.$store.dispatch('getArticleList', this)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+          duration: 1000
+        })
+      })
     }
   }
 }
 </script>
 
 <style lang="scss">
-  .qian-manage-menu__group {
-    a {
-      color: #fff;
+  $prefix: qian-manage;
+  .#{$prefix} {
+    &-menu {
+      &__title {
+        font-size: 14px;
+        padding: 10px 0;
+      }
+    }
+    &-menu__group {
+      padding-bottom: 20px;
+      a {
+        color: #fff;
+      }
+    }
+    &-pagination {
+      text-align: center;
+      padding-top: 15px;
     }
   }
 </style>

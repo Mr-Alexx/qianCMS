@@ -4,3 +4,19 @@
 * @Copyright: 2018 https://www.imqian.com All rights reserved
 * @description: tags表的数据库操作
 */
+
+const db = require('../config/db')
+const tagsSchema = db.import('../schemas/tags.js')
+const _ = require('lodash/core')
+const vd = require('../utils/validate.js')
+
+class Tags {
+  async getTags () {
+    return await tagsSchema.findAll({
+      attributes: ['id', 'tname']
+    })
+  }
+}
+
+module.exports = new Tags()
+

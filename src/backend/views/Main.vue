@@ -67,9 +67,10 @@
 
       <!-- 主视图内容 -->
       <el-main class="single-page-con">
-        <keep-alive>
+        <!-- <keep-alive>
           <router-view></router-view>
-        </keep-alive>
+        </keep-alive> -->
+        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>

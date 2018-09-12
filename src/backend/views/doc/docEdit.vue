@@ -10,10 +10,16 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文章类别" prop="category_id">
-        <el-select v-model="form.category" placeholder="请选择文章类别">
-          <el-option label="js" :value="{id: 1, name: 'js'}"></el-option>
-          <el-option label="vue" :value="{id: 2, name: 'vue'}"></el-option>
-          <el-option label="node" :value="{id: 3, name: 'node'}"></el-option>
+        <el-select
+          v-model="form.category_id"
+          placeholder="请选择文章类别"
+          value-key="value">
+          <el-option
+            v-if="categories.length > 0"
+            v-for="item in categories"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="标题" prop="title">
@@ -33,10 +39,17 @@
       </el-form-item>
       <!-- 标签选择 -->
       <el-form-item label="标签" prop="_tags">
-        <el-select v-model="form._tags" multiple placeholder="请选择标签">
-          <el-option label="js" :value="1"></el-option>
-          <el-option label="vue" :value="2"></el-option>
-          <el-option label="node" :value="3"></el-option>
+        <el-select
+          v-model="form._tags"
+          multiple
+          placeholder="请选择标签"
+          value-key="id">
+          <el-option
+            v-if="tags.length > 0"
+            v-for="item in tags"
+            :key="item.id"
+            :label="item.tname"
+            :value="item"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="缩略图">
@@ -81,8 +94,8 @@
 <script>
 import editorMd from './editorMd.vue'
 import {host} from '@/backend/config/index.js'
+import {mapState} from 'vuex'
 import {
-  getArticle,
   addArticle,
   editArticle
 } from '@/backend/api/article.js'
@@ -98,7 +111,7 @@ export default {
       isExist: false,
       form: {
         docType: 1,
-        category: {id: 1, name: 'js'},
+        category_id: '',
         title: '',
         smtitle: '',
         source: '原创',
@@ -112,7 +125,7 @@ export default {
         html: ''
       },
       rules: {
-        category: [
+        category_id: [
           {required: true, message: '请选择文章类别', trigger: 'change'}
         ],
         title: [
@@ -128,13 +141,19 @@ export default {
         ],
         summary: [
           {required: true, trigger: 'blur', message: '请填写文章摘要'},
-          {min: 20, max: 200, message: '长度在20～200个字符', trigger: 'blur'}
+          {min: 5, max: 200, message: '长度在5～200个字符', trigger: 'blur'}
         ]
       },
       maxSize: 2, // 单位M
       dialogVisible: false,
       initEditorContent: '' // 编辑文章时的初始内容
     }
+  },
+  computed: {
+    ...mapState({
+      tags: state => state.doc.tags,
+      categories: state => state.doc.categories
+    })
   },
   mounted () {
     this.initDoc()
@@ -144,14 +163,23 @@ export default {
      * @description 编辑状态时初始数据
      */
     async initDoc () {
+      // 获取标签和文章类型
+      this.$store.dispatch('getTags')
+      this.$store.dispatch('getCategories')
       const id = this.$route.query.id
       if (id) {
         this.isExist = true
         try {
-          const res = (await this.$store.dispatch('getArticleById', id)).data.data
-          this.form = res
-          this.form.category = {id: res.category_id, name: res.category_name}
-          console.log(this.form)
+          let res = (await this.$store.dispatch('getArticleById', id)).data.data
+          // 备份一份
+          let form = JSON.parse(JSON.stringify(res))
+          form._tags = JSON.parse(form.tags)
+          form.thumbnail = form.thumbnail || ''
+          form.display = !!form.display
+          this.form = form
+          this.initEditorContent = form.markdown
+          // 文档类型先写死
+          this.form.docType = 1
         } catch (err) {
           console.log(err)
           this.$message({
@@ -214,8 +242,6 @@ export default {
         this.requesting = true
         // console.log(this.form)
         let res = null
-        this.form.category_id = this.form.category.id
-        this.form.category_name = this.form.category.name
         try {
           if (!this.isExist) {
             res = await addArticle(this.form)
@@ -249,7 +275,7 @@ export default {
   watch: {
     'form._tags' (newV) {
       if (newV.length > 0) {
-        this.form.tags = newV.join(',')
+        this.form.tags = JSON.stringify(newV)
       }
     }
   }

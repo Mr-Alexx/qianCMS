@@ -5,6 +5,7 @@
 * @description: article表的数据库操作
 */
 
+const Op = (require('sequelize')).Op
 const db = require('../config/db')
 const articleSchema = db.import('../schemas/article.js')
 const _ = require('lodash/core')
@@ -74,7 +75,7 @@ class Article {
     return await articleSchema.create({
       id: 0,
       category_id: form.category_id,
-      category_name: form.category_name,
+      // category_name: form.category_name,
       title: form.title,
       smtitle: form.smtitle,
       source: form.source,
@@ -84,6 +85,19 @@ class Article {
       summary: form.summary,
       html: form.html,
       markdown: form.markdown
+    })
+  }
+
+  /**
+   * @description 删除文章
+   */
+  async deleteArticle (ids) {
+    return await articleSchema.destroy({
+      where: {
+        id: {
+          [Op.or]: ids
+        }
+      }
     })
   }
 }

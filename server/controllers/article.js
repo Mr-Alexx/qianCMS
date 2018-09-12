@@ -6,6 +6,7 @@
 
 const articleModel = require('../models/article')
 const getRes = require('../utils/customStatus.js')
+const _ = require('lodash/core')
 const validateForm = require('../utils/validate.js').validateForm
 
 class ArticleCtrl {
@@ -102,6 +103,24 @@ class ArticleCtrl {
   // update article
   async updateArticle (ctx) {
     console.log(ctx)
+  }
+
+  // delete article
+  async deleteArticle (ctx) {
+    const ids = ctx.request.body
+    if (!_.isArray(ids)) {
+      return getRes(1002, '参数必须为数组')
+    }
+    if (ids.length <= 0) {
+      return getRes(1002, '参数不能为空数组')
+    }
+    try {
+      const res = await articleModel.deleteArticle(ids)
+      ctx.body = getRes(1001, '', res)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002, '删除失败')
+    }
   }
 }
 // 不推荐使用new来导出，new会消耗内存

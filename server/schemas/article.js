@@ -32,16 +32,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '1'
     },
-    tid: {
-      type: DataTypes.INTEGER(10).UNSIGNED,
-      allowNull: false,
-      defaultValue: '0'
-    },
-    tname: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      defaultValue: ''
-    },
     thumbnail: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -90,10 +80,9 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: ''
     },
-    category_name: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      defaultValue: ''
+    tags: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   }, {
     tableName: 'article'

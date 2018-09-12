@@ -1,11 +1,13 @@
-import Vue from 'vue'
 import {host} from '@/backend/config/index.js'
 import {
-  getArticle,
-  addArticle,
-  editArticle,
+  // getArticle,
+  // addArticle,
+  // editArticle,
   getAllArticle,
-  getArticleById
+  getArticleById,
+  getTags,
+  getCategories,
+  deleteArticle
 } from '@/backend/api/article.js'
 
 const doc = {
@@ -27,7 +29,9 @@ const doc = {
     },
     maxSize: 2, // 单位M
     dialogVisible: false,
-    initEditorContent: '' // 编辑文章时的初始内容
+    initEditorContent: '', // 编辑文章时的初始内容
+    tags: [],
+    categories: []
   },
   mutations: {
     SET_ARTICLELIST (state, list) {
@@ -44,18 +48,24 @@ const doc = {
     },
     SET_FORM (state, form) {
       state.form = form
+    },
+    SET_TAGS (state, tags) {
+      state.tags = tags
+    },
+    SET_CATEGORY (state, categories) {
+      state.categories = categories
     }
   },
   actions: {
     /**
      * @description 获取文章列表
      */
-    async getArticleList ({commit}) {
+    async getArticleList ({commit}, vue) {
       const res = await getAllArticle()
       if (res.data.code === 1001) {
         commit('SET_ARTICLELIST', res.data.data)
       } else {
-        Vue.$message({
+        vue.$message({
           message: res.data.message,
           type: 'error'
         })
@@ -115,7 +125,48 @@ const doc = {
     /**
      * @description 修改文章
      */
-    editArticle () {}
+    editArticle () {},
+
+    /**
+     * @description 获取标签tags
+     */
+    async getTags ({commit}) {
+      const res = await getTags()
+      if (res.data.code === 1001) {
+        commit('SET_TAGS', res.data.data)
+      }
+    },
+
+    /**
+     * @description 获取categories
+     */
+    async getCategories ({commit}) {
+      const res = await getCategories()
+      if (res.data.code === 1001) {
+        commit('SET_CATEGORY', res.data.data)
+      }
+    },
+
+    /**
+     * @description 删除文章
+     */
+    async deleteArticle ({commit}, articles, vue) {
+      const ids = articles.map(article => {
+        return article.id
+      })
+      try {
+        const res = await deleteArticle(ids)
+        if (res.data.code === 1002) {
+          return vue.$message({
+            message: res.data.message,
+            type: 'error'
+          })
+        }
+      } catch (err) {
+        console.log(`删除文章失败`)
+        console.log(err)
+      }
+    }
   }
 }
 

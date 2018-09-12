@@ -5,7 +5,7 @@
 * @Last Modified time: 2018-07-10 13:21:15
 */
 
-const router = require("koa-router")()
+const router = require("koa-router")() // get/post/put/del/all
 
 const 
   articleCtrl = require('../controllers/article'),
@@ -13,7 +13,7 @@ const
   tagsCtrl = require('../controllers/tags'),
   userCtrl = require('../controllers/user'),
   uploadCtrl = require('../controllers/upload')
-
+console.log(router)
 /* artilce */
 
 // 通过id获取文章内容
@@ -35,6 +35,9 @@ router.post('/api/v1/article/add', articleCtrl.addArticle)
 // 更新文章
 router.put('/api/v1/article/update', articleCtrl.updateArticle)
 
+// 删除文章
+router.post('/api/v1/article/delete', articleCtrl.deleteArticle)
+
 /* 文件上传 */
 router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
 
@@ -42,5 +45,10 @@ router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
 // 登陆
 router.post('/api/v1/user/admin/login', userCtrl.login)
 router.post('/api/v1/user/admin/logout', userCtrl.logout)
+
+// 获取标签
+router.get('/api/v1/article/tag', tagsCtrl.getTags)
+// 获取文章类型
+router.get('/api/v1/article/category', categoryCtrl.getCategories)
 
 module.exports = router

@@ -26,6 +26,7 @@ const  app = new Koa()
 // 允许跨域,cors中间件 https://github.com/koajs/cors
 app.use(cors({
   origin: '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowHeaders: ['Content-Type', 'Authorization'] // 不是Authentication 请记住,我个大傻逼
 }))
 

@@ -106,3 +106,12 @@ export function putReq (url, data) {
     data
   })
 }
+
+// 封装delete请求
+export function deleteReq (url, data) {
+  return http({
+    method: 'DELETE',
+    url,
+    data
+  })
+}
