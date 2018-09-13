@@ -10,12 +10,12 @@
           <el-button type="primary" size="mini">
             <router-link to="/docEdit">添加</router-link>
           </el-button>
-          <el-button type="primary" size="mini">删除</el-button>
+          <el-button type="primary" size="mini" @click="deleteArticle">删除</el-button>
         </el-button-group>
 
         <el-button-group>
-          <el-button type="primary" size="mini">启用</el-button>
-          <el-button type="primary" size="mini">禁用</el-button>
+          <el-button type="primary" size="mini" @click="updateArticleStatus({display: 1})">显示</el-button>
+          <el-button type="primary" size="mini" @click="updateArticleStatus({display: 0})">隐藏</el-button>
         </el-button-group>
       </el-col>
       <el-col :md="12" :sm="24">
@@ -55,7 +55,8 @@
             width="260"></el-table-column>
           <el-table-column
             prop="update_time"
-            label="更新时间">
+            label="更新时间"
+            width="130">
             <template slot-scope="scope">
               <span>
                 {{scope.row.update_time | timeFilter}}
@@ -80,7 +81,11 @@
             width="100"></el-table-column>
           <el-table-column
             prop="display"
-            label="显示状态"></el-table-column>
+            label="显示状态">
+            <template slot-scope="scope">
+              <i :class="`qian-cell-icon el-icon-${scope.row.display ? 'circle-check' : 'remove'}`"></i>
+            </template>
+          </el-table-column>
           <el-table-column
             prop="action"
             label="操作"
@@ -90,7 +95,7 @@
               <el-button @click="edit(scope.$index, scope.row)">修改</el-button>
               <el-button
                 type="danger"
-                @click="deleteArticle(scope.$index, scope.row)">删除</el-button>
+                @click="deleteArticle(false, scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -115,6 +120,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'docManage',
   props: {
@@ -138,17 +144,20 @@ export default {
     return {
       searchVal: '',
       selectCategory: [],
-      articleList: [],
+      selectArticleRows: [], // 选中的表行
       pageSize: 8, // 每页数量
       currentPage: 1 // 当前页数
     }
   },
   computed: {
+    ...mapState({
+      articleList: state => state.doc.articleList
+    }),
     articles () {
-      if (this.$store.state.doc.articleList.length > 0) {
+      if (this.articleList.length > 0) {
         const start = (this.currentPage - 1) * this.pageSize
         const end = this.currentPage * this.pageSize
-        return this.$store.state.doc.articleList.slice(start, end)
+        return this.articleList.slice(start, end)
       }
     }
   },
@@ -162,7 +171,9 @@ export default {
   },
   methods: {
     // 处理文章列表checkbox选择
-    handleSelect () {},
+    handleSelect (selection) {
+      this.selectArticleRows = selection
+    },
 
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -187,17 +198,56 @@ export default {
 
     /**
      * @description 删除文章
+     * @param {Boolean} deleteAll 是否是删除全部
      */
-    deleteArticle (index, row) {
+    deleteArticle (deleteAll = true, index, row) {
+      const rows = deleteAll ? this.selectArticleRows : [row]
+      if (rows.length <= 0) return
       this.$confirm('是否将该文章移入回收站?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        await this.$store.dispatch('deleteArticle', [row], this)
+        const res = await this.$store.dispatch('deleteArticle', rows)
+        this.$message({
+          message: res.data.message,
+          type: res.data.code === 1001 ? 'success' : 'error'
+        })
+        if (res.data.code !== 1001) return
         // 更新文章列表
         this.$store.dispatch('getArticleList', this)
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err)
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+          duration: 1000
+        })
+      })
+    },
+
+    /**
+     * @description 更新文章状态
+     */
+    updateArticleStatus (fieldObj, row) {
+      const articles = row ? [row] : this.selectArticleRows
+      if (articles.length <= 0) return
+      const msg = fieldObj.display === 1 ? '显示' : '隐藏'
+      this.$confirm(`是否${msg}所选文章`, '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const res = await this.$store.dispatch('updateArticleStatus', {articles, fieldObj})
+        this.$message({
+          message: res.data.message,
+          type: res.data.code === 1001 ? 'success' : 'error'
+        })
+        if (res.data.code !== 1001) return
+        // 更新文章列表
+        this.$store.dispatch('getArticleList', this)
+      }).catch((err) => {
+        console.log(err)
         this.$message({
           type: 'info',
           message: '已取消删除',
@@ -210,8 +260,9 @@ export default {
 </script>
 
 <style lang="scss">
-  $prefix: qian-manage;
-  .#{$prefix} {
+  @import '@/backend/styles/colors.scss';
+  $prefix: qian;
+  .#{$prefix}-manage {
     &-menu {
       &__title {
         font-size: 14px;
@@ -227,6 +278,14 @@ export default {
     &-pagination {
       text-align: center;
       padding-top: 15px;
+    }
+  }
+  .qian-cell-icon {
+    &.el-icon-circle-check {
+      color: $success;
+    }
+    &.el-icon-remove {
+      color: $danger;
     }
   }
 </style>

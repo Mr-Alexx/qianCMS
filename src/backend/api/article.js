@@ -1,6 +1,7 @@
 import {
   fetch,
-  postReq
+  postReq,
+  putReq
 } from '../utils/request.js'
 // import {baseUrl} from '../config'
 
@@ -27,7 +28,11 @@ export async function addArticle (form) {
 // 编辑文章
 // form {id...}
 export async function editArticle (form) {
-  return postReq('/article/update', form)
+  return putReq('/article', form)
+}
+// 更新文章状态
+export async function updateStatus (data) {
+  return putReq('/article/status', data)
 }
 
 // 删除文章

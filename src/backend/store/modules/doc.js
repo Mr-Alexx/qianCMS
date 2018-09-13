@@ -7,7 +7,8 @@ import {
   getArticleById,
   getTags,
   getCategories,
-  deleteArticle
+  deleteArticle,
+  updateStatus
 } from '@/backend/api/article.js'
 
 const doc = {
@@ -74,7 +75,6 @@ const doc = {
 
     async getArticleById ({commit}, id) {
       const res = await getArticleById(id)
-      console.log(res)
       return res
     },
 
@@ -123,9 +123,17 @@ const doc = {
     addArticle () {},
 
     /**
-     * @description 修改文章
+     * @description 更新文章状态
      */
-    editArticle () {},
+    async updateArticleStatus ({commit}, {articles, fieldObj}) {
+      const ids = articles.map(v => v.id)
+      try {
+        const res = await updateStatus({ids, fieldObj})
+        return res
+      } catch (err) {
+        console.log(err)
+      }
+    },
 
     /**
      * @description 获取标签tags
@@ -150,18 +158,13 @@ const doc = {
     /**
      * @description 删除文章
      */
-    async deleteArticle ({commit}, articles, vue) {
+    async deleteArticle ({commit}, articles) {
       const ids = articles.map(article => {
         return article.id
       })
       try {
         const res = await deleteArticle(ids)
-        if (res.data.code === 1002) {
-          return vue.$message({
-            message: res.data.message,
-            type: 'error'
-          })
-        }
+        return res
       } catch (err) {
         console.log(`删除文章失败`)
         console.log(err)

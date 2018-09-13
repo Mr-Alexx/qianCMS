@@ -96,13 +96,25 @@ class ArticleCtrl {
       const result = await articleModel.addArticle(form)
       ctx.body = getRes()
     } catch (err) {
+      ctx.body = getRes(1002)
       console.log(err)
     }
   }
 
   // update article
   async updateArticle (ctx) {
-    console.log(ctx)
+    const form = ctx.request.body
+    const vali = validateForm(form)
+    if (vali) {
+      return ctx.body = Res(1002, vali)
+    }
+    try {
+      const res = await articleModel.updateArticle(form)
+      ctx.body = getRes()
+    } catch (err) {
+      ctx.body = getRes(1002)
+      console.log(err)
+    }
   }
 
   // delete article
@@ -120,6 +132,22 @@ class ArticleCtrl {
     } catch (err) {
       console.log(err)
       ctx.body = getRes(1002, '删除失败')
+    }
+  }
+
+  async updateStatus (ctx) {
+    const ids = ctx.request.body.ids
+    const fieldObj = ctx.request.body.fieldObj
+    console.log(ctx.request.body)
+    if (!ids || !fieldObj) {
+      return getRes(1002, '参数不正确')
+    }
+    try {
+      const res = await articleModel.updateStatus(ids, fieldObj)
+      ctx.body = getRes()
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
     }
   }
 }

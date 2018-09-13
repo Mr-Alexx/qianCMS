@@ -75,7 +75,7 @@ class Article {
     return await articleSchema.create({
       id: 0,
       category_id: form.category_id,
-      // category_name: form.category_name,
+      category_name: form.category_name,
       title: form.title,
       smtitle: form.smtitle,
       source: form.source,
@@ -89,6 +89,33 @@ class Article {
   }
 
   /**
+   * @description 更新文章
+   */
+  async updateArticle (form) {
+    try {
+      return await articleSchema.update({
+        category_id: form.category_id,
+        category_name: form.category_name,
+        title: form.title,
+        smtitle: form.smtitle,
+        source: form.source,
+        display: form.display,
+        tags: form.tags,
+        thumbnail: form.thumbnail,
+        summary: form.summary,
+        html: form.html,
+        markdown: form.markdown
+      },{
+        where: {
+          id: form.id
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  /**
    * @description 删除文章
    */
   async deleteArticle (ids) {
@@ -99,6 +126,25 @@ class Article {
         }
       }
     })
+  }
+
+  /**
+   * @description 更新文章状态(显示/删除)
+   * @param {Array} ids id数组
+   * @param {Object} fieldObj 字段键值对 ex: {display: 1}
+   */
+  async updateStatus (ids, fieldObj) {
+    try {
+      return await articleSchema.update(fieldObj, {
+        where: {
+          id: {
+            [Op.or]: ids
+          }
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 

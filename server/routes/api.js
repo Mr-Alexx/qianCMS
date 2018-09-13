@@ -33,7 +33,9 @@ router.get('/api/v1/article', articleCtrl.getAllArticle)
 router.post('/api/v1/article/add', articleCtrl.addArticle)
 
 // 更新文章
-router.put('/api/v1/article/update', articleCtrl.updateArticle)
+router.put('/api/v1/article', articleCtrl.updateArticle)
+// 更新文章状态
+router.put('/api/v1/article/status', articleCtrl.updateStatus)
 
 // 删除文章
 router.post('/api/v1/article/delete', articleCtrl.deleteArticle)

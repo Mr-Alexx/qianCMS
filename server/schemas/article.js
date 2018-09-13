@@ -22,6 +22,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '0'
     },
+    category_name: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: ''
+    },
     source: {
       type: DataTypes.STRING(10),
       allowNull: false,

@@ -8,7 +8,11 @@ const app = {
       state.sidebarCollapse = !state.sidebarCollapse
     }
   },
-  actions: {}
+  actions: {
+    goback ({ commit }, vue) {
+      vue.$router.back()
+    }
+  }
 }
 
 export default app
