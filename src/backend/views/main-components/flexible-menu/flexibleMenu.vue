@@ -75,19 +75,19 @@ export default {
             icon: 'el-icon-document',
             children: [
               {
-                router: '/docManage',
+                router: '/document',
                 title: '文档管理'
               },
               {
-                router: '/docType',
+                router: '/category',
                 title: '文档类别'
               },
               {
-                router: '/tagManage',
+                router: '/tags',
                 title: '标签管理'
               },
               {
-                router: '/msgManage',
+                router: '/message',
                 title: '留言管理'
               }
             ]

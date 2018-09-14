@@ -73,14 +73,16 @@
       </el-form-item>
       <!-- markdown编辑器 -->
       <el-form-item label="文章内容" required>
-        <editor-md
-          editor-id="article-editor"
-          :init-data="initEditorContent"
-          :init-data-delay="0"
-          :onchange="contentOnChange"
-          :config="{
-            placeholder: '请输入文章内容'
-          }"></editor-md>
+        <keep-alive>
+          <editor-md
+            editor-id="article-editor"
+            :init-data="initEditorContent"
+            :init-data-delay="0"
+            :onchange="contentOnChange"
+            :config="{
+              placeholder: '请输入文章内容'
+            }"></editor-md>
+        </keep-alive>
       </el-form-item>
       <!-- 确定/取消 -->
       <el-form-item class="qian-form-item-button">
@@ -301,7 +303,7 @@ export default {
               type: 'success'
             })
             this.loading = false
-            this.$router.push('/docManage')
+            this.$router.push('/document')
           } else {
             // 添加/更新失败
             this.$message({

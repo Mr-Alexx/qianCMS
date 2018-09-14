@@ -13,7 +13,6 @@ const
   tagsCtrl = require('../controllers/tags'),
   userCtrl = require('../controllers/user'),
   uploadCtrl = require('../controllers/upload')
-console.log(router)
 /* artilce */
 
 // 通过id获取文章内容

@@ -12,9 +12,7 @@ const vd = require('../utils/validate.js')
 
 class Category {
   async getCategories () {
-    return await categorySchema.findAll({
-      attributes: ['id', 'name']
-    })
+    return await categorySchema.findAll()
   }
 }
 

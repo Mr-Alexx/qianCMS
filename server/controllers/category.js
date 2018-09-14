@@ -6,12 +6,19 @@
 
 const categoriesModel = require('../models/category')
 const getRes = require('../utils/customStatus.js')
+// const TreeNode = require('../utils/treeMaker.js')
+const getDFSTree = require('../utils/treeMaker.js')
 
 class CategoryCtrl {
   async getCategories (ctx) {
     try {
-      const res = await categoriesModel.getCategories()
-      ctx.body = getRes(1001, '', res)
+      let res = await categoriesModel.getCategories()
+      if (res.length <= 0) return ctx.body = getRes(1001, '', [])
+      // 去掉无用属性
+      res = res.map(v => v.dataValues)
+      // 构造树结构
+      const tree = getDFSTree(res, 0)
+      ctx.body = getRes(1001, '', tree)
     } catch (err) {
       console.log(err)
       ctx.body = getRes(1002)

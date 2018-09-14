@@ -122,7 +122,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
-  name: 'docManage',
+  name: 'document',
   props: {
     categories: {
       type: Array,
