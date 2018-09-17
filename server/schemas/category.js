@@ -17,11 +17,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: ''
     },
-    title: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-      defaultValue: ''
-    },
     pid: {
       type: DataTypes.INTEGER(10).UNSIGNED,
       allowNull: false,
@@ -32,8 +27,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '0'
     },
-    meta_title: {
-      type: DataTypes.STRING(100),
+    url: {
+      type: DataTypes.STRING(50),
       allowNull: false,
       defaultValue: ''
     },

@@ -4,37 +4,11 @@
       <!-- 添加树 -->
       <el-col :span="24">
         <el-button @click="dialogTableVisible = true" type="primary">添加</el-button>
-        <el-dialog title="文档分类" :visible.sync="dialogTableVisible">
-          <el-form
-            ref="form"
-            :model="form"
-            :rules="rules"
-            label-position="right"
-            size="small"
-            label-width="80px">
-            <el-form-item label="父类">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="类名">
-              <el-input></el-input>
-            </el-form-item>
-            <el-form-item label="显示">
-              <el-switch></el-switch>
-            </el-form-item>
-            <el-form-item label="类型">
-              <el-radio-group>
-                <el-radio>文章</el-radio>
-                <el-radio>图片</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="模板">
-              <el-select>
-                <el-option label="默认"></el-option>
-                <el-option label="炫酷"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-dialog>
+        <category-form
+          :options="categoryTree"
+          @save="addCategory"
+          title="文档分类"
+          :visible="dialogTableVisible"></category-form>
       </el-col>
 
       <!-- 类别树 -->
@@ -68,17 +42,16 @@
 </template>
 
 <script>
+import categoryForm from './categoryForm.vue'
+
 export default {
   name: 'category',
+  components: {
+    categoryForm
+  },
   data () {
     return {
-      dialogTableVisible: false, // dialog显示/隐藏
-      form: {
-
-      },
-      rules: {
-
-      }
+      dialogTableVisible: false // dialog显示/隐藏
     }
   },
   computed: {
@@ -90,6 +63,18 @@ export default {
     if (this.categoryTree <= 0) {
       await this.$store.dispatch('getCategories')
       console.log(this.categoryTree)
+    }
+  },
+  methods: {
+    /**
+     * @description 子组件category-form保存按钮触发的事件
+     */
+    addCategory (form) {
+      const vue = this
+      console.log(form)
+      this.$store.dispatch('addCategory', {form, vue})
+      // 关闭form
+      this.dialogTableVisible = false
     }
   }
 }

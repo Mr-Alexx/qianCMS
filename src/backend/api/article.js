@@ -49,3 +49,7 @@ export async function getTags () {
 export async function getCategories () {
   return fetch('/article/category')
 }
+// 添加文章分类
+export async function addCategory (form) {
+  return postReq('/article/category', form)
+}

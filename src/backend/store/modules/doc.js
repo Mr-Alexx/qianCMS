@@ -8,7 +8,8 @@ import {
   getTags,
   getCategories,
   deleteArticle,
-  updateStatus
+  updateStatus,
+  addCategory
 } from '@/backend/api/article.js'
 
 const doc = {
@@ -153,6 +154,20 @@ const doc = {
       if (res.data.code === 1001) {
         commit('SET_CATEGORY', res.data.data)
       }
+    },
+
+    /**
+     * @description add category
+     */
+    async addCategory ({commit, dispatch}, {form, vue}) {
+      const res = await addCategory(form)
+      const success = res.data.code === 1001
+      vue.$message({
+        message: success ? '添加成功' : '添加失败',
+        type: success ? 'success' : 'error',
+        duration: 1000
+      })
+      success && dispatch('getCategories')
     },
 
     /**

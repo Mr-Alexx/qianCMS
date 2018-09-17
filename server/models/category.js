@@ -12,7 +12,26 @@ const vd = require('../utils/validate.js')
 
 class Category {
   async getCategories () {
-    return await categorySchema.findAll()
+    return await categorySchema.findAll({
+      order: [
+        ['sort', 'ASC'] // 升序排序
+      ]
+    })
+  }
+
+  async addCategory (form) {
+    await categorySchema.create({
+      id: 0,
+      name: form.name,
+      pid: form.pid,
+      sort: form.sort,
+      url: form.url,
+      keywords: form.keywords,
+      description: form.discription,
+      display: form.display,
+      create_time: new Date(),
+      update_time: new Date()
+    })
   }
 }
 

@@ -24,6 +24,18 @@ class CategoryCtrl {
       ctx.body = getRes(1002)
     }
   }
+
+  async addCategory (ctx) {
+    try {
+      const form = ctx.request.body
+      // 验证form
+      await categoriesModel.addCategory(form)
+      ctx.body = getRes(1001)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
+    }
+  }
 }
 
 module.exports = new CategoryCtrl()

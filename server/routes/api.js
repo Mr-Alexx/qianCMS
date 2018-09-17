@@ -49,7 +49,10 @@ router.post('/api/v1/user/admin/logout', userCtrl.logout)
 
 // 获取标签
 router.get('/api/v1/article/tag', tagsCtrl.getTags)
+
 // 获取文章类型
 router.get('/api/v1/article/category', categoryCtrl.getCategories)
+// 添加文章类型
+router.post('/api/v1/article/category', categoryCtrl.addCategory)
 
 module.exports = router
