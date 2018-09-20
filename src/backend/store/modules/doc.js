@@ -1,16 +1,18 @@
-import {host} from '@/backend/config/index.js'
 import {
   // getArticle,
   // addArticle,
   // editArticle,
   getAllArticle,
   getArticleById,
-  getTags,
   getCategories,
   deleteArticle,
   updateStatus,
-  addCategory
+  addCategory,
+  deleteCategory,
+  updateCategory,
+  getTags
 } from '@/backend/api/article.js'
+import { getDFSTree } from '@/backend/utils/treeMaker.js'
 
 const doc = {
   state: {
@@ -32,8 +34,22 @@ const doc = {
     maxSize: 2, // 单位M
     dialogVisible: false,
     initEditorContent: '', // 编辑文章时的初始内容
-    tags: [],
-    categories: []
+    tag: {
+      tags: [],
+      formState: {
+        visible: false,
+        isEdit: false,
+        form: {}
+      }
+    },
+    category: {
+      originCategories: [], // 保存原始分类数据,未做tree处理的数据
+      categoryTree: [],
+      dialogVisible: false,
+      isEdit: false,
+      type: 'root',
+      form: {}
+    }
   },
   mutations: {
     SET_ARTICLELIST (state, list) {
@@ -52,10 +68,28 @@ const doc = {
       state.form = form
     },
     SET_TAGS (state, tags) {
-      state.tags = tags
+      state.tag.tags = tags
     },
-    SET_CATEGORY (state, categories) {
-      state.categories = categories
+    SET_TAGFORM (state, formState) {
+      state.tag.formState = formState
+    },
+    SET_ORIGINCATEGORIES (state, categories) {
+      state.category.originCategories = categories
+    },
+    SET_CATEGORYTREE (state, tree) {
+      state.category.categoryTree = tree
+    },
+    SET_CATEGORY (state, category) {
+      state.category.dialogVisible = category.dialogVisible
+      state.category.isEdit = category.isEdit
+      state.category.form = category.form
+      state.category.type = category.type
+    },
+    SET_CATEGORYFORM (state, form) {
+      state.category.form = form
+    },
+    SET_CATEGORYDIALOG (state, visible) {
+      state.category.dialogVisible = visible
     }
   },
   actions: {
@@ -78,50 +112,6 @@ const doc = {
       const res = await getArticleById(id)
       return res
     },
-
-    /**
-     * @description 文章内容输入变化时的回调
-     */
-    contentOnChange ({commit}, {markdown, html, text}) {
-      commit('SET_MARKDOWN', markdown)
-      commit('SET_HTML', html)
-    },
-
-    /**
-     * @description 缩略图上传成功回调
-     */
-    thumbnailUploadSuccess ({commit}, res, file) {
-      if (res.data) {
-        commit('SET_THUMBNAIL', `${host}${res.data.path}`)
-      } else {
-        this.$message({
-          message: res.message,
-          type: 'error'
-        })
-      }
-    },
-
-    /**
-     * @description 缩略图上传前的处理
-     * @param {Object} file
-     */
-    beforeThumbnailUpload (file) {
-      const allowPicType = file.type.match(/^(image\/)(png|jpeg|gif)$/i)
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!allowPicType) {
-        this.$message.error('上传头像图片只能是png/jpeg/gif!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return allowPicType && isLt2M
-    },
-
-    /**
-     * @description 添加文章
-     */
-    addArticle () {},
 
     /**
      * @description 更新文章状态
@@ -150,9 +140,14 @@ const doc = {
      * @description 获取categories
      */
     async getCategories ({commit}) {
-      const res = await getCategories()
+      let res = await getCategories()
+      commit('SET_ORIGINCATEGORIES', res.data.data)
       if (res.data.code === 1001) {
-        commit('SET_CATEGORY', res.data.data)
+        let tree = []
+        if (res.data.data.length > 0) {
+          tree = getDFSTree(res.data.data, 0)
+        }
+        commit('SET_CATEGORYTREE', tree)
       }
     },
 
@@ -168,6 +163,68 @@ const doc = {
         duration: 1000
       })
       success && dispatch('getCategories')
+    },
+
+    /**
+     * @description 删除分类
+     */
+    async deleteCategory ({commit}, cid) {
+      const res = await deleteCategory(cid)
+      return res
+    },
+
+    /**
+     * @description 更新分类
+     */
+    async updateCategory ({commit, dispatch}, {form, vue}) {
+      const res = await updateCategory(form)
+      const success = res.data.code === 1001
+      vue.$message({
+        message: success ? '更新成功' : '更新失败',
+        type: success ? 'success' : 'error',
+        duration: 1000
+      })
+      success && dispatch('getCategories')
+    },
+
+    changeCategoryForm ({commit}, form) {
+      commit('SET_CATEGORYFORM', form)
+    },
+
+    showCategoryDialog ({commit, state}, category = {
+      isEdit: false,
+      type: 'root',
+      form: {}
+    }) {
+      category.form = Object.assign({
+        name: '',
+        parent: [],
+        display: 1,
+        sort: 0,
+        url: '',
+        keywords: '',
+        description: ''
+      }, category.form)
+      commit('SET_CATEGORY', category)
+      commit('SET_CATEGORYDIALOG', true)
+    },
+    closeCategoryDialog ({commit}) {
+      commit('SET_CATEGORYDIALOG', false)
+    },
+    // 标签action
+    showTagDialog ({commit}, formState = {
+      isEdit: false,
+      form: {name: ''},
+      visible: true
+    }) {
+      commit('SET_TAGFORM', formState)
+    },
+    closeTagDialog ({commit}) {
+      commit('SET_TAGFORM', {
+        isEdit: false,
+        form: {name: ''},
+        visible: false
+      })
     },
 
     /**

@@ -11,18 +11,13 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文章类别" prop="category_id">
-        <el-select
-          v-model="form.category"
-          placeholder="请选择文章类别"
-          value-key="id"
-          @change="changeCategory">
-          <el-option
-            v-if="categories.length > 0"
-            v-for="item in categories"
-            :key="item.id"
-            :label="item.name"
-            :value="item"></el-option>
-        </el-select>
+        <el-cascader
+          :options="categories"
+          v-model="form.parent"
+          @change="changeParent"
+          :props="cascaderProps"
+          filterable
+          placeholder="请选择分类"></el-cascader>
       </el-form-item>
       <el-form-item label="标题" prop="title">
         <el-input v-model="form.title" placeholder="请输入标题" @change="changeForm"></el-input>
@@ -99,8 +94,9 @@
 
 <script>
 import editorMd from './editorMd.vue'
-import {host} from '@/backend/config/index.js'
-import {mapState} from 'vuex'
+import { host } from '@/backend/config/index.js'
+import { mapState } from 'vuex'
+import { getParent } from '@/backend/utils/treeMaker.js'
 import {
   addArticle,
   editArticle
@@ -117,9 +113,13 @@ export default {
       loading: false,
       isExist: false,
       formChange: false,
+      cascaderProps: {
+        value: 'id',
+        label: 'name'
+      },
       form: {
         docType: 1,
-        category: null,
+        parent: [],
         category_id: '',
         category_name: '',
         title: '',
@@ -161,8 +161,9 @@ export default {
   },
   computed: {
     ...mapState({
-      tags: state => state.doc.tags,
-      categories: state => state.doc.categories
+      tags: state => state.doc.tag.tags,
+      categories: state => state.doc.category.categoryTree,
+      originCategories: state => state.doc.category.originCategories
     })
   },
   mounted () {
@@ -175,6 +176,16 @@ export default {
     changeForm () {
       if (this.formChange) return console.log(1)
       this.formChange = true
+    },
+    changeParent (item) {
+      if (!this.formChange) {
+        this.formChange = true
+      }
+      // 获取分类名称和id
+      const id = item[item.length - 1]
+      this.form.category_id = id
+      this.form.category_name = this.originCategories.filter(v => v.id === id)[0].name
+      // console.log(id, this.form.category_name)
     },
     changeCategory (item) {
       this.form.category_id = item.id
@@ -191,8 +202,12 @@ export default {
      */
     async initDoc () {
       // 获取标签和文章类型
-      this.$store.dispatch('getTags')
-      this.$store.dispatch('getCategories')
+      if (this.tags.length <= 0) {
+        await this.$store.dispatch('getTags')
+      }
+      if (this.originCategories.length <= 0) {
+        await this.$store.dispatch('getCategories')
+      }
       const id = this.$route.query.id
       if (id) {
         this.isExist = true
@@ -209,7 +224,10 @@ export default {
           form._tags = JSON.parse(form.tags)
           form.thumbnail = form.thumbnail || ''
           form.display = !!form.display
-          form.category = {id: form.category_id, name: form.category_name}
+          // 获取文章分类的parent数组
+          // 靠category_id递归获取
+          form.parent = getParent(this.originCategories, form.category_id)
+
           this.form = form
           this.initEditorContent = form.markdown
           // 文档类型先写死

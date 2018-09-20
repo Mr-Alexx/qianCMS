@@ -161,11 +161,6 @@ export default {
       }
     }
   },
-  filters: {
-    timeFilter (time) {
-      return time.substring(0, 10)
-    }
-  },
   created () {
     this.$store.dispatch('getArticleList')
   },

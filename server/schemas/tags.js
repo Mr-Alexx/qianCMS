@@ -7,12 +7,16 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       primaryKey: true
     },
-    tname: {
+    name: {
       type: DataTypes.STRING(10),
       allowNull: false,
       defaultValue: ''
     },
     create_time: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    update_time: {
       type: DataTypes.DATE,
       allowNull: false
     }

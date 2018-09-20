@@ -50,7 +50,8 @@ export const otherRouter = {
     {path: 'home', title: '首页', name: 'home_index', component: () => import('../views/home/home.vue')},
     {path: 'document', title: '文档管理', name: 'document', component: () => import('../views/document')},
     {path: 'docEdit', title: '文档编辑', name: 'docEdit', component: () => import('../views/document/docEdit.vue')},
-    {path: 'category', title: '类别管理', name: 'category', component: () => import('../views/category')}
+    {path: 'category', title: '类别管理', name: 'category', component: () => import('../views/category')},
+    {path: 'tags', title: '标签管理', name: 'tags', component: () => import('../views/tags')}
   ]
 }
 

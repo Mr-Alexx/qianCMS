@@ -47,12 +47,22 @@ router.post('/api/v1/upload/image', uploadCtrl.uploadImg)
 router.post('/api/v1/user/admin/login', userCtrl.login)
 router.post('/api/v1/user/admin/logout', userCtrl.logout)
 
-// 获取标签
-router.get('/api/v1/article/tag', tagsCtrl.getTags)
-
 // 获取文章类型
 router.get('/api/v1/article/category', categoryCtrl.getCategories)
 // 添加文章类型
 router.post('/api/v1/article/category', categoryCtrl.addCategory)
+// 更新文章类型
+router.put('/api/v1/article/category', categoryCtrl.updateCategory)
+// 删除文章类型
+router.post('/api/v1/article/category/delete', categoryCtrl.deleteCategory)
+
+// 获取标签
+router.get('/api/v1/article/tag', tagsCtrl.getTags)
+// 添加标签
+router.post('/api/v1/article/tag', tagsCtrl.addTag)
+// 修改标签
+router.put('/api/v1/article/tag', tagsCtrl.editTag)
+// 删除标签
+router.post('/api/v1/article/tag/delete', tagsCtrl.deleteTag)
 
 module.exports = router

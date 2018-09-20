@@ -3,6 +3,7 @@ import App from './App'
 import {router} from './router/index.js'
 import store from './store/index.js'
 import axios from 'axios'
+import filters from './filter'
 import '../../static/fonts/iconfont.css' // 全局使用iconfont
 import loadingBar from './components/loading-bar' // 使用loadingbar
 import {
@@ -161,6 +162,11 @@ Vue.prototype.$echarts = (id, option) => {
   window.addEventListener('resize', chart.resize)
   return chart
 }
+
+// 全局注册filters
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 /* eslint-disable no-new */
 new Vue({

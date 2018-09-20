@@ -8,6 +8,11 @@ const fetchScript = async function (url) {
   })
 }
 
+const cloneDeep = (data) => {
+  return JSON.parse(JSON.stringify(data))
+}
+
 export {
-  fetchScript
+  fetchScript,
+  cloneDeep
 }

@@ -40,11 +40,6 @@ export async function deleteArticle (ids) {
   return postReq('/article/delete', ids)
 }
 
-// 获取标签
-export async function getTags () {
-  return fetch('/article/tag')
-}
-
 // 获取文章分类
 export async function getCategories () {
   return fetch('/article/category')
@@ -52,4 +47,29 @@ export async function getCategories () {
 // 添加文章分类
 export async function addCategory (form) {
   return postReq('/article/category', form)
+}
+// 更新分类
+export async function updateCategory (form) {
+  return putReq('/article/category', form)
+}
+// 删除分类
+export async function deleteCategory (cid) {
+  return postReq('/article/category/delete', {cid})
+}
+
+// 获取标签
+export async function getTags () {
+  return fetch('/article/tag')
+}
+// 添加标签
+export async function addTag (tag) {
+  return postReq('/article/tag', tag)
+}
+// 修改标签
+export async function editTag (tag) {
+  return putReq('/article/tag', tag)
+}
+// 删除标签
+export async function deleteTag (id) {
+  return postReq('/article/tag/delete', {id})
 }

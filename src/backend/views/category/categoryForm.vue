@@ -1,7 +1,7 @@
 <template>
   <el-dialog
-    :visible.sync="visible"
-    :title="title">
+    :visible.sync="dialogVisible"
+    :title="`${isEdit ? '修改' : '添加'}分类`">
     <el-form
       ref="form"
       :model="form"
@@ -17,9 +17,9 @@
           :props="cascaderProps"
           filterable
           change-on-select
-          clearable
+          :disabled="type !== 'root' && !isEdit"
           placeholder="一级分类"></el-cascader>
-        <el-button type="text" @click="clearCascader">清空</el-button>
+        <el-button type="text" @click="clearCascader" v-show="type === 'root' || isEdit">清空</el-button>
       </el-form-item>
       <el-form-item label="类名" prop="name">
         <el-input v-model="form.name"></el-input>
@@ -40,16 +40,20 @@
         <el-input type="textarea" :rows="2" v-model="form.keywords"></el-input>
       </el-form-item>
       <el-form-item label="描述">
-        <el-input type="textarea" :rows="2" v-model="form.discription"></el-input>
+        <el-input type="textarea" :rows="2" v-model="form.description"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="save" :loading="loading">保存</el-button>
+        <el-button type="primary" @click="submit" :loading="loading">
+          {{isEdit ? '保存' : '添加'}}
+        </el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 
 <script>
+import { cloneDeep } from '@/backend/utils'
+
 export default {
   name: 'categoryForm',
   data () {
@@ -58,6 +62,8 @@ export default {
         value: 'id',
         label: 'name'
       },
+      form: cloneDeep(this.formData), // 拷贝一份,防止直接修改store的数据
+      canSubmit: false,
       loading: false,
       pid: 0,
       rules: {
@@ -73,7 +79,7 @@ export default {
           { required: false },
           { min: 0, max: 255, message: '关键字长度在0~255个字符', trigger: 'blur' }
         ],
-        discription: [
+        description: [
           { required: false },
           { min: 0, max: 255, message: '描述长度在0~255个字符', trigger: 'blur' }
         ]
@@ -85,13 +91,9 @@ export default {
       type: Boolean,
       default: false
     },
-    title: {
+    type: {
       type: String,
-      default: ''
-    },
-    state: {
-      type: String,
-      default: '添加'
+      default: 'root'
     },
     options: {
       type: Array,
@@ -99,29 +101,47 @@ export default {
         return []
       }
     },
-    form: {
-      type: Object,
-      default () {
-        return {
-          name: '',
-          parent: [],
-          display: 1,
-          sort: 0,
-          url: '',
-          keywords: '',
-          discription: ''
-        }
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    formData: Object
+  },
+  computed: {
+    dialogVisible: {
+      get () {
+        return this.visible
+      },
+      set () {
+        this.$store.dispatch('closeCategoryDialog')
       }
+    }
+  },
+  watch: {
+    // 监测到props过来的数据时,给form赋值
+    formData (val) {
+      this.form = cloneDeep(val)
+      this.canSubmit = false // 防止初始化时触发formchange
+    },
+    form: {
+      // 这种方式防止未修改提交无效,因form在复制formData的数据时会触发一次
+      handler () {
+        !this.canSubmit && (this.canSubmit = true)
+      },
+      deep: true
     }
   },
   methods: {
     changeParent (item) {
-      this.pid = item[item.length - 1]
+      this.canSubmit = true
     },
     clearCascader () {
-      this.form.parent.length > 0 && (this.form.parent = [])
+      if (this.form.parent.length > 0) {
+        this.form.parent = []
+        this.pid = 0
+      }
     },
-    save () {
+    submit () {
       // 提交前先校验
       this.$refs.form.validate(async valid => {
         if (!valid) {
@@ -134,9 +154,24 @@ export default {
         // 通过校验才加载loading，防止多次提交
         this.loading = true
         let form = JSON.parse(JSON.stringify(this.form))
-        delete form.parent
-        form.pid = this.pid
-        this.$emit('save', form)
+        // delete form.parent
+        form.pid = form.parent[form.parent.length - 1] || 0
+        const vue = this
+        if (!this.isEdit) { // 添加
+          this.$store.dispatch('addCategory', {form, vue})
+        } else { // 更新
+          if (this.canSubmit) {
+            this.$store.dispatch('updateCategory', {form, vue})
+          } else {
+            this.loading = false
+            return this.$message({
+              message: '请先对分类做出修改',
+              type: 'info',
+              duration: 1000
+            })
+          }
+        }
+        this.$store.dispatch('closeCategoryDialog')
         this.loading = false
       })
     }
