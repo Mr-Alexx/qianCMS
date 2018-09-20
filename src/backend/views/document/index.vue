@@ -2,9 +2,6 @@
   <section>
     <!-- 功能组 -->
     <el-row class="qian-manage-menu">
-      <el-col :span="24">
-        <h5 class="qian-manage-menu__title">文档管理</h5>
-      </el-col>
       <el-col :md="12" :sm="24" class="qian-manage-menu__group">
         <el-button-group>
           <el-button type="primary" size="mini">

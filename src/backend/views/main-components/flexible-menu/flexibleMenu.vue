@@ -2,15 +2,13 @@
   <el-scrollbar style="height: 100%">
     <el-menu
       :collapse="isCollapse"
-      class="el-menu-vertical-demo"
+      class="qian-aside-menu"
       @open="handleOpen"
       @close="handleClose"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b"
       router
-      default-active="/home"
-      :default-openeds="defaultOpeneds">
+      :default-active="activeRoute"
+      :default-openeds="defaultOpeneds"
+      @select="handleSelect">
       <el-submenu
         v-for="(menu, i) in menus"
         :key="i"
@@ -96,13 +94,65 @@ export default {
       }
     }
   },
+  computed: {
+    activeRoute () {
+      return this.$store.state.app.activeRoute
+    }
+  },
+  created () {
+    this.$store.dispatch('getActiveRoute')
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    handleSelect (index, indexPath) {
+      console.log(index)
+      this.$store.dispatch('setActiveRoute', index)
     }
   }
 }
 </script>
+
+<style lang="scss">
+  @import '@/backend/styles/colors.scss';
+  .el-scrollbar__view {
+    height: 100%;
+  }
+  .qian-aside-menu {
+    height: 100%;
+    background-color: $aside-menu__bg;
+    .el-menu-item, .el-submenu__title {
+      color: $aside-menu__color;
+      &:hover, &:focus {
+        background: none;
+        color: $aside-menu-item-active__color;
+      }
+    }
+    .el-submenu {
+      background-color: $aside-menu__bg;
+      .el-menu {
+        background-color: $aside-menu--active__bg;
+      }
+      &.is-active {
+        .el-submenu__title {
+          color: $aside-menu-item-active__color;
+        }
+      }
+      &.is-opened {
+        .el-menu-item {
+          &.is-active {
+            background-color: $aside-menu-item--active__bg;
+            color: $aside-menu-item-active__color;
+          }
+        }
+      }
+    }
+    .el-menu-item-group__title {
+      display: none;
+    }
+  }
+</style>

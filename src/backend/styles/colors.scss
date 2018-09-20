@@ -17,3 +17,10 @@ $fl-border: #F2F6FC; // 四级边框
 $body-gray: #F0F0F0; // body灰
 $aside-menu: #545c64;
 $aside-menu-active: #ffd04b;
+
+// aside menu
+$aside-menu__bg: #031427;
+$aside-menu__color: hsla(0,0%,100%,.7);
+$aside-menu--active__bg: #020B16;
+$aside-menu-item--active__bg: $primary;
+$aside-menu-item-active__color: #fff;
