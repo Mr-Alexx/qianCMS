@@ -4,7 +4,8 @@
 * @Copyright: 2018 https://www.imqian.com All rights reserved
 */
 
-const userModel = require('../models/user')
+const db = require('../config/db')
+const userModel = db.import('../models/user.js') // require('../models/user')
 const getRes = require('../utils/customStatus.js')
 const valiSql = require('../utils/validate.js').valiSql
 const jwt = require('jsonwebtoken')
@@ -26,7 +27,12 @@ class UserCtrl {
       return ctx.body = getRes(1002, '不能含有sql关键字')
     }
     try {
-      const res = await userModel.login({uname, pwd})
+      const res = await userModel.find({
+        where: {
+          uname,
+          pwd
+        }
+      })
       if (!res) {
         return ctx.body = getRes(1002, '登陆失败，账号或密码不正确')
       }

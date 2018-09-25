@@ -4,7 +4,9 @@
 * @Copyright: 2018 https://www.imqian.com All rights reserved
 */
 
-const categoriesModel = require('../models/category')
+const db = require('../config/db')
+const Op = (require('sequelize')).Op
+const categoryModel = db.import('../models/category.js') // require('../models/category')
 const getRes = require('../utils/customStatus.js')
 // const TreeNode = require('../utils/treeMaker.js')
 const getDFSTree = require('../utils/treeMaker.js')
@@ -12,7 +14,11 @@ const getDFSTree = require('../utils/treeMaker.js')
 class CategoryCtrl {
   async getCategories (ctx) {
     try {
-      let res = await categoriesModel.getCategories()
+      let res = await categoryModel.findAll({
+        order: [
+          ['sort', 'ASC'] // 升序排序
+        ]
+      })
       // 构造树结构--放前端执行
       ctx.body = getRes(1001, '', res)
     } catch (err) {
@@ -25,7 +31,18 @@ class CategoryCtrl {
     try {
       const form = ctx.request.body
       // 验证form
-      await categoriesModel.addCategory(form)
+      await categoryModel.create({
+        id: 0,
+        name: form.name,
+        pid: form.pid,
+        sort: form.sort,
+        url: form.url,
+        keywords: form.keywords,
+        description: form.discription,
+        display: form.display,
+        create_time: new Date(),
+        update_time: new Date()
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)
@@ -37,7 +54,20 @@ class CategoryCtrl {
     try {
       const form = ctx.request.body
       // 验证form
-      await categoriesModel.updateCategory(form)
+      await categoryModel.update({
+        name: form.name,
+        pid: form.pid,
+        sort: form.sort,
+        url: form.url,
+        keywords: form.keywords,
+        description: form.description,
+        display: form.display,
+        update_time: new Date()
+      }, {
+        where: {
+          id: form.id
+        }
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)
@@ -48,7 +78,14 @@ class CategoryCtrl {
   async deleteCategory (ctx) {
     try {
       const id = ctx.request.body.cid
-      await categoriesModel.deleteCategory(id)
+      await categoryModel.destroy({
+        where: {
+          [Op.or]: [
+            {id},
+            {pid: id}
+          ]
+        }
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)

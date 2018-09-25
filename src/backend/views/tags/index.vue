@@ -12,8 +12,9 @@
       <!-- 标签表格 -->
       <el-col :span="24">
         <el-table
-          :data="tags"
-          @selection-change="handleSelect">
+          :data="tagList"
+          @selection-change="handleSelect"
+          size="primary">
           <el-table-column
             type="selection"
             width="50"></el-table-column>
@@ -43,7 +44,9 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            prop="action">
+            prop="action"
+            fixed="right"
+            width="130px">
             <template slot-scope="scope">
               <el-button @click="editTag(scope.$index, scope.row)">修改</el-button>
               <el-button
@@ -52,6 +55,19 @@
             </template>
           </el-table-column>
         </el-table>
+      </el-col>
+      <!-- 分页标签 -->
+      <el-col :span="24">
+        <el-pagination
+          class="qian-manage-pagination"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[8, 16, 24, 32]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tags.length">
+        </el-pagination>
       </el-col>
     </el-row>
   </div>
@@ -70,12 +86,21 @@ export default {
   },
   data () {
     return {
-      selection: []
+      selection: [],
+      currentPage: 1,
+      pageSize: 8
     }
   },
   computed: {
     tags () {
       return this.$store.state.doc.tag.tags
+    },
+    tagList () {
+      if (this.tags.length > 0) {
+        const start = (this.currentPage - 1) * this.pageSize
+        const end = this.currentPage * this.pageSize
+        return this.tags.slice(start, end)
+      }
     },
     formState () {
       return this.$store.state.doc.tag.formState
@@ -90,6 +115,14 @@ export default {
   methods: {
     handleSelect (selection) {
       this.selection = selection
+    },
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+      this.pageSize = val
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.currentPage = val
     },
     addTag () {
       this.$store.dispatch('showTagDialog')
@@ -119,6 +152,10 @@ export default {
         })
         // 更新tags
         if (res.data.code === 1001) {
+          // 判断当前分页下是不是只有这唯一一条记录
+          if (this.tagList.length === 1 && this.currentPage !== 1) {
+            --this.currentPage
+          }
           this.$store.dispatch('getTags')
         }
       }).catch((err) => {

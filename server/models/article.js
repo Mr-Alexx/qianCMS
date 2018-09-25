@@ -1,151 +1,95 @@
-/*
-* @Author: Mr.Alex (潜)
-* @Date: 2018-07-12 14:23:50
-* @Copyright: 2018 https://www.imqian.com All rights reserved
-* @description: article表的数据库操作
-*/
+/* jshint indent: 2 */
 
-const Op = (require('sequelize')).Op
-const db = require('../config/db')
-const articleSchema = db.import('../schemas/article.js')
-const _ = require('lodash/core')
-const vd = require('../utils/validate.js')
-
-class Article {
-  /**
-   * @description 验证表单编辑内容
-   * @param {Object} form
-  */
-  static validateForm (form) {
-    if (vd.isNullStr(form.title)) {
-      return '标题不能为空'
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('article', {
+    id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true
+    },
+    uid: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    title: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: ''
+    },
+    category_id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    category_name: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: ''
+    },
+    source: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+      defaultValue: ''
+    },
+    display: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    thumbnail: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
+    summary: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
+    create_time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    update_time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    },
+    is_delete: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    view: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    comments: {
+      type: DataTypes.INTEGER(5).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    html: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    markdown: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    smtitle: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: ''
+    },
+    tags: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
-  }
-  // 查找指定id的文章
-  async getArticleById (id) {
-    return await articleSchema.findById(id)
-  }
-  // 查找指定tid的文章，且display状态为1的
-  async getArticleByTid (tid) {
-    return await articleSchema.findAll({
-      where: {
-        tid: tid,
-        display: 1
-      }
-    })
-  }
-  // 查找指定cid的文章，切display状态为1的
-  async getArticleByCid (cid) {
-    return await articleSchema.findAll({
-      where: {
-        category_id: cid,
-        display: 1
-      }
-    })
-  }
-  // 分页获取文章
-  /**
-   * @description 获取分页文章内容
-   * @param {Number} page 页码
-   * @param {Number} perpage 每页条数
-  */
-  async getArticle (page, perpage) {
-    // 必须保证两个数是数字类型
-    page = Number(page)
-    perpage = Number(perpage)
-    return await articleSchema.findAll({
-      limit: perpage,
-      offset: perpage * (page - 1)
-    })  
-  }
-  
-  /**
-   * @description 获取所有文章
-   */
-  async getAllArticle () {
-    return await articleSchema.findAll()
-  }
-
-  // 添加/更新文章
-  /**
-   * @description 添加文章
-   * @param {Object} form 表单内容
-  */
-  async addArticle (form) {
-    return await articleSchema.create({
-      id: 0,
-      category_id: form.category_id,
-      category_name: form.category_name,
-      title: form.title,
-      smtitle: form.smtitle,
-      source: form.source,
-      display: form.display,
-      tags: form.tags,
-      thumbnail: form.thumbnail,
-      summary: form.summary,
-      html: form.html,
-      markdown: form.markdown
-    })
-  }
-
-  /**
-   * @description 更新文章
-   */
-  async updateArticle (form) {
-    try {
-      return await articleSchema.update({
-        category_id: form.category_id,
-        category_name: form.category_name,
-        title: form.title,
-        smtitle: form.smtitle,
-        source: form.source,
-        display: form.display,
-        tags: form.tags,
-        thumbnail: form.thumbnail,
-        summary: form.summary,
-        html: form.html,
-        markdown: form.markdown
-      },{
-        where: {
-          id: form.id
-        }
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  /**
-   * @description 删除文章
-   */
-  async deleteArticle (ids) {
-    return await articleSchema.destroy({
-      where: {
-        id: {
-          [Op.or]: ids
-        }
-      }
-    })
-  }
-
-  /**
-   * @description 更新文章状态(显示/删除)
-   * @param {Array} ids id数组
-   * @param {Object} fieldObj 字段键值对 ex: {display: 1}
-   */
-  async updateStatus (ids, fieldObj) {
-    try {
-      return await articleSchema.update(fieldObj, {
-        where: {
-          id: {
-            [Op.or]: ids
-          }
-        }
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
-
-module.exports = new Article()
+  }, {
+    tableName: 'article'
+  });
+};

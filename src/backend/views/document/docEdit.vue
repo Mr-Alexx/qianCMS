@@ -46,7 +46,7 @@
             v-if="tags.length > 0"
             v-for="item in tags"
             :key="item.id"
-            :label="item.tname"
+            :label="item.name"
             :value="item"></el-option>
         </el-select>
       </el-form-item>
@@ -99,7 +99,8 @@ import { mapState } from 'vuex'
 import { getParent } from '@/backend/utils/treeMaker.js'
 import {
   addArticle,
-  editArticle
+  editArticle,
+  getArticleById
 } from '@/backend/api/article.js'
 
 export default {
@@ -212,7 +213,7 @@ export default {
       if (id) {
         this.isExist = true
         try {
-          let res = await this.$store.dispatch('getArticleById', id)
+          const res = await getArticleById(id)
           if (res.data.code !== 1001) {
             return this.$message({
               message: res.data.message || '获取文章失败',

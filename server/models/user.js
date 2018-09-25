@@ -1,25 +1,32 @@
-/*
-* @Author: Mr.Alex (潜)
-* @Date: 2018-07-12 14:23:50
-* @Copyright: 2018 https://www.imqian.com All rights reserved
-* @description: article表的数据库操作
-*/
+/* jshint indent: 2 */
 
-const db = require('../config/db')
-const userSchema = db.import('../schemas/user.js')
-
-class User {
-  /**
-   * @description 验证表单编辑内容
-   * @param {Object} form
-  */
-  async login ({uname, pwd}) {
-    return await userSchema.find({
-      where: {
-        uname, pwd
-      }
-    })
-  }
-}
-
-module.exports = new User()
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('user', {
+    id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true
+    },
+    uname: {
+      type: DataTypes.STRING(20),
+      allowNull: false,
+      defaultValue: ''
+    },
+    pwd: {
+      type: DataTypes.STRING(20),
+      allowNull: false
+    },
+    role: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    create_time: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+    }
+  }, {
+    tableName: 'user'
+  });
+};

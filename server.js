@@ -12,7 +12,6 @@ const
   fs = require('fs'),
   logger = require('koa-logger'),
   koabody = require('koa-body'),
-  // bodyparser = require('koa-bodyparser'),
   koaStatic = require('koa-static')
   router = require('koa-router')(),
   articleRoute = require('./server/routes/api'),
@@ -43,8 +42,6 @@ app.use(koaJwt({secret: config.secret}).unless({
   method: 'GET'
 }))
 
-// bodyparser
-// app.use(bodyparser())
 app.use(koabody({
   multipart: true, // 开启文件上传
   // encoding: 'gzip', // 开启gzip

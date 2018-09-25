@@ -4,7 +4,9 @@
 * @Copyright: 2018 https://www.imqian.com All rights reserved
 */
 
-const articleModel = require('../models/article')
+const Op = (require('sequelize')).Op
+const db = require('../config/db')
+const articleModel = db.import('../models/article.js') // require('../models/article')
 const getRes = require('../utils/customStatus.js')
 const _ = require('lodash/core')
 const validateForm = require('../utils/validate.js').validateForm
@@ -13,40 +15,45 @@ class ArticleCtrl {
   // 根据id获取article
   async getArticleById (ctx) {
     // ctx可以指代ctx
-    const id = ctx.params.id
-    const result = await articleModel.getArticleById(id)
-    ctx.body = getRes(1001, '', result)
+    try {
+      const id = ctx.params.id
+      const result = await articleModel.findById(id)
+      ctx.body = getRes(1001, '', result)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
+    }
   }
   // 根据tid获取文章
   async getArticleByTid (ctx) {
     const tid = ctx.params.tid
     try {
-      const result = await articleModel.getArticleByTid(tid)
-      ctx.body = {
-        code: 1001,
-        message: 'Success!',
-        data: result
-      }
+      const res = await articleModel.findAll({
+        where: {
+          tid: tid,
+          display: 1
+        }
+      })
+      ctx.body = getRes(1001, '', res)
     } catch (err) {
-      ctx.body = {
-        code: 1002,
-        message: 'Failed!'
-      }
-      console.log('getArticleByTig error: ' + err)
+      console.log(err)
+      ctx.body = getRes(1002)
     }
   }
   // 根据分类获取文章
   async getArticleByCid (ctx) {
     const cid = ctx.params.cid
     try {
-      const result = await articleModel.getArticleByCid(cid)
-      ctx.body = {
-        code: 1001,
-        message: 'success',
-        data: result
-      }
+      const res = await articleModel.findAll({
+        where: {
+          category_id: cid,
+          display: 1
+        }
+      })
+      ctx.body = getRes(1001, '', res)
     } catch (err) {
-      console.error('getArticleByCid error', err)
+      console.log(err)
+      ctx.body = getRes(1002)
     }
 
   }
@@ -57,24 +64,26 @@ class ArticleCtrl {
       perpage = ctx.request.query.perpage
       
     try {
-      const result = await articleModel.getArticle(page, perpage)
-      ctx.body = {
-        code: 1001,
-        message: 'success',
-        data: result
-      }
+      // 验证page和perpage
+      const res = await articleModel.findAll({
+        limit: perpage,
+        offset: perpage * (page - 1)
+      })  
+      ctx.body = getRes(1001, '', res)
     } catch (err) {
-      ctx.body = {
-        code: 1002,
-        message: 'failed'
-      }
       console.log(err)
+      ctx.body = getRes(1002)
     }
   }
   // 获取所有文章
   async getAllArticle (ctx) {
     try {
-      const res = await articleModel.getAllArticle()
+      const res = await articleModel.findAll({
+        order: [
+          ['id', 'DESC'] // 降序排序,确保最新的在前面
+          // ['id', 'ASC'] // 升序
+        ]
+      })
       ctx.body = getRes(1001, '', res)
     } catch (err) {
       ctx.body = getRes(1002)
@@ -93,7 +102,20 @@ class ArticleCtrl {
       return  ctx.body = getRes(1002, vali)
     }
     try {
-      const result = await articleModel.addArticle(form)
+      await articleModel.create({
+        id: 0,
+        category_id: form.category_id,
+        category_name: form.category_name,
+        title: form.title,
+        smtitle: form.smtitle,
+        source: form.source,
+        display: form.display,
+        tags: form.tags,
+        thumbnail: form.thumbnail,
+        summary: form.summary,
+        html: form.html,
+        markdown: form.markdown
+      })
       ctx.body = getRes()
     } catch (err) {
       ctx.body = getRes(1002)
@@ -109,7 +131,23 @@ class ArticleCtrl {
       return ctx.body = Res(1002, vali)
     }
     try {
-      const res = await articleModel.updateArticle(form)
+      await articleModel.update({
+        category_id: form.category_id,
+        category_name: form.category_name,
+        title: form.title,
+        smtitle: form.smtitle,
+        source: form.source,
+        display: form.display,
+        tags: form.tags,
+        thumbnail: form.thumbnail,
+        summary: form.summary,
+        html: form.html,
+        markdown: form.markdown
+      },{
+        where: {
+          id: form.id
+        }
+      })
       ctx.body = getRes()
     } catch (err) {
       ctx.body = getRes(1002)
@@ -127,8 +165,14 @@ class ArticleCtrl {
       return getRes(1002, '参数不能为空数组')
     }
     try {
-      const res = await articleModel.deleteArticle(ids)
-      ctx.body = getRes(1001, '', res)
+      await articleModel.destroy({
+        where: {
+          id: {
+            [Op.or]: ids
+          }
+        }
+      })
+      ctx.body = getRes()
     } catch (err) {
       console.log(err)
       ctx.body = getRes(1002, '删除失败')
@@ -138,12 +182,17 @@ class ArticleCtrl {
   async updateStatus (ctx) {
     const ids = ctx.request.body.ids
     const fieldObj = ctx.request.body.fieldObj
-    console.log(ctx.request.body)
     if (!ids || !fieldObj) {
       return getRes(1002, '参数不正确')
     }
     try {
-      const res = await articleModel.updateStatus(ids, fieldObj)
+      await articleModel.update(fieldObj, {
+        where: {
+          id: {
+            [Op.or]: ids
+          }
+        }
+      })
       ctx.body = getRes()
     } catch (err) {
       console.log(err)

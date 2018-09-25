@@ -4,13 +4,19 @@
 * @Copyright: 2018 https://www.imqian.com All rights reserved
 */
 
-const tagsModel = require('../models/tags')
+const db = require('../config/db')
+const Op = (require('sequelize')).Op
+const tagsModel = db.import('../models/tags.js') // require('../models/tags')
 const getRes = require('../utils/customStatus.js')
 
 class TagsCtrl {
   async getTags (ctx) {
     try {
-      const res = await tagsModel.getTags()
+      const res = await tagsModel.findAll({
+        order: [
+          ['id', 'ASC']
+        ]
+      })
       ctx.body = getRes(1001, '', res)
     } catch (err) {
       console.log(err)
@@ -22,7 +28,12 @@ class TagsCtrl {
     try {
       const tag = ctx.request.body
       // form验证
-      await tagsModel.addTag(tag)
+      await tagsModel.create({
+        id: 0,
+        name: tag.name,
+        create_time: new Date(),
+        update_time: new Date()
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)
@@ -34,7 +45,14 @@ class TagsCtrl {
     try {
       const tag = ctx.request.body
       // form验证
-      await tagsModel.editTag(tag)
+      await tagsModel.update({
+        name: tag.name,
+        update_time: new Date()
+      }, {
+        where: {
+          id: tag.id
+        }
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)
@@ -46,7 +64,13 @@ class TagsCtrl {
     try {
       const id = ctx.request.body.id
       // 验证id
-      await tagsModel.deleteTag(id)
+      await tagsModel.destroy({
+        where: {
+          id: {
+            [Op.or]: id
+          }
+        }
+      })
       ctx.body = getRes(1001)
     } catch (err) {
       console.log(err)

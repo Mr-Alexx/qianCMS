@@ -118,6 +118,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import {
+  deleteArticle,
+  updateStatus
+} from '@/backend/api/article.js'
+
 export default {
   name: 'document',
   props: {
@@ -200,16 +205,31 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        const res = await this.$store.dispatch('deleteArticle', rows)
-        this.$message({
-          message: res.data.message,
-          type: res.data.code === 1001 ? 'success' : 'error'
+        const ids = rows.map(row => {
+          return row.id
         })
-        if (res.data.code !== 1001) return
-        // 更新文章列表
-        this.$store.dispatch('getArticleList', this)
-      }).catch((err) => {
-        console.log(err)
+        try {
+          const res = await deleteArticle(ids)
+          if (res.data.code === 1001) {
+            // 判断当前分页下是不是只有这唯一一条记录
+            if (this.articles.length === 1 && this.currentPage !== 1) {
+              --this.currentPage
+            }
+            // 更新文章列表
+            this.$store.dispatch('getArticleList', this)
+          }
+          this.$message({
+            message: res.data.message,
+            type: res.data.code === 1001 ? 'success' : 'error'
+          })
+        } catch (err) {
+          console.log(err)
+          this.$message({
+            message: 'failed',
+            type: 'error'
+          })
+        }
+      }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除',
@@ -230,14 +250,24 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        const res = await this.$store.dispatch('updateArticleStatus', {articles, fieldObj})
-        this.$message({
-          message: res.data.message,
-          type: res.data.code === 1001 ? 'success' : 'error'
-        })
-        if (res.data.code !== 1001) return
-        // 更新文章列表
-        this.$store.dispatch('getArticleList', this)
+        const ids = articles.map(v => v.id)
+        try {
+          const res = await updateStatus({ids, fieldObj})
+          if (res.data.code === 1001) {
+            // 更新文章列表
+            this.$store.dispatch('getArticleList', this)
+          }
+          this.$message({
+            message: res.data.message,
+            type: res.data.code === 1001 ? 'success' : 'error'
+          })
+        } catch (err) {
+          console.log(err)
+          this.$message({
+            message: 'failed',
+            type: 'error'
+          })
+        }
       }).catch((err) => {
         console.log(err)
         this.$message({
@@ -267,10 +297,10 @@ export default {
         color: #fff;
       }
     }
-    &-pagination {
-      text-align: center;
-      padding-top: 15px;
-    }
+    // &-pagination {
+    //   text-align: center;
+    //   padding-top: 15px;
+    // }
   }
   .qian-cell-icon {
     &.el-icon-circle-check {

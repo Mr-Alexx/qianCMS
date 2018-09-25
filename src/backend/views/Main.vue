@@ -26,19 +26,7 @@
         <!-- 最右侧图标和头像 -->
         <div class="header-right-con">
           <div class="header-right-icons-con">
-            <el-tooltip content="全屏">
-              <i class="iconfont icon-full-screen"></i>
-            </el-tooltip>
-            <el-tooltip content="锁屏">
-              <i class="iconfont icon-md-lock"></i>
-            </el-tooltip>
-            <el-tooltip :content="`有${msgnum}条消息未读`">
-              <i class="iconfont icon-ios-notifications msg-tip">
-                <span v-if="hasUnreadMsg"></span>
-              </i>
-            </el-tooltip>
-            <!-- 主题切换 -->
-            <theme-switch></theme-switch>
+            <func-icon></func-icon>
           </div>
 
           <div class="header-avator-con">
@@ -62,7 +50,7 @@
         </div>
       </el-header>
 
-      <!-- 标签栏 -->
+      <!-- 路由标签栏 -->
       <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
 
       <!-- 主视图内容 -->
@@ -81,12 +69,19 @@
 <script>
 import qIcon from '@/backend/components/qIcon.vue'
 import breadcrumb from './main-components/breadcrumb-nav.vue'
-import themeSwitch from './main-components/theme-switch.vue'
+import funcIcon from './main-components/funcIcon.vue'
 import tagsPageOpened from './main-components/tagsPageOpened.vue'
 import flexibleMenu from './main-components/flexible-menu/flexibleMenu.vue'
 
 export default {
   name: 'Main',
+  components: {
+    breadcrumb,
+    funcIcon,
+    tagsPageOpened,
+    qIcon,
+    flexibleMenu // 左侧菜单栏
+  },
   data () {
     return {
       test: '测试',
@@ -106,13 +101,6 @@ export default {
         }
       ]
     }
-  },
-  components: {
-    breadcrumb,
-    themeSwitch,
-    tagsPageOpened,
-    qIcon,
-    flexibleMenu // 左侧菜单栏
   },
   mounted () {
     // this.$loadingbar.start()

@@ -1,68 +1,71 @@
-/*
-* @Author: Mr.Alex (潜)
-* @Date: 2018-07-12 14:23:50
-* @Copyright: 2018 https://www.imqian.com All rights reserved
-* @description: category表的数据库操作
-*/
+/* jshint indent: 2 */
 
-const db = require('../config/db')
-const Op = (require('sequelize')).Op
-const categorySchema = db.import('../schemas/category.js')
-const _ = require('lodash/core')
-const vd = require('../utils/validate.js')
-
-class Category {
-  async getCategories () {
-    return await categorySchema.findAll({
-      order: [
-        ['sort', 'ASC'] // 升序排序
-      ]
-    })
-  }
-
-  async addCategory (form) {
-    await categorySchema.create({
-      id: 0,
-      name: form.name,
-      pid: form.pid,
-      sort: form.sort,
-      url: form.url,
-      keywords: form.keywords,
-      description: form.discription,
-      display: form.display,
-      create_time: new Date(),
-      update_time: new Date()
-    })
-  }
-
-  async updateCategory (form) {
-    await categorySchema.update({
-      name: form.name,
-      pid: form.pid,
-      sort: form.sort,
-      url: form.url,
-      keywords: form.keywords,
-      description: form.description,
-      display: form.display,
-      update_time: new Date()
-    }, {
-      where: {
-        id: form.id
-      }
-    })
-  }
-
-  async deleteCategory (id) {
-    // 删除该分类和其下子分类
-    await categorySchema.destroy({
-      where: {
-        [Op.or]: [
-          {id},
-          {pid: id}
-        ]
-      }
-    })
-  }
-}
-
-module.exports = new Category()
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('category', {
+    id: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      primaryKey: true
+    },
+    uid: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    name: {
+      type: DataTypes.STRING(30),
+      allowNull: false,
+      defaultValue: ''
+    },
+    pid: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    sort: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    url: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      defaultValue: ''
+    },
+    keywords: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
+    description: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      defaultValue: ''
+    },
+    allow_publish: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    display: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: false,
+      defaultValue: '1'
+    },
+    view: {
+      type: DataTypes.INTEGER(10).UNSIGNED,
+      allowNull: false,
+      defaultValue: '0'
+    },
+    create_time: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    update_time: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
+  }, {
+    tableName: 'category'
+  });
+};

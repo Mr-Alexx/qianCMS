@@ -5,8 +5,6 @@ import {
   getAllArticle,
   getArticleById,
   getCategories,
-  deleteArticle,
-  updateStatus,
   addCategory,
   deleteCategory,
   updateCategory,
@@ -114,19 +112,6 @@ const doc = {
     },
 
     /**
-     * @description 更新文章状态
-     */
-    async updateArticleStatus ({commit}, {articles, fieldObj}) {
-      const ids = articles.map(v => v.id)
-      try {
-        const res = await updateStatus({ids, fieldObj})
-        return res
-      } catch (err) {
-        console.log(err)
-      }
-    },
-
-    /**
      * @description 获取标签tags
      */
     async getTags ({commit}) {
@@ -225,22 +210,6 @@ const doc = {
         form: {name: ''},
         visible: false
       })
-    },
-
-    /**
-     * @description 删除文章
-     */
-    async deleteArticle ({commit}, articles) {
-      const ids = articles.map(article => {
-        return article.id
-      })
-      try {
-        const res = await deleteArticle(ids)
-        return res
-      } catch (err) {
-        console.log(`删除文章失败`)
-        console.log(err)
-      }
     }
   }
 }
