@@ -61,7 +61,7 @@
         <!-- 快捷操作 -->
         <el-card class="quick-operation">
           <header slot="header" class="quick-operation-header">
-            <q-icon icon="ios-send"></q-icon> 快捷操作
+            <!-- <q-icon icon="ios-send"></q-icon> 快捷操作 -->
           </header>
           <div class="quick-operation-body">
             <el-button plain round type="primary" size="mini">
@@ -93,9 +93,9 @@
           :bar-data="[10, 20, 30, 40, 30, 20, 10]"
           bar-color="rgb(109, 176, 234)"
           id-name="views-chart" bar-name="访问量">
-          <q-icon
+          <!-- <q-icon
             icon="ios-happy" slot="icon"
-            color="#409EFF" :size="18"></q-icon>
+            color="#409EFF" :size="18"></q-icon> -->
         </chart>
       </el-col>
       <el-col :md="12" :xs="24">
@@ -105,9 +105,9 @@
           line-color="#F56C6C" bar-color="rgb(96, 196, 199)"
           show-line bar-name="错误数" line-name="错误率"
           :line-data="[10, 15, 12, 13, 18, 20, 30]">
-          <q-icon
+          <!-- <q-icon
             icon="ios-sad" slot="icon"
-            color="#F56C6C" :size="18"></q-icon>
+            color="#F56C6C" :size="18"></q-icon> -->
         </chart>
       </el-col>
     </el-row>
@@ -117,7 +117,7 @@
       <el-col :span="24">
         <el-card>
           <header slot="header">
-            <q-icon icon="location" :size="18"></q-icon>
+            <!-- <q-icon icon="location" :size="18"></q-icon> -->
             访客地域分布图
           </header>
           <bmap></bmap>

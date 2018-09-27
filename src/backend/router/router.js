@@ -39,26 +39,51 @@ export const login = {
   component: () => import('@/backend/views/login/login.vue')
 }
 
-// 作为Main组件的子组件页面展示但是不在左侧菜单显示的路由
-// 写在otherRouter里
+// 作为Main组件的子组件页面展示且在左侧菜单显示的路由
 export const otherRouter = {
   path: '/',
   name: 'otherRouter',
   redirect: '/home', // 默认重定向到home页
   component: Main,
   children: [
-    {path: 'home', title: '首页', name: 'home_index', component: () => import('../views/home/home.vue')},
-    {path: 'document', title: '文档管理', name: 'document', component: () => import('../views/document')},
-    {path: 'docEdit', title: '文档编辑', name: 'docEdit', component: () => import('../views/document/docEdit.vue')},
-    {path: 'category', title: '类别管理', name: 'category', component: () => import('../views/category')},
-    {path: 'tags', title: '标签管理', name: 'tags', component: () => import('../views/tags')}
+    {path: 'home', title: '首页', name: 'home_index', component: () => import('../views/home/home.vue')}
   ]
 }
+
+// 作为Main组件的子组件页面展示,但是不在左侧显示的路由
+export const appRouter = [
+  {
+    path: '/system',
+    title: '系统管理',
+    name: 'system',
+    icon: 'el-icon-setting',
+    component: Main,
+    children: [
+      {path: 'config', title: '系统配置', name: 'system_config', icon: '', component: () => import('../views/system/config.vue')},
+      {path: 'users', title: '用户管理', name: 'users_manage', icon: '', component: () => import('../views/system/users.vue')},
+      {path: 'roles', title: '角色管理', name: 'roles_manage', icon: '', component: () => import('../views/system/roles.vue')}
+    ]
+  },
+  {
+    path: '/document',
+    title: '文档管理',
+    name: 'document',
+    icon: 'el-icon-document',
+    component: Main,
+    children: [
+      {path: 'index', title: '文档管理', name: 'document_index', icon: '', component: () => import('../views/document')},
+      {path: 'edit', title: '文档编辑', name: 'document_edit', icon: '', component: () => import('../views/document/docEdit.vue')},
+      {path: 'category', title: '类别管理', name: 'document_category', icon: '', component: () => import('../views/category')},
+      {path: 'tags', title: '标签管理', name: 'document_tags', component: () => import('../views/tags')}
+    ]
+  }
+]
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [
   otherRouter,
   login,
+  ...appRouter,
   page403,
   page404,
   page500

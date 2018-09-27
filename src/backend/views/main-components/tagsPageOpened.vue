@@ -11,11 +11,12 @@
       <div class="tags-scroll-body" ref="scrollBody" :style="{left: tagLeft + 'px'}">
         <transition-group name="tag-scroll-transition">
           <tag
-            v-for="(item, i) in 20" :key="i"
-            @click.native="changeTag($event, i)" closable
+            v-for="(item, i) in pageTagsList"
+            :key="i"
+            @click="changeTag($event, i)" closable
             @on-close="handleCloseTag($event, i)"
             :active="activeTag === i">
-            首页{{item}}
+            {{item.title}}
           </tag>
         </transition-group>
       </div>
@@ -43,14 +44,20 @@ export default {
   components: {
     tag
   },
+  props: {
+    pageTagsList: Array
+  },
   data () {
     return {
       tagLeft: 0,
+      step: 100, // tag容器每次移动步长
       activeTag: 0 // 激活的tag
     }
   },
-  props: {
-    pageTagsList: Array
+  computed: {
+    tagsList () {
+      return this.$store.state.app.openedPageList
+    }
   },
   methods: {
     handleTagsOption (command) {
@@ -66,7 +73,7 @@ export default {
       this.activeTag = i
     },
     handleCloseTag (e, i) {
-      console.log(e)
+      // console.log(e)
     },
 
     /**
@@ -87,14 +94,13 @@ export default {
      * @param {Number} direction 滚动方向 负数: 下滚, 正数: 上滚
      */
     scroll (direction = 0) {
-      const step = 100
       if (direction > 0) { // 上滚
         const left = Math.abs(this.tagLeft)
-        // 左移距离 >= step时,右移step距离
-        // 左移距离 在(0, step)时, 右移0(回原点)
-        if (left >= step) {
-          this.tagLeft += step
-        } else if (left > 0 && left < step) {
+        // 左移距离 >= this.step时,右移this.step距离
+        // 左移距离 在(0, this.step)时, 右移0(回原点)
+        if (left >= this.step) {
+          this.tagLeft += this.step
+        } else if (left > 0 && left < this.step) {
           this.tagLeft = 0
         }
       } else if (direction < 0) { // 下滚
@@ -104,8 +110,8 @@ export default {
         const w = scrollBodyOffset - Math.abs(this.tagLeft)
         // 当剩余长度 > 容器长度时才滚动
         if (w > scrollConOffset) {
-          // 最后滚动的时候,取滚动距离与step两者的最小值
-          this.tagLeft -= (Math.min(step, w - scrollConOffset))
+          // 最后滚动的时候,取滚动距离与this.step两者的最小值
+          this.tagLeft -= (Math.min(this.step, w - scrollConOffset))
         }
       } else {
         console.error('您的浏览器不支持DOMMouseScroll或mouseWheel方法')
@@ -114,10 +120,22 @@ export default {
 
     /**
      * @description 移动tag方法,一般当tag位于最左或者最右侧时才调用
-     * @param {Object} tag tag dom event对象
+     * @param {Object} e tag dom event对象
      */
-    moveTag (tag) {
-      console.log(tag)
+    moveTag (e) {
+      const self = e.target
+      const offsetLeft = self.offsetLeft
+      const offsetWidth = self.offsetWidth
+      const scrollConOffset = this.$refs.scrollCon.offsetWidth
+      if (offsetLeft < -this.tagLeft) {
+        // 位于可视区域左侧
+        this.scroll(1)
+      } else if ((offsetLeft > -this.tagLeft) && (offsetLeft + offsetWidth < -this.tagLeft + scrollConOffset)) {
+        // 位于可视区域
+      } else {
+        // 位于可视区域右侧
+        this.scroll(-1)
+      }
     }
   }
 }
@@ -132,8 +150,6 @@ export default {
     padding-left: 28px;
     padding-right: 60px;
     background-color: #f0f0f0;
-    // padding-right: 120px;
-    // @include box-shadow();
   }
   .tags-ctrl {
     &-left, &-right {
@@ -149,15 +165,22 @@ export default {
         border-radius: 0;
         font-size: 18px;
         font-weight: 800;
+        border-left: none;
+        border-bottom: none;
       }
     }
     &-left {
       left: 0;
       width: 28px;
+      .el-button {
+        border-right: none;
+        @include box-shadow(2px 2px 1px 1px rgba(100, 100, 100, 0.1));
+      }
     }
     &-right {
       right: 0;
       width: 60px;
+      @include box-shadow(-2px 2px 1px 1px rgba(100, 100, 100, 0.1));
       .el-button, .el-dropdown {
         float: left;
       }

@@ -5,12 +5,11 @@
       class="qian-aside-menu"
       @open="handleOpen"
       @close="handleClose"
-      router
       :default-active="activeRoute"
       :default-openeds="defaultOpeneds"
       @select="handleSelect">
       <el-submenu
-        v-for="(menu, i) in menus"
+        v-for="(menu, i) in menuList"
         :key="i"
         :index="menu.title">
         <template slot="title">
@@ -22,7 +21,7 @@
             v-if="menu.children && menu.children.length > 0"
             v-for="(subMenu, j) in menu.children"
             :key="j"
-            :index="subMenu.router">
+            :index="subMenu.name">
             <i :class="subMenu.icon" v-if="subMenu.icon"></i>
             {{subMenu.title}}
           </el-menu-item>
@@ -46,7 +45,7 @@ export default {
         return ['文档管理']
       }
     },
-    menus: {
+    menu: {
       type: Array,
       default () {
         return [
@@ -95,12 +94,15 @@ export default {
     }
   },
   computed: {
+    menuList () {
+      return this.$store.state.app.menuList
+    },
     activeRoute () {
       return this.$store.state.app.activeRoute
     }
   },
   created () {
-    this.$store.dispatch('getActiveRoute')
+    // this.$store.dispatch('getActiveRoute')
   },
   methods: {
     handleOpen (key, keyPath) {
@@ -110,8 +112,10 @@ export default {
       console.log(key, keyPath)
     },
     handleSelect (index, indexPath) {
-      console.log(index)
-      this.$store.dispatch('setActiveRoute', index)
+      this.$router.push({
+        name: index
+      })
+      // this.$store.dispatch('setActiveRoute', index)
     }
   }
 }

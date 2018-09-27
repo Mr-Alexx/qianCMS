@@ -5,7 +5,7 @@
   <el-container class="main">
     <!-- 左侧功能栏 -->
     <el-aside :class="[isCollapse ? 'collapse-aside' : 'expand-aside', 'aside-menu']">
-      <flexible-menu :isCollapse="isCollapse"></flexible-menu>
+      <!-- <flexible-menu :isCollapse="isCollapse"></flexible-menu> -->
     </el-aside>
     <!-- 右侧主内容 -->
     <el-container>
@@ -13,20 +13,20 @@
       <el-header class="main-header">
         <!-- 控制左侧导航伸缩 -->
         <div class="navicon-con">
-            <q-icon
-              icon="ios-menu" :class="{'clollapse-navicon': isCollapse}"
-              @click.native="isCollapse = !isCollapse"></q-icon>
+          <!-- <q-icon
+            icon="ios-menu" :class="{'clollapse-navicon': isCollapse}"
+            @click.native="isCollapse = !isCollapse"></q-icon> -->
         </div>
 
         <!-- 中间文字显示内容 -->
         <div class="header-middle-con">
-            <breadcrumb :currentPath="currentPath"></breadcrumb>
+          <breadcrumb :currentPath="currentPath"></breadcrumb>
         </div>
 
         <!-- 最右侧图标和头像 -->
         <div class="header-right-con">
           <div class="header-right-icons-con">
-            <func-icon></func-icon>
+            <!-- <func-icon></func-icon> -->
           </div>
 
           <div class="header-avator-con">
@@ -51,7 +51,7 @@
       </el-header>
 
       <!-- 路由标签栏 -->
-      <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
+      <!-- <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened> -->
 
       <!-- 主视图内容 -->
       <el-main class="single-page-con">
@@ -72,6 +72,7 @@ import breadcrumb from './main-components/breadcrumb-nav.vue'
 import funcIcon from './main-components/funcIcon.vue'
 import tagsPageOpened from './main-components/tagsPageOpened.vue'
 import flexibleMenu from './main-components/flexible-menu/flexibleMenu.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Main',
@@ -91,16 +92,14 @@ export default {
         name: 'Mr.Alex', // 用户名称
         avator: './static/images/batman.png'
       },
-      pageTagsList: [], // 已打开的tab
-      hasUnreadMsg: true, // 控制未读消息圆点
-      currentPath: [
-        {
-          path: '/',
-          name: 'index',
-          title: '首页'
-        }
-      ]
+      hasUnreadMsg: true // 控制未读消息圆点
     }
+  },
+  computed: {
+    ...mapState({
+      pageTagsList: state => state.app.openedPageList,
+      currentPath: state => state.app.currentPath
+    })
   },
   mounted () {
     // this.$loadingbar.start()
@@ -115,6 +114,12 @@ export default {
     // 用户菜单选择
     handleUserDropdownClick () {
 
+    }
+  },
+  watch: {
+    '$route' (to) {
+      console.log(to)
+      this.$store.dispatch('addTag', to)
     }
   }
 }
