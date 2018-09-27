@@ -4,7 +4,8 @@
     {{title}}
     <slot></slot>
     <i
-      class="el-icon-close" v-if="closable"
+      class="el-icon-close"
+      v-if="closable"
       @click="close"></i>
   </span>
 </template>
@@ -81,10 +82,10 @@ export default {
   &.is-active {
     background-color: $primary;
     color: #fff;
-    @include transition(background-color, .5s, ease);
+    // @include transition(background-color, .5s, ease);
     .qian-tag-circle {
       background-color: #fff;
-      @include transition(background-color, .5s, ease);
+      // @include transition(background-color, .5s, ease);
     }
     .el-icon-close {
       color: #fff;

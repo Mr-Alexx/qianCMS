@@ -13,17 +13,18 @@
           <tag
             v-for="(item, i) in pageTagsList"
             :key="i"
-            @click="changeTag($event, i)" closable
-            @on-close="handleCloseTag($event, i)"
-            :active="activeTag === i">
-            {{item.title}}
+            @click.native="changeTag($event, i, item)"
+            :closable="item.name !== 'home_index'"
+            @on-close="handleCloseTag($event, i, item)"
+            :active="activeTag === item.name">
+            {{item.meta.title}}
           </tag>
         </transition-group>
       </div>
     </div>
     <div class="tags-ctrl-right">
       <el-button icon="el-icon-arrow-right" @click="scroll(-1)"></el-button>
-      <el-dropdown @command="handleTagsOption">
+      <el-dropdown @command="closeTags">
         <span class="el-dropdown-link">
           <el-button icon="el-icon-circle-close-outline"></el-button>
         </span>
@@ -50,11 +51,13 @@ export default {
   data () {
     return {
       tagLeft: 0,
-      step: 100, // tag容器每次移动步长
-      activeTag: 0 // 激活的tag
+      step: 100 // tag容器每次移动步长
     }
   },
   computed: {
+    activeTag () {
+      return this.$store.state.app.currentPageName
+    },
     tagsList () {
       return this.$store.state.app.openedPageList
     }
@@ -63,17 +66,40 @@ export default {
     handleTagsOption (command) {
       this.$alert(command)
     },
-    changeTag (e, i) {
+    changeTag (e, i, route) {
       if (e.target.tagName !== 'SPAN') {
         return
       }
       if (i !== 0 || i !== this.pageTagsList.length - 1) {
         this.moveTag(e)
       }
-      this.activeTag = i
+      this.$router.push({
+        name: route.name
+      })
     },
-    handleCloseTag (e, i) {
-      // console.log(e)
+    handleCloseTag (e, i, route) {
+      this.$store.dispatch('removeTag', {route, router: this.$router})
+      // 覆盖当前的路由
+    },
+    /**
+     * @description 关闭所有和关闭其它方法
+     */
+    closeTags (type) {
+      const home = this.$store.state.app.openedPageList[0]
+      if (type === 'closeAll') {
+        // 关闭全部(保留主页)
+        this.$store.commit('SET_OPENEDPAGELIST', [home])
+        this.$store.commit('SET_CURRENTPAGENAME', home.name)
+        this.$router.push({
+          name: home.name
+        })
+      } else {
+        // 关闭其它(保留主页和当前激活的)
+        const existPage = this.$store.state.app.openedPageList.filter(v => {
+          return v.name === home.name || v.name === this.$store.state.app.currentPageName
+        })
+        this.$store.commit('SET_OPENEDPAGELIST', existPage)
+      }
     },
 
     /**

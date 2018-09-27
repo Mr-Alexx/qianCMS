@@ -46,7 +46,14 @@ export const otherRouter = {
   redirect: '/home', // 默认重定向到home页
   component: Main,
   children: [
-    {path: 'home', title: '首页', name: 'home_index', component: () => import('../views/home/home.vue')}
+    {
+      path: 'home',
+      name: 'home_index',
+      meta: {
+        title: '首页'
+      },
+      component: () => import('../views/home/home.vue')
+    }
   ]
 }
 
@@ -54,27 +61,88 @@ export const otherRouter = {
 export const appRouter = [
   {
     path: '/system',
-    title: '系统管理',
     name: 'system',
-    icon: 'el-icon-setting',
+    meta: {
+      title: '系统管理',
+      icon: 'el-icon-setting'
+    },
     component: Main,
     children: [
-      {path: 'config', title: '系统配置', name: 'system_config', icon: '', component: () => import('../views/system/config.vue')},
-      {path: 'users', title: '用户管理', name: 'users_manage', icon: '', component: () => import('../views/system/users.vue')},
-      {path: 'roles', title: '角色管理', name: 'roles_manage', icon: '', component: () => import('../views/system/roles.vue')}
+      {
+        path: 'config',
+        name: 'system_config',
+        meta: {
+          title: '系统配置',
+          icon: ''
+        },
+        component: () => import('../views/system/config.vue')
+      },
+      {
+        path: 'users',
+        name: 'users_manage',
+        meta: {
+          title: '用户管理',
+          icon: ''
+        },
+        component: () => import('../views/system/users.vue')
+      },
+      {
+        path: 'roles',
+        name: 'roles_manage',
+        meta: {
+          title: '角色管理',
+          icon: ''
+        },
+        component: () => import('../views/system/roles.vue')
+      }
     ]
   },
   {
     path: '/document',
-    title: '文档管理',
     name: 'document',
-    icon: 'el-icon-document',
+    meta: {
+      title: '文档管理',
+      icon: 'el-icon-document'
+    },
     component: Main,
     children: [
-      {path: 'index', title: '文档管理', name: 'document_index', icon: '', component: () => import('../views/document')},
-      {path: 'edit', title: '文档编辑', name: 'document_edit', icon: '', component: () => import('../views/document/docEdit.vue')},
-      {path: 'category', title: '类别管理', name: 'document_category', icon: '', component: () => import('../views/category')},
-      {path: 'tags', title: '标签管理', name: 'document_tags', component: () => import('../views/tags')}
+      {
+        path: 'index',
+        name: 'document_index',
+        meta: {
+          title: '文档管理',
+          icon: ''
+        },
+        component: () => import('../views/document')
+      },
+      {
+        path: 'edit',
+        name: 'document_edit',
+        hide: true,
+        meta: {
+          title: '文档编辑',
+          icon: ''
+        },
+        component: () => import('../views/document/docEdit.vue')
+      },
+      {
+        path: 'category',
+        name: 'document_category',
+        meta: {
+          title: '类别管理',
+          icon: ''
+        },
+        component: () => import('../views/category')
+      },
+      {
+        path: 'tags',
+        name: 'document_tags',
+        meta: {
+          title: '标签管理',
+          icon: ''
+        },
+        component: () => import('../views/tags')
+      }
     ]
   }
 ]

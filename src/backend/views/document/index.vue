@@ -186,7 +186,7 @@ export default {
      */
     edit (index, row) {
       this.$router.push({
-        path: '/docEdit',
+        name: 'document_edit',
         query: {
           id: row.id
         }

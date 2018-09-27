@@ -5,7 +5,7 @@
   <el-container class="main">
     <!-- 左侧功能栏 -->
     <el-aside :class="[isCollapse ? 'collapse-aside' : 'expand-aside', 'aside-menu']">
-      <!-- <flexible-menu :isCollapse="isCollapse"></flexible-menu> -->
+      <flexible-menu :isCollapse="isCollapse"></flexible-menu>
     </el-aside>
     <!-- 右侧主内容 -->
     <el-container>
@@ -13,9 +13,9 @@
       <el-header class="main-header">
         <!-- 控制左侧导航伸缩 -->
         <div class="navicon-con">
-          <!-- <q-icon
+          <q-icon
             icon="ios-menu" :class="{'clollapse-navicon': isCollapse}"
-            @click.native="isCollapse = !isCollapse"></q-icon> -->
+            @click.native="isCollapse = !isCollapse"></q-icon>
         </div>
 
         <!-- 中间文字显示内容 -->
@@ -51,7 +51,7 @@
       </el-header>
 
       <!-- 路由标签栏 -->
-      <!-- <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened> -->
+      <tags-page-opened :pageTagsList="pageTagsList"></tags-page-opened>
 
       <!-- 主视图内容 -->
       <el-main class="single-page-con">
@@ -117,8 +117,7 @@ export default {
     }
   },
   watch: {
-    '$route' (to) {
-      console.log(to)
+    '$route' (to, from) {
       this.$store.dispatch('addTag', to)
     }
   }

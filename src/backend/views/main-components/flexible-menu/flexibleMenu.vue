@@ -7,23 +7,25 @@
       @close="handleClose"
       :default-active="activeRoute"
       :default-openeds="defaultOpeneds"
-      @select="handleSelect">
+      @select="handleSelect"
+      unique-opened>
       <el-submenu
         v-for="(menu, i) in menuList"
         :key="i"
-        :index="menu.title">
+        :index="menu.meta.title"
+        v-if="!menu.hide">
         <template slot="title">
-          <i :class="menu.icon"></i>
-          <span>{{menu.title}}</span>
+          <i :class="menu.meta.icon"></i>
+          <span>{{menu.meta.title}}</span>
         </template>
         <el-menu-item-group>
           <el-menu-item
-            v-if="menu.children && menu.children.length > 0"
+            v-if="menu.children && menu.children.length > 0 && !subMenu.hide"
             v-for="(subMenu, j) in menu.children"
             :key="j"
             :index="subMenu.name">
-            <i :class="subMenu.icon" v-if="subMenu.icon"></i>
-            {{subMenu.title}}
+            <i :class="subMenu.meta.icon" v-if="subMenu.meta.icon"></i>
+            {{subMenu.meta.title}}
           </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
@@ -45,60 +47,14 @@ export default {
         return ['文档管理']
       }
     },
-    menu: {
-      type: Array,
-      default () {
-        return [
-          {
-            title: '系统管理',
-            icon: 'el-icon-setting',
-            children: [
-              {
-                router: '/systemConfig',
-                title: '系统配置'
-              },
-              {
-                router: '/userManage',
-                title: '用户管理'
-              },
-              {
-                router: '/roleManage',
-                title: '角色管理'
-              }
-            ]
-          },
-          {
-            title: '文档管理',
-            icon: 'el-icon-document',
-            children: [
-              {
-                router: '/document',
-                title: '文档管理'
-              },
-              {
-                router: '/category',
-                title: '文档类别'
-              },
-              {
-                router: '/tags',
-                title: '标签管理'
-              },
-              {
-                router: '/message',
-                title: '留言管理'
-              }
-            ]
-          }
-        ]
-      }
-    }
+    menus: Array
   },
   computed: {
     menuList () {
       return this.$store.state.app.menuList
     },
     activeRoute () {
-      return this.$store.state.app.activeRoute
+      return this.$store.state.app.currentPageName
     }
   },
   created () {
@@ -112,6 +68,7 @@ export default {
       console.log(key, keyPath)
     },
     handleSelect (index, indexPath) {
+      // console.log(index, indexPath)
       this.$router.push({
         name: index
       })
