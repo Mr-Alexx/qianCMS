@@ -13,6 +13,7 @@
           <tag
             v-for="(item, i) in pageTagsList"
             :key="i"
+            :ref="item.name"
             @click.native="changeTag($event, i, item)"
             :closable="item.name !== 'home_index'"
             @on-close="handleCloseTag($event, i, item)"
@@ -62,16 +63,25 @@ export default {
       return this.$store.state.app.openedPageList
     }
   },
+  watch: {
+    '$route' (to) {
+      // 使用nextTick,防止添加时dom未获取
+      this.$nextTick(() => {
+        this.moveTag(this.$refs[to.name][0].$el)
+      })
+    }
+  },
   methods: {
     handleTagsOption (command) {
       this.$alert(command)
     },
     changeTag (e, i, route) {
-      if (e.target.tagName !== 'SPAN') {
+      // 点击到关闭按钮或者已经是激活状态,则跳过
+      if (e.target.tagName !== 'SPAN' || e.target.className.match(/active/ig)) {
         return
       }
       if (i !== 0 || i !== this.pageTagsList.length - 1) {
-        this.moveTag(e)
+        this.moveTag(this.$refs[route.name][0].$el)
       }
       this.$router.push({
         name: route.name
@@ -88,8 +98,9 @@ export default {
       const home = this.$store.state.app.openedPageList[0]
       if (type === 'closeAll') {
         // 关闭全部(保留主页)
-        this.$store.commit('SET_OPENEDPAGELIST', [home])
-        this.$store.commit('SET_CURRENTPAGENAME', home.name)
+        // this.$store.commit('SET_OPENEDPAGELIST', [home])
+        this.$store.dispatch('setOpenedPageList', [home])
+        this.$store.dispatch('setCurrentpageName', home.name)
         this.$router.push({
           name: home.name
         })
@@ -98,7 +109,8 @@ export default {
         const existPage = this.$store.state.app.openedPageList.filter(v => {
           return v.name === home.name || v.name === this.$store.state.app.currentPageName
         })
-        this.$store.commit('SET_OPENEDPAGELIST', existPage)
+        // this.$store.commit('SET_OPENEDPAGELIST', existPage)
+        this.$store.dispatch('setOpenedPageList', existPage)
       }
     },
 
@@ -146,21 +158,20 @@ export default {
 
     /**
      * @description 移动tag方法,一般当tag位于最左或者最右侧时才调用
-     * @param {Object} e tag dom event对象
+     * @param {Object} tag dom对象
      */
-    moveTag (e) {
-      const self = e.target
-      const offsetLeft = self.offsetLeft
-      const offsetWidth = self.offsetWidth
+    moveTag (tag) {
+      const offsetLeft = tag.offsetLeft
+      const w = offsetLeft + tag.offsetWidth
       const scrollConOffset = this.$refs.scrollCon.offsetWidth
       if (offsetLeft < -this.tagLeft) {
         // 位于可视区域左侧
-        this.scroll(1)
-      } else if ((offsetLeft > -this.tagLeft) && (offsetLeft + offsetWidth < -this.tagLeft + scrollConOffset)) {
+        this.tagLeft = 4 - offsetLeft
+      } else if ((offsetLeft > -this.tagLeft) && (w < -this.tagLeft + scrollConOffset)) {
         // 位于可视区域
       } else {
         // 位于可视区域右侧
-        this.scroll(-1)
+        this.tagLeft = -(w - scrollConOffset + 4)
       }
     }
   }

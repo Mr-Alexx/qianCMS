@@ -3,8 +3,6 @@
     <el-menu
       :collapse="isCollapse"
       class="qian-aside-menu"
-      @open="handleOpen"
-      @close="handleClose"
       :default-active="activeRoute"
       :default-openeds="defaultOpeneds"
       @select="handleSelect"
@@ -61,12 +59,6 @@ export default {
     // this.$store.dispatch('getActiveRoute')
   },
   methods: {
-    handleOpen (key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose (key, keyPath) {
-      console.log(key, keyPath)
-    },
     handleSelect (index, indexPath) {
       // console.log(index, indexPath)
       this.$router.push({

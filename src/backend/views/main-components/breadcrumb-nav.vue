@@ -4,7 +4,7 @@
       v-for="item in currentPath"
       :to="{path: item.path}"
       :key="item.name">
-      {{item.title}}
+      {{item.meta.title}}
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
@@ -15,8 +15,10 @@ export default {
   props: {
     currentPath: Array
   },
-  mounted () {
-    console.log(this.currentPath)
+  watch: {
+    currentPath (val) {
+      console.log(val)
+    }
   }
 }
 </script>

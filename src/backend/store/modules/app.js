@@ -11,13 +11,7 @@ const app = {
       ...cloneDeep(appRouter)
     ],
     tagsList: [...cloneDeep(otherRouter.children)], // 标签数组
-    openedPageList: [{ // 打开的页面数组
-      path: '/',
-      meta: {
-        title: '首页'
-      },
-      name: 'home_index'
-    }],
+    openedPageList: [cloneDeep(otherRouter.children[0])], // 打开的页面数组,默认是首页
     currentPageName: 'home_index', // 当前打开的路由
     currentPath: [{ // 面包屑数组
       path: '/',
@@ -40,42 +34,60 @@ const app = {
       state.openedPageList = list
     },
     SET_CURRENTPAGENAME (state, name) {
-      state.currentPageName = name
+      state.currentPageName = name || sessionStorage.currentPageName
     }
   },
   actions: {
     goback ({ commit }, vue) {
       vue.$router.back()
     },
-    setActiveRoute ({commit}, route) {
-      sessionStorage.setItem('activeRoute', route)
-      commit('SET_ACTIVEROUTE', route)
+    // 先存sessionStorage
+    setOpenedPageList ({commit}, list) {
+      sessionStorage.openedPageList = JSON.stringify(list)
+      commit('SET_OPENEDPAGELIST', list)
     },
-    getActiveRoute ({commit}) {
-      const route = sessionStorage.getItem('activeRoute')
-      commit('SET_ACTIVEROUTE', route || '/home')
+    // 从sessionStorage获取openedPageList
+    getOpenedPageList ({commit, state}) {
+      const list = sessionStorage.openedPageList
+      const _list = list ? JSON.parse(list) : cloneDeep(otherRouter.children[0])
+      commit('SET_OPENEDPAGELIST', _list)
     },
-    addTag ({commit, state}, route) {
+    setCurrentpageName ({commit}, pageName) {
+      sessionStorage.currentPageName = pageName
+      commit('SET_CURRENTPAGENAME', pageName)
+    },
+    /**
+     * @description 新增路由,先判断路由tag是否已经存在
+     * @param {Object} route 路由对象
+     */
+    addTag ({state, dispatch}, route) {
       const res = state.openedPageList.filter(v => route.name === v.name)
       // 判断tag是否已经存在
       if (res.length <= 0) {
         // 不存在则添加tag
-        commit('SET_OPENEDPAGELIST', state.openedPageList.concat(route))
+        // commit('SET_OPENEDPAGELIST', state.openedPageList.concat(route))
+        dispatch('setOpenedPageList', state.openedPageList.concat(route))
       }
       // 激活tag
-      commit('SET_CURRENTPAGENAME', route.name)
+      dispatch('setCurrentpageName', route.name)
     },
-    removeTag ({commit, state}, {route, router}) {
+    /**
+     * @description 删除路由tag
+     * @param {Object} route 路由对象
+     * @param {Object} router vue router实例(this.$router)
+     */
+    removeTag ({state, dispatch}, {route, router}) {
       // 找出route前面的路由,设为激活的
       let prevRoute = null
       state.openedPageList.forEach((v, i) => {
         v.name === route.name && (prevRoute = state.openedPageList[i - 1])
       })
       const res = state.openedPageList.filter(v => v.name !== route.name)
-      commit('SET_OPENEDPAGELIST', res)
+      // commit('SET_OPENEDPAGELIST', res)
+      dispatch('setOpenedPageList', res)
       // 必须是删除激活状态的tag才更改激活tag
       if (route.name === state.currentPageName) {
-        commit('SET_CURRENTPAGENAME', prevRoute.name)
+        dispatch('setCurrentpageName', prevRoute.name)
         router.push({
           name: prevRoute.name
         })

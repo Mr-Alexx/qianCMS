@@ -43,6 +43,9 @@ export const login = {
 export const otherRouter = {
   path: '/',
   name: 'otherRouter',
+  meta: {
+    title: '首页'
+  },
   redirect: '/home', // 默认重定向到home页
   component: Main,
   children: [
@@ -94,6 +97,42 @@ export const appRouter = [
           icon: ''
         },
         component: () => import('../views/system/roles.vue')
+      },
+      {
+        path: 'dataCopy',
+        name: 'data_copy',
+        meta: {
+          title: '数据备份',
+          icon: ''
+        },
+        component: () => import('../views/system/dataCopy.vue')
+      },
+      {
+        path: 'log',
+        name: 'system_log',
+        meta: {
+          title: '日志管理',
+          icon: ''
+        },
+        component: () => import('../views/system/log.vue')
+      },
+      {
+        path: 'message',
+        name: 'system_message',
+        meta: {
+          title: '消息管理',
+          icon: ''
+        },
+        component: () => import('../views/system/message.vue')
+      },
+      {
+        path: 'announcement',
+        name: 'system_announcement',
+        meta: {
+          title: '公告管理',
+          icon: ''
+        },
+        component: () => import('../views/system/announcement.vue')
       }
     ]
   },
@@ -142,6 +181,15 @@ export const appRouter = [
           icon: ''
         },
         component: () => import('../views/tags')
+      },
+      {
+        path: 'message',
+        name: 'user_message',
+        meta: {
+          title: '留言管理',
+          icon: ''
+        },
+        component: () => import('../views/message')
       }
     ]
   }

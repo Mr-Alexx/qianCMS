@@ -26,7 +26,7 @@
         <!-- 最右侧图标和头像 -->
         <div class="header-right-con">
           <div class="header-right-icons-con">
-            <!-- <func-icon></func-icon> -->
+            <func-icon></func-icon>
           </div>
 
           <div class="header-avator-con">
@@ -98,8 +98,16 @@ export default {
   computed: {
     ...mapState({
       pageTagsList: state => state.app.openedPageList,
-      currentPath: state => state.app.currentPath
+      currentPath: state => {
+        console.log(state.app.routers)
+        return state.app.openedPageList.filter(v => v.name === state.app.currentPageName)
+      }
     })
+  },
+  created () {
+    // 刷新时,从sessionStorage获取openedPageList和currentPageName
+    this.$store.dispatch('getOpenedPageList')
+    this.$store.commit('SET_CURRENTPAGENAME')
   },
   mounted () {
     // this.$loadingbar.start()
@@ -117,8 +125,15 @@ export default {
     }
   },
   watch: {
-    '$route' (to, from) {
-      this.$store.dispatch('addTag', to)
+    '$route' (to) {
+      // 不直接传to,避免序列化openedPageList时循环引用的问题
+      this.$store.dispatch('addTag', {
+        name: to.name,
+        meta: to.meta,
+        path: to.path,
+        params: to.params,
+        query: to.query
+      })
     }
   }
 }
