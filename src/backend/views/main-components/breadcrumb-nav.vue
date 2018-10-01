@@ -1,8 +1,10 @@
 <template>
   <el-breadcrumb separator="/">
     <el-breadcrumb-item
+      :to="{name: 'home_index'}">首页</el-breadcrumb-item>
+    <el-breadcrumb-item
       v-for="item in currentPath"
-      :to="{path: item.path}"
+      v-if="item.meta.title !== '首页'"
       :key="item.name">
       {{item.meta.title}}
     </el-breadcrumb-item>
@@ -14,11 +16,6 @@ export default {
   name: 'breadcrumbNav',
   props: {
     currentPath: Array
-  },
-  watch: {
-    currentPath (val) {
-      console.log(val)
-    }
   }
 }
 </script>

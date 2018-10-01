@@ -20,7 +20,7 @@
 
         <!-- 中间文字显示内容 -->
         <div class="header-middle-con">
-          <breadcrumb :currentPath="currentPath"></breadcrumb>
+          <breadcrumb :currentPath="$route.matched"></breadcrumb>
         </div>
 
         <!-- 最右侧图标和头像 -->
@@ -38,7 +38,9 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="a">
-                  个人中心
+                  <router-link :to="{name: 'personal_center'}">
+                    个人中心
+                  </router-link>
                 </el-dropdown-item>
                 <el-dropdown-item command="b" divided>
                   退出登陆
@@ -97,11 +99,7 @@ export default {
   },
   computed: {
     ...mapState({
-      pageTagsList: state => state.app.openedPageList,
-      currentPath: state => {
-        console.log(state.app.routers)
-        return state.app.openedPageList.filter(v => v.name === state.app.currentPageName)
-      }
+      pageTagsList: state => state.app.openedPageList
     })
   },
   created () {

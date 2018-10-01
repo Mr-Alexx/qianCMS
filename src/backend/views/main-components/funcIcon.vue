@@ -4,9 +4,9 @@
       <i class="iconfont icon-full-screen" @click="screenfull"></i>
     </el-tooltip>
     <el-tooltip :content="`有${msgnum}条消息未读`">
-      <i class="iconfont icon-ios-notifications msg-tip">
+      <router-link class="iconfont icon-ios-notifications msg-tip" :to="{name: 'message_center'}">
         <span v-if="hasUnreadMsg"></span>
-      </i>
+      </router-link>
     </el-tooltip>
     <!-- 主题切换 -->
     <theme-switch></theme-switch>

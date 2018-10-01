@@ -44,7 +44,8 @@ export const otherRouter = {
   path: '/',
   name: 'otherRouter',
   meta: {
-    title: '首页'
+    title: '首页',
+    id: 1
   },
   redirect: '/home', // 默认重定向到home页
   component: Main,
@@ -56,6 +57,26 @@ export const otherRouter = {
         title: '首页'
       },
       component: () => import('../views/home/home.vue')
+    },
+    {
+      path: 'personalCenter',
+      name: 'personal_center',
+      meta: {
+        title: '个人中心',
+        icon: '',
+        pid: 1
+      },
+      component: () => import('../views/home/personalCenter.vue')
+    },
+    {
+      path: 'messageCenter',
+      name: 'message_center',
+      meta: {
+        title: '消息中心',
+        icon: '',
+        pid: 1
+      },
+      component: () => import('../views/home/messageCenter.vue')
     }
   ]
 }
@@ -67,7 +88,9 @@ export const appRouter = [
     name: 'system',
     meta: {
       title: '系统管理',
-      icon: 'el-icon-setting'
+      icon: 'el-icon-setting',
+      pid: 1,
+      id: 2
     },
     component: Main,
     children: [
@@ -76,7 +99,8 @@ export const appRouter = [
         name: 'system_config',
         meta: {
           title: '系统配置',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/config.vue')
       },
@@ -85,7 +109,8 @@ export const appRouter = [
         name: 'users_manage',
         meta: {
           title: '用户管理',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/users.vue')
       },
@@ -94,7 +119,8 @@ export const appRouter = [
         name: 'roles_manage',
         meta: {
           title: '角色管理',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/roles.vue')
       },
@@ -103,7 +129,8 @@ export const appRouter = [
         name: 'data_copy',
         meta: {
           title: '数据备份',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/dataCopy.vue')
       },
@@ -112,7 +139,8 @@ export const appRouter = [
         name: 'system_log',
         meta: {
           title: '日志管理',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/log.vue')
       },
@@ -121,7 +149,8 @@ export const appRouter = [
         name: 'system_message',
         meta: {
           title: '消息管理',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/message.vue')
       },
@@ -130,7 +159,8 @@ export const appRouter = [
         name: 'system_announcement',
         meta: {
           title: '公告管理',
-          icon: ''
+          icon: '',
+          pid: 2
         },
         component: () => import('../views/system/announcement.vue')
       }
@@ -141,7 +171,9 @@ export const appRouter = [
     name: 'document',
     meta: {
       title: '文档管理',
-      icon: 'el-icon-document'
+      icon: 'el-icon-document',
+      id: 3,
+      pid: 1
     },
     component: Main,
     children: [
@@ -150,7 +182,8 @@ export const appRouter = [
         name: 'document_index',
         meta: {
           title: '文档管理',
-          icon: ''
+          icon: '',
+          pid: 3
         },
         component: () => import('../views/document')
       },
@@ -160,7 +193,8 @@ export const appRouter = [
         hide: true,
         meta: {
           title: '文档编辑',
-          icon: ''
+          icon: '',
+          pid: 3
         },
         component: () => import('../views/document/docEdit.vue')
       },
@@ -169,7 +203,8 @@ export const appRouter = [
         name: 'document_category',
         meta: {
           title: '类别管理',
-          icon: ''
+          icon: '',
+          pid: 3
         },
         component: () => import('../views/category')
       },
@@ -178,7 +213,8 @@ export const appRouter = [
         name: 'document_tags',
         meta: {
           title: '标签管理',
-          icon: ''
+          icon: '',
+          pid: 3
         },
         component: () => import('../views/tags')
       },
@@ -187,13 +223,16 @@ export const appRouter = [
         name: 'user_message',
         meta: {
           title: '留言管理',
-          icon: ''
+          icon: '',
+          pid: 3
         },
         component: () => import('../views/message')
       }
     ]
   }
 ]
+
+// 定义一个
 
 // 所有上面定义的路由都要写在下面的routers里
 export const routers = [

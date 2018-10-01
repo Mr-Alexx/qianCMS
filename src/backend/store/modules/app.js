@@ -33,8 +33,8 @@ const app = {
     SET_OPENEDPAGELIST (state, list) {
       state.openedPageList = list
     },
-    SET_CURRENTPAGENAME (state, name) {
-      state.currentPageName = name || sessionStorage.currentPageName
+    SET_CURRENTPAGENAME (state, name = 'home_index') {
+      state.currentPageName = sessionStorage.currentPageName || name
     }
   },
   actions: {
@@ -49,7 +49,7 @@ const app = {
     // 从sessionStorage获取openedPageList
     getOpenedPageList ({commit, state}) {
       const list = sessionStorage.openedPageList
-      const _list = list ? JSON.parse(list) : cloneDeep(otherRouter.children[0])
+      const _list = list ? JSON.parse(list) : [cloneDeep(otherRouter.children[0])]
       commit('SET_OPENEDPAGELIST', _list)
     },
     setCurrentpageName ({commit}, pageName) {

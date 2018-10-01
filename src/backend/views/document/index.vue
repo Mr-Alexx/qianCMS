@@ -4,8 +4,8 @@
     <el-row class="qian-manage-menu">
       <el-col :md="12" :sm="24" class="qian-manage-menu__group">
         <el-button-group>
-          <el-button type="primary" size="mini">
-            <router-link to="/docEdit">添加</router-link>
+          <el-button type="primary" size="mini" class="qian-button--add">
+            <router-link :to="{name: 'document_edit'}">添加</router-link>
           </el-button>
           <el-button type="primary" size="mini" @click="deleteArticle">删除</el-button>
         </el-button-group>
@@ -308,6 +308,13 @@ export default {
     }
     &.el-icon-remove {
       color: $danger;
+    }
+  }
+  .qian-button--add {
+    padding: 0;
+    a {
+      display: inline-block;
+      padding: 7px;
     }
   }
 </style>
