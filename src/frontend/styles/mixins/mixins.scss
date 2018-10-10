@@ -1,0 +1,193 @@
+@import './config.scss';
+@import 'utils.scss';
+
+/* BEM
+ --------------------- */
+ // block
+@mixin b($block) {
+  $B: $namespace + '-' + $block !global; // 生成的类可以全局使用
+
+  .#{$B} {
+    @content;
+  }
+}
+
+// element
+@mixin e($element) {
+  $E: $element !global;
+  $selector: &; // 外层选择器
+  $currentSelector: "";
+  @each $unit in $element {
+    // 用全局的block加上分隔符，再加上子元素选择器
+    $currentSelector: #{$currentSelector + "." + $B + $element-separator + $unit + ","};
+  }
+
+  /**
+   * 传入外层选择器，判断是是伪类/.is-xx/--xx
+   * 是的话，返回后代选择器的写法: 外层选择器 当前选择器
+   * 否则直接返回当前选择器
+   * 例子见最后方注释
+   */
+  @if hitAllSpecialNestRule($selector) {
+    @at-root {
+      #{$selector} {
+        #{$currentSelector} {
+          @content;
+        }
+      }
+    }
+  } @else {
+    @at-root {
+      #{$currentSelector} {
+        @content;
+      }
+    }
+  }
+}
+
+// modifier
+@mixin m($modifier) {
+  $selector: &;
+  $currentSelector: "";
+  @each $unit in $modifier {
+    $currentSelector: #{$currentSelector + & + $modifier-separator + $unit + ","};
+  }
+
+  @at-root {
+    #{$currentSelector} {
+      @content;
+    }
+  }
+}
+
+// 含有子元素的modifier，在modifier前面插入__子元素
+@mixin configurable-m($modifier, $E-flag: false) {
+  $selector: &;
+  $interpolation: ""; // 插值
+
+  @if $E-flag {
+    $interpolation: $element-separator + $E-flag;
+  }
+
+  @at-root {
+    .#{$selector} {
+      #{$B + $interpolation + $modifier-separator + $E-flag} {
+        @content;
+      }
+    }
+  }
+}
+
+// 待研究
+@mixin spec-selector($specSelector: '', $element: $E, $modifier: false, $block: $B) {
+  $modifierCombo: ''; // 合并修饰符
+
+  @if $modifier {
+    $modifierCombo: $modifier-separator + $modifier
+  }
+
+  @at-root {
+    #{&}#{$specSelector}.#{$block + $element-separator + $element + $modifierCombo} {
+      @content;
+    }
+  }
+}
+
+// 待研究
+@mixin meb($modifier: false, $element: $E, $block: $B) {
+  $selector: &;
+  $modifierCombo: '';
+
+  @if $modifier {
+    $modifierCombo: $modifier-separator + $modifier;
+  }
+
+  @at-root {
+    #{$selector} {
+      .#{$block+$element-separator+$element+$modifierCombo} {
+        @content;
+      }
+    }
+  }
+}
+
+
+/* 状态mixin is-xxxx
+ --------------------- */
+@mixin when ($state) {
+  @at-root {
+    &.#{$state-prefix + $state} {
+      @content;
+    }
+  }
+}
+
+// 待研究
+@mixin extend-rule($name) {
+  @extend #{'%shared-'+$name};
+}
+
+// 待研究
+@mixin share-rule($name) {
+  $rule-name: '%shared-'+$name;
+
+  @at-root #{$rule-name} {
+    @content;
+  }
+}
+
+// 伪类
+@mixin pseudo($pseudo) {
+  @at-root {
+    #{&}#{':$pseudo'} {
+      @content;
+    }
+  }
+}
+
+/* scss 其中($namespace: qian; $element-separator: __; $modifier-separator: --)
+  @include b(test) {
+    display: inline-block;
+    &.is-active{
+      @include e(item) {
+        padding: 8px 20px;
+      }
+    }
+    &:first-child{
+      @include e(item) {
+        padding: 8px 20px;
+      }
+    }
+    &--modifier{
+      @include e(item) {
+        padding: 8px 20px;
+      }
+    }
+    &.tt{
+      @include e(item) {
+        padding: 8px 20px;
+      }
+    }
+  }
+ */
+
+/* 上方scss生成的css
+ .qian-test {
+    display: inline-block;
+  }
+  .qian-test.is-active .qian-test__item {
+    padding: 8px 20px;
+  }
+
+  .qian-test:first-child .qian-test__item {
+    padding: 8px 20px;
+  }
+
+  .qian-test--modifier .qian-test__item {
+    padding: 8px 20px;
+  }
+
+  .qian-test__item {
+    padding: 8px 20px;
+  }
+ */

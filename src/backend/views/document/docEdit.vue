@@ -322,7 +322,7 @@ export default {
               type: 'success'
             })
             this.loading = false
-            this.$router.push('/document')
+            this.$router.push({name: 'document_index'})
           } else {
             // 添加/更新失败
             this.$message({
