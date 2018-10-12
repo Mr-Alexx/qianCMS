@@ -18,6 +18,7 @@ $-color-black: #000 !default;
 $--color-main-bg: #F5F4F5 !default;
 
 $--color-main: #DA3E9B !default; // rgb(183, 63, 207) !default;
+
 $--color-main-light-1: mix($--color-white, $--color-main, 10%) !default;
 $--color-main-light-2: mix($--color-white, $--color-main, 20%) !default;
 $--color-main-light-3: mix($--color-white, $--color-main, 30%) !default;
@@ -27,6 +28,12 @@ $--color-main-light-6: mix($--color-white, $--color-main, 60%) !default;
 $--color-main-light-7: mix($--color-white, $--color-main, 70%) !default;
 $--color-main-light-8: mix($--color-white, $--color-main, 80%) !default;
 $--color-main-light-9: mix($--color-white, $--color-main, 90%) !default;
+
+$--color-primary: #409EFF !default;
+$--color-success: #67c23a !default;
+$--color-warning: #e6a23c !default;
+$--color-danger: #f56c6c !default;
+$--color-info: #909399 !default;
 
 $--color-text-primary: #303133 !default;
 $--color-text-regular: #606266 !default;
@@ -40,11 +47,26 @@ $--box-shadow-dark: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .12) !de
 $--box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
 $--box-shadow-bubble: 0 3px 6px 0 rgba(0, 0, 0, 0.6) !default;
 
+/* Border
+-------------------------- */
+$--border-width-base: 1px !default;
+$--border-style-base: solid !default;
+$--border-color-base: #dcdfe6 !default;
+$--border-color-light: #e4e7ed !default;
+$--border-color-lighter: #ebeef5 !default;
+$--border-color-extra-light: #f2f6fc !default;
+$--border-color-hover: $--color-text-placeholder !default;
+$--border-base: $--border-width-base $--border-style-base $--border-color-base !default;
+$--border-radius-base: 4px !default;
+$--border-radius-small: 2px !default;
+$--border-radius-circle: 100% !default;
+
 /* Font
 -------------------------- */
 $--font-path: 'fonts' !default;
 $--font-size-base: 14px !default;
 $--font-size-small: 13px !default;
+$--font-size-middle: 16px !default;
 $--font-size-large: 18px !default;
 $--font-color-disabled-base: #bbb !default;
 $--font-weight-primary: 500 !default;
@@ -88,3 +110,7 @@ $--breakpoints-spec: (
   'lg-and-down': (max-width: $--xl - 1),
   'xl-only' : (min-width: $--xl),
 );
+
+/* Menu
+--------------------------*/
+$--menu-height: 60px;

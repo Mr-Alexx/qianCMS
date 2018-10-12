@@ -1,21 +1,24 @@
 import Vue from 'vue'
 import App from './App'
-import router from './router'
-import axios from 'axios'
+import store from './store'
+import { router } from './router'
 import Row from './components/row'
 import Col from './components/col'
+import Icon from '@/components/icon'
+import '../../static/fonts/iconfont.css' // 全局使用iconfont
 import './styles/style.scss'
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios
 
+Vue.use(Icon)
 Vue.use(Row)
 Vue.use(Col)
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el: '#qian',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

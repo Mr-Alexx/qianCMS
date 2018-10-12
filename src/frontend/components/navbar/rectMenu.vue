@@ -1,10 +1,10 @@
 <template>
   <div>
-    <ul class="qian-menu">
+    <ul class="qian-rectmenu">
       <li
         v-for="(item, i) in menuList"
         :key="i"
-        :class="['qian-menu__item', {'is-active': activeIndex == i}]"
+        :class="['qian-rectmenu__item', {'is-active': activeIndex == i}]"
         @click="changeMenu(i)">
         <router-link :to="{name: item.name}">{{item.label}}</router-link>
         <span class="qian-line-lr"></span>
@@ -37,7 +37,7 @@ export default {
   @import '@/frontend/styles/common/var.scss';
   @import '@/styles/mixins/mixins.scss';
 
-  @include b(menu) {
+  @include b(rectmenu) {
     height: 40px;
     line-height: 40px;
     font-size: 16px;

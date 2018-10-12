@@ -70,8 +70,8 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '@/backend/styles/colors.scss';
-  @import '@/backend/styles/mixins.scss';
+  @import '@/styles/common/var.scss';
+  @import '@/styles/mixins/mixins.scss';
 
   $prefixCls: qian-loading-bar;
   .#{$prefixCls}{
@@ -82,12 +82,15 @@ export default {
     right: 0;
     z-index: 2000;
     &-inner{
-      @include transition(width, .2s, linear);
+      @include utils-prefix(transition, width .2s linear);
       &-color-primary{
-        background-color: $primary;
+        background-color: $--color-primary;
       }
+      // &-color-main{
+      //   background-color: $--color-main;
+      // }
       &-color-error{
-        background-color: $danger;
+        background-color: $--color-danger;
       }
     }
   }

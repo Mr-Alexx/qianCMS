@@ -1,5 +1,44 @@
 @import '@/styles/common/var.scss';
+@import '@/styles/mixins/mixins.scss';
 
 body {
   background-color: $--color-main-bg;
+}
+
+// 修改loading-bar的颜色为主色调
+.qian-loading-bar-inner-color-primary {
+  background-color: $--color-main !important;
+}
+
+a {
+  color: $--color-text-primary;
+  &:hover, &:active, &:link {
+    color: $--color-main;
+  }
+}
+
+// 容器
+@include b(container) {
+  margin: 0 auto;
+  max-width: 890px;
+  @include res(lg) {
+    min-width: 1190px;
+  }
+  @include m(pd) {
+    padding-top: 40px;
+  }
+}
+
+// 卡片
+@include b(card) {
+  border: 1px solid $--border-color-lighter;
+  border-radius: $--border-radius-base;
+  @include utils-prefix(transition, $--all-transition);
+  padding: 15px;
+  @include m(white) {
+    background-color: $--color-white;
+  }
+  &:hover {
+    @include utils-prefix(box-shadow, $--box-shadow-light);
+  }
 }

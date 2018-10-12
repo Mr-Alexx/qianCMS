@@ -82,7 +82,7 @@ export default {
   // 抽离的公共生成qian-col'-xx'-x, qian-col'-xx'-push-x...方法
   @mixin com($size: "") {
     $str: "";
-    @if $size {
+    @if $size != "" {
       $str: -#{$size};
     }
     .qian-col#{$str}-#{"0"} {
@@ -94,14 +94,14 @@ export default {
       .qian-col#{$str}-#{$i} {
         width: $w;
       }
-      .qian-col-offset#{$str}-#{$i} {
+      .qian-col#{$str}-offset-#{$i} {
         margin-left: $w;
       }
-      .qian-col-pull#{$str}-#{$i} {
+      .qian-col#{$str}-pull-#{$i} {
         position: relative;
         left: $w;
       }
-      .qian-col-push#{$str}-#{$i} {
+      .qian-col#{$str}-push-#{$i} {
         position: relative;
         right: $w;
       }

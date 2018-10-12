@@ -5,7 +5,6 @@ import store from './store/index.js'
 import axios from 'axios'
 import filters from './filter'
 import '../../static/fonts/iconfont.css' // 全局使用iconfont
-import loadingBar from './components/loading-bar' // 使用loadingbar
 import {
   Pagination,
   Dialog,
@@ -136,7 +135,6 @@ Vue.prototype.$message = Message
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axios
-Vue.$loadingbar = loadingBar
 
 // 挂载lodash到Vue proto上
 const lodash = require('lodash/core')

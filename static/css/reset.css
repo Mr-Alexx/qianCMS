@@ -17,7 +17,7 @@ a, span, i, em, img, button, input {
   padding: 0;
 }
 
-html:before, html:after, body:before, body:after, main:before, main:after, section:before, section:after, article:before, article:after, header:before, header:after, footer:before, footer:after,
+/* html:before, html:after, body:before, body:after, main:before, main:after, section:before, section:after, article:before, article:after, header:before, header:after, footer:before, footer:after,
 aside:before,
 aside:after, div:before, div:after, p:before, p:after, h1:before, h1:after, h2:before, h2:after, h3:before, h3:after, h4:before, h4:after, h5:before, h5:after, h6:before, h6:after,
 table:before,
@@ -29,7 +29,7 @@ a:after, span:before, span:after, i:before, i:after, em:before, em:after, img:be
   -o-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-}
+} */
 
 pre:before, pre:after {
   -webkit-box-sizing: border-box;
@@ -37,10 +37,6 @@ pre:before, pre:after {
   -o-box-sizing: border-box;
   -ms-box-sizing: border-box;
   box-sizing: border-box;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
 }
 
 ul, ol {
