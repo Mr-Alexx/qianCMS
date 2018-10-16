@@ -1,5 +1,5 @@
 <template>
-  <div class="qian-navbar">
+  <div :class="['qian-navbar', {'qian-navbar--fixed': smallBar}]">
     <div class="qian-navbar__banner"></div>
     <div class="qian-container">
       <qian-row class="qian-menu-container">
@@ -34,6 +34,9 @@ export default {
   components: {
     RectMenu,
     LineMenu
+  },
+  props: {
+    smallBar: Boolean
   },
   data () {
     return {
@@ -74,6 +77,17 @@ export default {
       min-height: 280px;
       background-image: url(https://i.loli.net/2018/10/09/5bbc7c611eaf0.jpg);
       background-size: cover;
+    }
+    @include m(fixed) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      height: $--menu-height;
+      @include e(banner) {
+        display: none;
+      }
     }
   }
   .qian-avatar-container {

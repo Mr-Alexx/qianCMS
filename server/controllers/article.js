@@ -59,17 +59,33 @@ class ArticleCtrl {
   }
   // 获取文章--分页
   async getArticle (ctx) {
-    const 
-      page = ctx.request.query.page,
-      perpage = ctx.request.query.perpage
-      
+    const page = Number(ctx.request.query.page)
+    const limit = Number(ctx.request.query.limit)
     try {
       // 验证page和perpage
       const res = await articleModel.findAll({
-        limit: perpage,
-        offset: perpage * (page - 1)
+        where: {
+          display: 1
+        },
+        limit,
+        offset: limit * (page - 1),
+        order: [
+          ['id', 'DESC']
+        ],
+        attributes: ['id', 'title', 'smtitle', 'category_id', 'category_name', 'source', 'thumbnail', 'summary', 'update_time', 'views', 'comments', 'likes']
       })  
       ctx.body = getRes(1001, '', res)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
+    }
+  }
+  // 获取分页总条数
+  async getArticleSum (ctx) {
+    try {
+      let res = await articleModel.count('id')
+      console.log(res)
+      ctx.body = getRes(1001, '', {count: res})
     } catch (err) {
       console.log(err)
       ctx.body = getRes(1002)

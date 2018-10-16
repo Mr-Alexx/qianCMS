@@ -38,7 +38,10 @@ app.use(logger())
 // jwt验证 保护下面的中间件
 // 登陆和get请求不需要通过jwt验证
 app.use(koaJwt({secret: config.secret}).unless({
-  path: [/^\/api\/v1\/(upload)|(user\/admin\/login|logout)/], // 暂时上传不需要认证，后面改造
+  path: [
+    /^\/api\/v1\/(upload)|(user\/admin\/login|logout)/,
+    /^\/api\/frontend\/v1/
+  ], // 暂时上传不需要认证，后面改造
   method: 'GET'
 }))
 

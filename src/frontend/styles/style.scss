@@ -1,5 +1,6 @@
 @import '@/styles/common/var.scss';
 @import '@/styles/mixins/mixins.scss';
+@import '@/styles/transition.scss'; // 路由效果
 
 body {
   background-color: $--color-main-bg;
@@ -12,9 +13,10 @@ body {
 
 a {
   color: $--color-text-primary;
-  &:hover, &:active, &:link {
-    color: $--color-main;
-  }
+}
+
+@include b(relative) {
+  position: relative;
 }
 
 // 容器

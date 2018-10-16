@@ -1,27 +1,29 @@
 <template>
   <div>
     <qian-row :gutter="20">
-      <qian-col :xs="0" :md="5">
+      <qian-col :xs="0" :md="4">
         <qian-message-board></qian-message-board>
       </qian-col>
-      <qian-col :xs="24" :md="14">
+      <qian-col :xs="24" :md="14" class="qian-relative">
         <ul class="qian-article-list">
           <li
             class="qian-card qian-card--white qian-article-item"
             v-for="(item, i) in articleList"
             :key="i">
             <div :span="6" class="qian-article-item__thumbnail">
-              <router-link to="/">
+              <router-link :to="`/article/${item.id}`">
                 <img :src="item.thumbnail | thumbnail">
               </router-link>
             </div>
             <div :span="18" class="qian-article-item__content">
               <h3>
-                <router-link to="/">
+                <router-link :to="`/article/${item.id}`">
                   {{item.title}}
                 </router-link>
               </h3>
-              <p>{{item.summary}}</p>
+              <div>
+                <p>{{item.summary}}</p>
+              </div>
               <div>
                 <div>
                   <span>
@@ -45,10 +47,17 @@
             </div>
           </li>
         </ul>
+        <el-pagination
+          layout="prev, pager, next"
+          :total="count"
+          :page-size="pageSize"
+          :current-page="currentPage"
+          @current-change="changePage">
+        </el-pagination>
       </qian-col>
-      <qian-col :xs="0" :md="5">
+      <qian-col :xs="0" :md="6">
         <qian-featured></qian-featured>
-        <qian-tags></qian-tags>
+        <qian-tags :tagList="tagList"></qian-tags>
       </qian-col>
     </qian-row>
   </div>
@@ -71,17 +80,39 @@ export default {
     QianFeatured,
     QianCard
   },
+  data () {
+    return {
+      currentPage: 1,
+      pageSize: 5
+    }
+  },
   filters: {
     thumbnail,
     timeFilter
   },
   computed: {
     ...mapState({
-      articleList: state => state.app.articleList
+      articleList: state => state.app.articleList,
+      tagList: state => state.app.tagList,
+      count: state => state.app.count
     })
   },
-  created () {
-    this.$store.dispatch('getArticles')
+  async created () {
+    if (!this.count) {
+      await this.$store.dispatch('getArticleSum')
+    }
+    if (this.articleList.length <= 0) {
+      await this.$store.dispatch('getPaginationArticle', {page: this.currentPage, limit: this.pageSize})
+    }
+    if (this.tagList.length <= 0) {
+      this.$store.dispatch('getTagList')
+    }
+  },
+  methods: {
+    changePage (page) {
+      this.$store.dispatch('getPaginationArticle', {page, limit: this.pageSize})
+      window.scrollTo(0, 280)
+    }
   }
 }
 </script>
@@ -121,12 +152,15 @@ export default {
       float: left;
       max-width: calc(100% - 230px);
       height: 100%;
+      color: $--color-text-regular;
       >h3 {
-        font-size: $--font-size-large;
-        font-weight: normal;
+        font-size: $--font-size-middle;
+        font-weight: 500;
         a {
-          @include utils-prefix(transition, all .3s linear);
+          @include utils-prefix(transition, padding-left .3s linear);
           &:hover {
+            color: $--color-main;
+            text-decoration: underline;
             padding-left: 10px;
           }
         }
@@ -134,12 +168,12 @@ export default {
       >h3, >div {
         height: 30px;
       }
-      >p {
+      >div:nth-child(2) {
         height: calc(100% - 60px);
         padding-top: 10px;
-        text-overflow: ellipsis;
+        overflow: hidden;
       }
-      >div {
+      >div:last-child {
         display: table;
         div {
           display: table-cell;
@@ -157,5 +191,15 @@ export default {
         font-size: $--font-size-small;
       }
     }
+  }
+  .el-pagination {
+    text-align: center;
+    margin-bottom: 15px;
+    [class*="btn"], ul, li {
+      background-color: transparent !important;
+    }
+  }
+  .el-pager li.active {
+    color: $--color-main;
   }
 </style>

@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { getAllArticle, getTags, getArticleSum, getPaginationArticle } from '@/frontend/api'
 
 export default {
   state: {
@@ -8,40 +8,12 @@ export default {
       {name: 'tag', label: '标签'},
       {name: 'music', label: '音乐'},
       {name: 'life', label: '生活'},
-      {name: 'effect', label: '效果'},
       {name: 'message', label: '留言'}
     ],
+    tagList: [],
     activeRoute: 'index',
-    articleList: [
-      {
-        id: 1,
-        title: '测试',
-        category_id: 1,
-        category_name: 'vue',
-        source: '原创',
-        thumbnail: '',
-        summary: '测试测试测试',
-        create_time: '2018-09-21 02:01:25',
-        update_time: '2018-09-21 02:01:25',
-        views: 288,
-        comments: 20,
-        likes: 15
-      },
-      {
-        id: 1,
-        title: '测试',
-        category_id: 1,
-        category_name: 'vue',
-        source: '原创',
-        thumbnail: 'https://www.html-js.cn/upload/images/img20180415212519.jpeg',
-        summary: '测试测试测试',
-        create_time: '2018-09-21 02:01:25',
-        update_time: '2018-09-21 02:01:25',
-        views: 288,
-        comments: 20,
-        likes: 15
-      }
-    ]
+    articleList: [],
+    count: 0
   },
   mutations: {
     'SET_ACTIVEROUTE' (state, routeName) {
@@ -49,13 +21,33 @@ export default {
     },
     'SET_ARTICLELIST' (state, list) {
       state.articleList = list
+    },
+    'SET_TAGLIST' (state, list) {
+      state.tagList = list
+    },
+    'SET_COUNT' (state, count) {
+      state.count = count
     }
   },
   actions: {
-    getArticles ({commit}) {
-      axios.get('http://localhost:3000/api/v1/article').then(res => {
+    getArticleList ({ commit }) {
+      getAllArticle().then(res => {
         commit('SET_ARTICLELIST', res.data.data)
       })
+    },
+    getTagList ({ commit }) {
+      getTags().then(res => {
+        commit('SET_TAGLIST', res.data.data)
+      })
+    },
+    // 获取分页总数
+    async getArticleSum ({ commit }) {
+      const res = await getArticleSum()
+      commit('SET_COUNT', res.data.data.count || 0)
+    },
+    async getPaginationArticle ({ commit }, { page, limit }) {
+      const res = await getPaginationArticle(page, limit)
+      commit('SET_ARTICLELIST', res.data.data || [])
     }
   }
 }

@@ -42,7 +42,7 @@ export async function deleteArticle (ids) {
 
 // 获取文章分类
 export async function getCategories () {
-  return fetch('/article/category')
+  return fetch('/categories')
 }
 // 添加文章分类
 export async function addCategory (form) {
@@ -59,7 +59,7 @@ export async function deleteCategory (cid) {
 
 // 获取标签
 export async function getTags () {
-  return fetch('/article/tag')
+  return fetch('/tags')
 }
 // 添加标签
 export async function addTag (tag) {

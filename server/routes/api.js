@@ -17,6 +17,7 @@ const
 
 // 通过id获取文章内容
 router.get('/api/v1/article/id/:id', articleCtrl.getArticleById)
+router.get('/api/v1/article/:id', articleCtrl.getArticleById)
 
 // 通过tid查询文章列表
 router.get('/api/v1/article/tid/:tid', articleCtrl.getArticleByTid)
@@ -24,7 +25,10 @@ router.get('/api/v1/article/tid/:tid', articleCtrl.getArticleByTid)
 router.get('/api/v1/article/cid/:cid', articleCtrl.getArticleByCid)
 
 // 通过分页和每页数量查询文章列表--page采用query形式获取参数 ?limit=x&offset=x
-router.get('/api/v1/article/pagination', articleCtrl.getArticle)
+router.get('/api/v1/pagination/article', articleCtrl.getArticle)
+// 获取分页总条数
+router.get('/api/v1/sum', articleCtrl.getArticleSum)
+
 // 获取所有文章
 router.get('/api/v1/article', articleCtrl.getAllArticle)
 
@@ -48,7 +52,8 @@ router.post('/api/v1/user/admin/login', userCtrl.login)
 router.post('/api/v1/user/admin/logout', userCtrl.logout)
 
 // 获取文章类型
-router.get('/api/v1/article/category', categoryCtrl.getCategories)
+// router.get('/api/v1/article/category', categoryCtrl.getCategories)
+router.get('/api/v1/categories', categoryCtrl.getCategories)
 // 添加文章类型
 router.post('/api/v1/article/category', categoryCtrl.addCategory)
 // 更新文章类型
@@ -57,7 +62,8 @@ router.put('/api/v1/article/category', categoryCtrl.updateCategory)
 router.post('/api/v1/article/category/delete', categoryCtrl.deleteCategory)
 
 // 获取标签
-router.get('/api/v1/article/tag', tagsCtrl.getTags)
+// router.get('/api/v1/article/tag', tagsCtrl.getTags)
+router.get('/api/v1/tags', tagsCtrl.getTags)
 // 添加标签
 router.post('/api/v1/article/tag', tagsCtrl.addTag)
 // 修改标签
