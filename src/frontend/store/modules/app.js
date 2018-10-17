@@ -1,4 +1,11 @@
-import { getAllArticle, getTags, getArticleSum, getPaginationArticle } from '@/frontend/api'
+import {
+  getAllArticle,
+  getTags,
+  getArticleSum,
+  getPaginationArticle,
+  getFeaturedList,
+  getTimelineList
+} from '@/frontend/api'
 
 export default {
   state: {
@@ -13,6 +20,8 @@ export default {
     tagList: [],
     activeRoute: 'index',
     articleList: [],
+    featuredList: [], // 推荐列表
+    timelineList: [], // 归档列表
     count: 0
   },
   mutations: {
@@ -27,6 +36,12 @@ export default {
     },
     'SET_COUNT' (state, count) {
       state.count = count
+    },
+    'SET_FEATUREDLIST' (state, list) {
+      state.featuredList = list
+    },
+    'SET_TIMELINELIST' (state, list) {
+      state.timelineList = list
     }
   },
   actions: {
@@ -48,6 +63,19 @@ export default {
     async getPaginationArticle ({ commit }, { page, limit }) {
       const res = await getPaginationArticle(page, limit)
       commit('SET_ARTICLELIST', res.data.data || [])
+    },
+    // 获取推荐列表
+    getFeaturedList ({commit}) {
+      getFeaturedList().then(res => {
+        commit('SET_FEATUREDLIST', res.data.data || [])
+      }).catch(err => console.log(err))
+    },
+    // 获取归档信息
+    getTimelineList ({commit}) {
+      getTimelineList().then(res => {
+        console.log(res)
+        commit('SET_TIMELINELIST', res.data.data || [])
+      }).catch(err => console.log(err))
     }
   }
 }

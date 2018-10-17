@@ -22,7 +22,7 @@
                 </router-link>
               </h3>
               <div>
-                <p>{{item.summary}}</p>
+                <p>{{item.summary | summaryFilter}}</p>
               </div>
               <div>
                 <div>
@@ -57,7 +57,7 @@
       </qian-col>
       <qian-col :xs="0" :md="6">
         <qian-featured></qian-featured>
-        <qian-tags :tagList="tagList"></qian-tags>
+        <qian-tags></qian-tags>
       </qian-col>
     </qian-row>
   </div>
@@ -88,7 +88,14 @@ export default {
   },
   filters: {
     thumbnail,
-    timeFilter
+    timeFilter,
+    summaryFilter (summary) {
+      let str = summary
+      if (summary.length > 120) {
+        str = summary.substring(0, 120) + '......'
+      }
+      return str
+    }
   },
   computed: {
     ...mapState({
@@ -103,9 +110,6 @@ export default {
     }
     if (this.articleList.length <= 0) {
       await this.$store.dispatch('getPaginationArticle', {page: this.currentPage, limit: this.pageSize})
-    }
-    if (this.tagList.length <= 0) {
-      this.$store.dispatch('getTagList')
     }
   },
   methods: {
@@ -150,7 +154,7 @@ export default {
     }
     @include e(content) {
       float: left;
-      max-width: calc(100% - 230px);
+      max-width: calc(100% - 235px);
       height: 100%;
       color: $--color-text-regular;
       >h3 {

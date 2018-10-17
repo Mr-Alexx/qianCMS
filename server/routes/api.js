@@ -19,6 +19,12 @@ const
 router.get('/api/v1/article/id/:id', articleCtrl.getArticleById)
 router.get('/api/v1/article/:id', articleCtrl.getArticleById)
 
+// 获取推荐文章
+router.get('/api/v1/featured', articleCtrl.getFeatured)
+
+// 获取归档文章
+router.get('/api/v1/file', articleCtrl.getFile)
+
 // 通过tid查询文章列表
 router.get('/api/v1/article/tid/:tid', articleCtrl.getArticleByTid)
 // 通过分类(cid)查询文章列表

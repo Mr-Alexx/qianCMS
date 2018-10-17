@@ -60,13 +60,14 @@ export default {
           cls.push(`qian-col-${size}-${this[size]}`)
         } else if (typeof this[size] === 'object') {
           let props = this[size]
-          props.forEach(prop => {
+          for (let k in props) {
+            const prop = props[k]
             cls.push(
-              prop === 'span'
-                ? `qian-col-${size}-${props[prop]}`
-                : `qian-col-${size}-${prop}-${props[prop]}`
+              k === 'span'
+                ? `qian-col-${size}-${prop}`
+                : `qian-col-${size}-${k}-${prop}`
             )
-          })
+          }
         }
       })
 

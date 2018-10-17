@@ -18,6 +18,17 @@ a {
 @include b(relative) {
   position: relative;
 }
+@include b(mgt) {
+  margin-top: 15px;
+}
+@include b(mgb) {
+  margin-bottom: 15px;
+}
+@include b(pdl) {
+  padding-left: 15px;
+}
+
+@include utils-scrollbar();
 
 // 容器
 @include b(container) {
@@ -28,19 +39,5 @@ a {
   }
   @include m(pd) {
     padding-top: 40px;
-  }
-}
-
-// 卡片
-@include b(card) {
-  border: 1px solid $--border-color-lighter;
-  border-radius: $--border-radius-base;
-  @include utils-prefix(transition, $--all-transition);
-  padding: 15px;
-  @include m(white) {
-    background-color: $--color-white;
-  }
-  &:hover {
-    @include utils-prefix(box-shadow, $--box-shadow-light);
   }
 }

@@ -30,6 +30,9 @@ export default {
     QianFeatured,
     QianCard
   },
+  props: {
+    id: [Number, String]
+  },
   data () {
     return {
       article: ''
@@ -40,18 +43,29 @@ export default {
       tagList: state => state.app.tagList
     })
   },
-  props: {
-    id: [Number, String]
-  },
   created () {
     if (this.tagList.length <= 0) {
       this.$store.dispatch('getTagList')
     }
-    getArticleById(this.id).then(res => {
-      this.article = res.data.code === 1001 ? res.data.data.html : '获取文章失败'
-    }).catch(err => {
-      console.log(err)
-    })
+    // 进入时获取
+    if (!this.article) {
+      this.getArticle()
+    }
+  },
+  methods: {
+    getArticle () {
+      getArticleById(this.id).then(res => {
+        this.article = res.data.code === 1001 ? res.data.data.html : '获取文章失败'
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+  },
+  watch: {
+    // 切换文章时,重新获取
+    id (id) {
+      this.getArticle()
+    }
   }
 }
 </script>

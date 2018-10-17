@@ -93,6 +93,11 @@ module.exports = function(sequelize, DataTypes) {
     tags: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    featured: {
+      type: DataTypes.INTEGER(3).UNSIGNED,
+      allowNull: true,
+      defaultValue: '0'
     }
   }, {
     tableName: 'article'

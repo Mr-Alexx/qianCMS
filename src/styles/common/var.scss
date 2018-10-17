@@ -35,10 +35,33 @@ $--color-warning: #e6a23c !default;
 $--color-danger: #f56c6c !default;
 $--color-info: #909399 !default;
 
+$--color-primary-light-1: mix($--color-white, $--color-primary, 10%) !default;
+$--color-primary-light-2: mix($--color-white, $--color-primary, 20%) !default;
+$--color-primary-light-3: mix($--color-white, $--color-primary, 30%) !default;
+$--color-primary-light-4: mix($--color-white, $--color-primary, 40%) !default;
+$--color-primary-light-5: mix($--color-white, $--color-primary, 50%) !default;
+$--color-primary-light-6: mix($--color-white, $--color-primary, 60%) !default;
+$--color-primary-light-7: mix($--color-white, $--color-primary, 70%) !default;
+$--color-primary-light-8: mix($--color-white, $--color-primary, 80%) !default;
+$--color-primary-light-9: mix($--color-white, $--color-primary, 90%) !default;
+
+$--color-success-light-1: mix($--color-white, $--color-success, 10%) !default;
+$--color-success-light-2: mix($--color-white, $--color-success, 20%) !default;
+$--color-success-light-3: mix($--color-white, $--color-success, 30%) !default;
+$--color-success-light-4: mix($--color-white, $--color-success, 40%) !default;
+$--color-success-light-5: mix($--color-white, $--color-success, 50%) !default;
+$--color-success-light-6: mix($--color-white, $--color-success, 60%) !default;
+$--color-success-light-7: mix($--color-white, $--color-success, 70%) !default;
+$--color-success-light-8: mix($--color-white, $--color-success, 80%) !default;
+$--color-success-light-9: mix($--color-white, $--color-success, 90%) !default;
+
 $--color-text-primary: #303133 !default;
 $--color-text-regular: #606266 !default;
 $--color-text-secondary: #909399 !default;
 $--color-text-placeholder: #c0c4cc !default;
+
+$--color-scrollbar-primary: rgba(122, 191, 250, .3);
+$--color-scrollbar-main: rgba(218, 62, 155, 0.3);
 
 /* Box-shadow
 -------------------------- */
@@ -51,6 +74,7 @@ $--box-shadow-bubble: 0 3px 6px 0 rgba(0, 0, 0, 0.6) !default;
 -------------------------- */
 $--border-width-base: 1px !default;
 $--border-style-base: solid !default;
+$--border-color-time: lightblue !default;
 $--border-color-base: #dcdfe6 !default;
 $--border-color-light: #e4e7ed !default;
 $--border-color-lighter: #ebeef5 !default;

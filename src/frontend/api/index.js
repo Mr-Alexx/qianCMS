@@ -81,6 +81,14 @@ export async function getArticleByTid (tid) {
 export async function getCategories () {
   return fetch('categories')
 }
+// 获取推荐文章
+export function getFeaturedList () {
+  return fetch('featured')
+}
+// 获取归档
+export function getTimelineList () {
+  return fetch('file')
+}
 
 // 获取标签
 export async function getTags () {

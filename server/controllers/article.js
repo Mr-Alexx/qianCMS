@@ -106,6 +106,56 @@ class ArticleCtrl {
       console.log(err)
     }
   }
+
+  // 获取推荐文章
+  async getFeatured (ctx) {
+    try {
+      const res = await articleModel.findAll({
+        where: {
+          featured: 1
+        },
+        order: [
+          ['update_time', 'DESC']
+        ]
+      })
+      ctx.body = getRes(1001, '', res)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
+    }
+  }
+
+  // 获取归档文章
+  async getFile (ctx) {
+    try {
+      let res = await articleModel.findAll({
+        order: [
+          ['create_time', 'DESC']
+        ],
+        attributes: ['id', 'title', 'create_time']
+      })
+      let obj = {}
+      res.forEach(row => {
+        const year = new Date(row.create_time).getFullYear()
+        if (!obj.hasOwnProperty(year)) {
+          obj[year] = {
+            title: year,
+            children: [row]
+          }
+        } else {
+          obj[year]['children'].push(row)
+        }
+      })
+      let temp = []
+      for (let k in obj) {
+        temp.unshift(obj[k])
+      }
+      ctx.body = getRes(1001, '', temp)
+    } catch (err) {
+      console.log(err)
+      ctx.body = getRes(1002)
+    }
+  }
   
   // add article
   async addArticle (ctx) {

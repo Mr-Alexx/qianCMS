@@ -1,7 +1,6 @@
 <template>
-  <qian-card bg="#fff">
-    <h3>标签</h3>
-    <div>
+  <qian-card bg="#fff" title="标签">
+    <div v-if="tagList.length > 0" class="qian-tags">
       <qian-tag
         v-for="(item, i) in tagList"
         :key="i"
@@ -23,12 +22,19 @@ export default {
     QianTag,
     QianCard
   },
-  props: {
-    tagList: Array
-  },
   data () {
     return {
       activeTag: {}
+    }
+  },
+  computed: {
+    tagList () {
+      return this.$store.state.app.tagList
+    }
+  },
+  created () {
+    if (this.tagList.length <= 0) {
+      this.$store.dispatch('getTagList')
     }
   },
   methods: {
@@ -41,6 +47,11 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  @import '@/styles/common/var.scss';
+  @import '@/styles/mixins/mixins.scss';
 
+  @include b(tags) {
+    padding-left: 10px;
+  }
 </style>
