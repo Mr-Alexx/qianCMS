@@ -5,24 +5,19 @@
 ## Build Setup
 
 ``` bash
-# install dependencies
+# 安装依赖/install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# 导入mysql文件，在static目录下/import mysql file which is under directory 'static'
+
+# 修改数据库连接密码，在server目录下的db.js文件内/modify mysql connected password which is in db.js under the directory 'server'
+
+# 开始项目/start the project (serve with hot reload at localhost:8080)
 npm start
 
-# build for production with minification
+# 构建项目/build the project (build for production with minification)
 npm run build
 
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
 ```
-"concurrently \"node server.js\" \"npm run dev\" "
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
