@@ -1,6 +1,6 @@
 # blog
 
-> My custom blog project.Deveplope with node/koa/vue/vue-router/vuex/elementUI
+> My custom blog project.Deveplope with node/koa2/vue/
 
 ## Build Setup
 
