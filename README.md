@@ -11,6 +11,7 @@ npm install
 # 导入mysql文件，在static目录下/import mysql file which is under directory 'static'
 
 # 修改数据库连接密码，在server目录下的db.js文件内/modify mysql connected password which is in db.js under the directory 'server'
+user: xxx, pwd: xxx
 
 # 开始项目/start the project (serve with hot reload at localhost:8080)
 npm start
