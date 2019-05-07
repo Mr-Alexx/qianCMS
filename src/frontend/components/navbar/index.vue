@@ -74,7 +74,7 @@ export default {
     background-color: $--color-white;
     @include utils-prefix(box-shadow, $--box-shadow-dark);
     @include e(banner) {
-      min-height: 280px;
+      min-height: 200px;
       background-image: url(https://i.loli.net/2018/10/09/5bbc7c611eaf0.jpg);
       background-size: cover;
     }
@@ -100,8 +100,8 @@ export default {
   }
   // 头像
   @include b(avatar) {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border: 5px solid $--color-white;
     border-radius: 50%;
     overflow: hidden;
@@ -110,7 +110,7 @@ export default {
     top: 50%;
     left: 50%;
     margin-left: -100px;
-    margin-top: -140px;
+    margin-top: -125px;
     @include e(img) {
       width: 100%;
       height: 100%;

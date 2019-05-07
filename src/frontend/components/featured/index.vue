@@ -27,7 +27,7 @@ export default {
       return this.$store.state.app.featuredList
     }
   },
-  created () {
+  mounted () {
     if (this.list.length <= 0) {
       this.$store.dispatch('getFeaturedList')
     }

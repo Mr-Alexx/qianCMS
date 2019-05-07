@@ -17,11 +17,11 @@ export default {
     offset: Number,
     push: Number,
     pull: Number,
-    xs: [Number, Object],
-    sm: [Number, Object],
-    md: [Number, Object],
-    lg: [Number, Object],
-    xl: [Number, Object]
+    xs: [Number, String, Object],
+    sm: [Number, String, Object],
+    md: [Number, String, Object],
+    lg: [Number, String, Object],
+    xl: [Number, String, Object]
   },
   computed: {
     styles () {
