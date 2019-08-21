@@ -7,6 +7,7 @@
 ``` bash
 # 安装依赖/install dependencies
 npm install
+npm i supervisor -g
 
 # 导入mysql文件，在static目录下/import mysql file which is under directory 'static'
 mysql >= v 5.0
